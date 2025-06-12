@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <meta name="description" content="MongoDB Setup Guide for EliteStore - Enable full database functionality">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', 'sans-serif'],
+                        'display': ['Poppins', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-40 backdrop-blur-sm bg-white/95">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex items-center">
+                    <a href="/" class="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        EliteStore
+                    </a>
+                </div>
+                
+                <!-- Back to Site -->
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="text-gray-600 hover:text-gray-900 transition-colors">
+                        ← Back to Store
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <% if (isDbConnected) { %>
+                <div class="inline-flex items-center px-4 py-2 bg-green-100 text-green-800 rounded-full mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Database Connected
+                </div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Database Setup Complete!</h1>
+                <p class="text-xl text-gray-600">Your EliteStore is now running with full database functionality.</p>
+            <% } else { %>
+                <div class="inline-flex items-center px-4 py-2 bg-amber-100 text-amber-800 rounded-full mb-6">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Demo Mode Active
+                </div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-4">Enable Database Functionality</h1>
+                <p class="text-xl text-gray-600">Set up MongoDB to unlock all features including user accounts, persistent shopping cart, and admin functionality.</p>
+            <% } %>
+        </div>
+
+        <% if (!isDbConnected) { %>
+        <!-- Setup Options -->
+        <div class="grid md:grid-cols-2 gap-8 mb-12">
+            <!-- Local MongoDB -->
+            <div class="bg-white rounded-lg shadow-lg p-8 border-2 border-blue-100 hover:border-blue-200 transition-colors">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                        <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">Local MongoDB</h3>
+                    <p class="text-gray-600">Install MongoDB Community Server on your machine</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Full control over your data</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>No internet required</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Free forever</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <button onclick="showLocalInstructions()" class="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors font-semibold">
+                        Setup Local MongoDB
+                    </button>
+                </div>
+            </div>
+
+            <!-- MongoDB Atlas -->
+            <div class="bg-white rounded-lg shadow-lg p-8 border-2 border-green-100 hover:border-green-200 transition-colors">
+                <div class="text-center mb-6">
+                    <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                        <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-gray-900 mb-2">MongoDB Atlas</h3>
+                    <p class="text-gray-600">Cloud-hosted MongoDB service</p>
+                </div>
+                
+                <div class="space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>No installation required</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>Automatic backups</span>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span>512MB free tier</span>
+                    </div>
+                </div>
+                
+                <div class="mt-6">
+                    <button onclick="showAtlasInstructions()" class="w-full bg-green-600 text-white py-3 px-4 rounded-lg hover:bg-green-700 transition-colors font-semibold">
+                        Setup MongoDB Atlas
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions Sections (Hidden by default) -->
+        <div id="local-instructions" class="hidden bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h3 class="text-2xl font-bold mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+                </svg>
+                Local MongoDB Setup
+            </h3>
+            
+            <div class="space-y-6">
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h4 class="font-semibold text-lg mb-2">Step 1: Download MongoDB</h4>
+                    <p class="text-gray-600 mb-3">Visit the MongoDB Community Server download page:</p>
+                    <a href="https://www.mongodb.com/try/download/community" target="_blank" 
+                       class="inline-flex items-center px-4 py-2 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition-colors">
+                        Download MongoDB Community Server
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2M7 7l10 10M17 7l-10 10"></path>
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h4 class="font-semibold text-lg mb-2">Step 2: Install</h4>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1">
+                        <li>Run the downloaded installer</li>
+                        <li>Choose "Complete" installation type</li>
+                        <li>Install as a Windows Service (recommended)</li>
+                        <li>Optionally install MongoDB Compass (GUI tool)</li>
+                    </ul>
+                </div>
+                
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h4 class="font-semibold text-lg mb-2">Step 3: Start MongoDB</h4>
+                    <div class="bg-gray-100 rounded-lg p-4">
+                        <p class="text-sm text-gray-600 mb-2">Open Command Prompt as Administrator and run:</p>
+                        <code class="text-sm font-mono">net start MongoDB</code>
+                    </div>
+                </div>
+                
+                <div class="border-l-4 border-blue-500 pl-4">
+                    <h4 class="font-semibold text-lg mb-2">Step 4: Restart EliteStore</h4>
+                    <div class="bg-gray-100 rounded-lg p-4">
+                        <p class="text-sm text-gray-600 mb-2">In your project terminal:</p>
+                        <code class="text-sm font-mono">npm start</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="atlas-instructions" class="hidden bg-white rounded-lg shadow-lg p-8 mb-8">
+            <h3 class="text-2xl font-bold mb-6 flex items-center">
+                <svg class="w-6 h-6 mr-3 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                </svg>
+                MongoDB Atlas Setup
+            </h3>
+            
+            <div class="space-y-6">
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h4 class="font-semibold text-lg mb-2">Step 1: Create Account</h4>
+                    <p class="text-gray-600 mb-3">Sign up for a free MongoDB Atlas account:</p>
+                    <a href="https://www.mongodb.com/atlas" target="_blank" 
+                       class="inline-flex items-center px-4 py-2 bg-green-100 text-green-700 rounded-lg hover:bg-green-200 transition-colors">
+                        Create Atlas Account
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-2M7 7l10 10M17 7l-10 10"></path>
+                        </svg>
+                    </a>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h4 class="font-semibold text-lg mb-2">Step 2: Create Cluster</h4>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1">
+                        <li>Choose M0 Sandbox (Free tier)</li>
+                        <li>Select your preferred region</li>
+                        <li>Create cluster (takes 1-3 minutes)</li>
+                    </ul>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h4 class="font-semibold text-lg mb-2">Step 3: Configure Access</h4>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1">
+                        <li>Add your IP address to the whitelist</li>
+                        <li>Create a database user with username/password</li>
+                    </ul>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h4 class="font-semibold text-lg mb-2">Step 4: Get Connection String</h4>
+                    <ul class="list-disc list-inside text-gray-600 space-y-1">
+                        <li>Click "Connect" → "Connect your application"</li>
+                        <li>Copy the connection string</li>
+                        <li>Replace &lt;password&gt; with your database password</li>
+                    </ul>
+                </div>
+                
+                <div class="border-l-4 border-green-500 pl-4">
+                    <h4 class="font-semibold text-lg mb-2">Step 5: Update .env File</h4>
+                    <div class="bg-gray-100 rounded-lg p-4">
+                        <p class="text-sm text-gray-600 mb-2">Update your .env file:</p>
+                        <code class="text-sm font-mono">MONGODB_URI=mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/elitestore</code>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <% } %>
+
+        <!-- Current Status -->
+        <div class="bg-white rounded-lg shadow-lg p-8">
+            <h3 class="text-2xl font-bold mb-6">Current Status</h3>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <h4 class="font-semibold text-lg mb-3">✅ Working Features</h4>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Product browsing and search</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Shopping cart (localStorage)</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Newsletter signup</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            <span>Responsive design</span>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-semibold text-lg mb-3">🔓 Unlocked with Database</h4>
+                    <ul class="space-y-2 text-gray-600">
+                        <li class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            <span>User registration & login</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            <span>Persistent shopping cart</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            <span>Order history</span>
+                        </li>
+                        <li class="flex items-center space-x-2">
+                            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                            </svg>
+                            <span>Admin product management</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="mt-8 text-center">
+            <p class="text-gray-600 mb-4">
+                Need help with setup? Check out our comprehensive guide:
+            </p>
+            <a href="/MONGODB_SETUP.md" target="_blank" 
+               class="inline-flex items-center px-6 py-3 bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Full Setup Documentation
+            </a>
+        </div>
+    </div>
+
+    <script>
+        function showLocalInstructions() {
+            document.getElementById('local-instructions').classList.remove('hidden');
+            document.getElementById('atlas-instructions').classList.add('hidden');
+            document.getElementById('local-instructions').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        function showAtlasInstructions() {
+            document.getElementById('atlas-instructions').classList.remove('hidden');
+            document.getElementById('local-instructions').classList.add('hidden');
+            document.getElementById('atlas-instructions').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
