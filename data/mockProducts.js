@@ -9,16 +9,15 @@ const mockProducts = [
     category: "Men",
     subcategory: "Shirts",
     brand: "Urban Essentials",
-    sku: "UE-CT-001",
-    images: [
+    sku: "UE-CT-001",    images: [
       {
-        url: "/images/men-tshirt-white.jpg",
-        alt: "White cotton t-shirt",
+        url: "/images/mens/oxford-shirt-white.jpg",
+        alt: "Classic Oxford Shirt - White",
         isPrimary: true
       },
       {
-        url: "/images/men-tshirt-black.jpg",
-        alt: "Black cotton t-shirt",
+        url: "/images/mens/oxford-shirt-blue.jpg", 
+        alt: "Classic Oxford Shirt - Blue",
         isPrimary: false
       }
     ],
@@ -59,7 +58,7 @@ const mockProducts = [
     sku: "DC-SJ-002",
     images: [
       {
-        url: "/images/men-jeans-blue.jpg",
+        url: "/images/mens/chinos-khaki.jpg",
         alt: "Blue slim fit jeans",
         isPrimary: true
       }
@@ -100,7 +99,7 @@ const mockProducts = [
     sku: "LL-LJ-003",
     images: [
       {
-        url: "/images/men-leather-jacket.jpg",
+        url: "/images/mens/blazer-charcoal.jpg",
         alt: "Black leather jacket",
         isPrimary: true
       }
@@ -140,7 +139,7 @@ const mockProducts = [
     sku: "CS-CS-004",
     images: [
       {
-        url: "/images/men-sneakers-white.jpg",
+        url: "/images/mens/sneakers-white.jpg",
         alt: "White casual sneakers",
         isPrimary: true
       }
@@ -181,7 +180,7 @@ const mockProducts = [
     sku: "ES-DS-005",
     images: [
       {
-        url: "/images/men-dress-shirt.jpg",
+        url: "/images/mens/sweater-grey.jpg",
         alt: "White dress shirt",
         isPrimary: true
       }
@@ -221,7 +220,7 @@ const mockProducts = [
     sku: "TC-CW-006",
     images: [
       {
-        url: "/images/men-watch-silver.jpg",
+        url: "/images/mens/watch-silver.jpg",
         alt: "Silver classic watch",
         isPrimary: true
       }
@@ -261,7 +260,7 @@ const mockProducts = [
     sku: "FF-SD-007",
     images: [
       {
-        url: "/images/women-floral-dress.jpg",
+        url: "/images/womens/midi-dress-black.jpg",
         alt: "Floral summer dress",
         isPrimary: true
       }
@@ -302,7 +301,7 @@ const mockProducts = [
     sku: "SE-SB-008",
     images: [
       {
-        url: "/images/women-silk-blouse.jpg",
+        url: "/images/womens/silk-blouse-ivory.jpg",
         alt: "Cream silk blouse",
         isPrimary: true
       }
@@ -342,7 +341,7 @@ const mockProducts = [
     sku: "TD-HJ-009",
     images: [
       {
-        url: "/images/women-jeans-blue.jpg",
+        url: "/images/womens/trousers-black.jpg",
         alt: "High-waisted blue jeans",
         isPrimary: true
       }
@@ -383,7 +382,7 @@ const mockProducts = [
     sku: "CC-TC-010",
     images: [
       {
-        url: "/images/women-trench-coat.jpg",
+        url: "/images/womens/cardigan-camel.jpg",
         alt: "Beige trench coat",
         isPrimary: true
       }
@@ -423,7 +422,7 @@ const mockProducts = [
     sku: "CF-BF-011",
     images: [
       {
-        url: "/images/women-ballet-flats.jpg",
+        url: "/images/womens/pumps-black.jpg",
         alt: "Black ballet flats",
         isPrimary: true
       }
@@ -464,7 +463,7 @@ const mockProducts = [
     sku: "LB-DH-012",
     images: [
       {
-        url: "/images/women-handbag-black.jpg",
+        url: "/images/womens/floral-dress-blue.jpg",
         alt: "Black leather handbag",
         isPrimary: true
       }
