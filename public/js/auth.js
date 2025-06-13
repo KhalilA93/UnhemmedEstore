@@ -168,7 +168,7 @@ class AuthManager {
         const demoUsers = [
             { email: 'john@example.com', password: 'password123' },
             { email: 'jane@example.com', password: 'password123' },
-            { email: 'admin@elitestore.com', password: 'admin123' },
+            { email: 'admin@unhemmed.com', password: 'admin123' },
             { email: 'demo@demo.com', password: 'demo' }
         ];
         
@@ -179,7 +179,7 @@ class AuthManager {
         const demoUsers = {
             'john@example.com': 'John Doe',
             'jane@example.com': 'Jane Smith', 
-            'admin@elitestore.com': 'Admin User',
+            'admin@unhemmed.com': 'Admin User',
             'demo@demo.com': 'Demo User'
         };
         return demoUsers[email] || email.split('@')[0];
@@ -203,7 +203,7 @@ class AuthManager {
             
             if (response.success) {
                 this.setAuthData(response.data.token, response.data);
-                this.showAlert('Registration successful! Welcome to EliteStore!', 'success');
+                this.showAlert('Registration successful! Welcome to Unhemmed!', 'success');
                 
                 // Redirect after short delay
                 setTimeout(() => {

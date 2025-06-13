@@ -1,6 +1,6 @@
-# EliteStore - Premium E-Commerce Platform
+# Unhemmed - Premium Clothing E-Commerce Platform
 
-A modern, responsive e-commerce website built with Node.js, Express, and EJS templating. Features a professional brochure-style design with mobile-first approach using Tailwind CSS.
+A modern, responsive clothing e-commerce website built with Node.js, Express, and EJS templating. Features a professional brochure-style design with mobile-first approach using Tailwind CSS.
 
 ## ✨ Features
 

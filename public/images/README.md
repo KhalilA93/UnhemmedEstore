@@ -1,6 +1,6 @@
-# Product Images for Clothing Store
+# Product Images for Unhemmed
 
-This directory contains product images for the clothing store. The following images are referenced in the mock data:
+This directory contains product images for the Unhemmed clothing store. The following images are referenced in the mock data:
 
 ## Men's Products:
 - men-tshirt-white.jpg - White cotton t-shirt

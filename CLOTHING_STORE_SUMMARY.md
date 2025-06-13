@@ -1,4 +1,4 @@
-# Clothing Store Conversion - Summary
+# Unhemmed - Clothing Store Conversion - Summary
 
 ## Overview
 Successfully converted the e-commerce site into a clothing-only store with dedicated sections for men's and women's clothing.
@@ -98,4 +98,4 @@ Successfully converted the e-commerce site into a clothing-only store with dedic
 7. Add product filtering by size, color, price range
 8. Create admin panel for product management
 
-The clothing store is now fully functional with a clean, modern design and proper data structure for a professional e-commerce experience.
+The Unhemmed clothing store is now fully functional with a clean, modern design and proper data structure for a professional e-commerce experience.

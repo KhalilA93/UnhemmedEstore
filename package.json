@@ -1,7 +1,7 @@
 {
-  "name": "ecommerce-site",
+  "name": "unhemmed-store",
   "version": "1.0.0",
-  "description": "A modern brochure-style e-commerce website",
+  "description": "Unhemmed - A modern clothing e-commerce website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

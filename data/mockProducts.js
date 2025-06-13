@@ -224,22 +224,19 @@ const mockProducts = [  // Men's Clothing (6 products)
       count: 89
     }
   },
-
   // Women's Clothing (6 products)
   {
-    name: "White Summer Dress",
-    description: "Elegant white summer dress with delicate details and flowing silhouette. Perfect for garden parties, brunches, and summer events. Features comfortable fabric and flattering cut.",
-    shortDescription: "Elegant white summer dress",
-    price: 79.99,
-    comparePrice: 99.99,
-    category: "Women",
-    subcategory: "Dresses",
+    name: "Women's Casual Sweater",
+    description: "A soft-knit sweater with a relaxed fit and modern cut. Perfect for layering in cooler weather or wearing solo on breezy days.",
+    shortDescription: "Soft-knit sweater with relaxed fit",
+    price: 68.00,
+    comparePrice: 88.00,    category: "Women",
+    subcategory: "Shirts",
     brand: "SummerElegance",
-    sku: "SE-WSD-007",
-    images: [
+    sku: "SE-WSD-007",    images: [
       {
-        url: "/images/womens/StockSnap_JA2NGUEHYA.jpg",
-        alt: "White summer dress",
+        url: "/images/womens/calm-serious-woman-light-brown-stylish-cashmere-suit-cap-looks-into-camera-brunette-longhaired-girl-eyeglasses-poses-isolated-beige-background.jpg",
+        alt: "Women's casual sweater",
         isPrimary: true
       }
     ],
@@ -257,30 +254,26 @@ const mockProducts = [  // Men's Clothing (6 products)
       quantity: 53,
       lowStockThreshold: 10,
       trackQuantity: true
-    },
-    features: ["Flowing Silhouette", "Delicate Details", "Summer Weight Fabric", "Flattering Cut"],
-    tags: ["dress", "white", "summer", "elegant", "flowing"],
+    },    features: ["Soft Knit Fabric", "Relaxed Fit", "Modern Cut", "Layering Versatile"],
+    tags: ["sweater", "casual", "soft", "relaxed", "layering"],
     status: "active",
     featured: true,
     ratings: {
       average: 4.8,
       count: 167
     }
-  },
-  {
-    name: "Black Turtleneck Sweater",
-    description: "Classic black turtleneck sweater with ribbed texture and comfortable fit. Perfect for layering or wearing alone. Made from soft, high-quality knit fabric.",
-    shortDescription: "Classic black ribbed turtleneck",
-    price: 69.99,
-    comparePrice: 89.99,
-    category: "Women",
-    subcategory: "Shirts",
+  },  {
+    name: "Women's Sweater & Hat Set",
+    description: "Cozy meets chic in this cold-weather duo, featuring a coordinated knit sweater and winter hat made for both warmth and style.",
+    shortDescription: "Coordinated knit sweater and winter hat set",
+    price: 95.00,
+    comparePrice: 115.00,    category: "Women",
+    subcategory: "Sets",
     brand: "KnitClassics",
-    sku: "KC-BTS-008",
-    images: [
+    sku: "KC-BTS-008",    images: [
       {
-        url: "/images/womens/StockSnap_ODNPHGUMP7.jpg",
-        alt: "Black turtleneck sweater",
+        url: "/images/womens/glamour-stylish-beautiful-young-woman-model-with-red-lips-blue-sweater-hipster-cloth-beanie.jpg",
+        alt: "Women's sweater and hat set",
         isPrimary: true
       }
     ],
@@ -299,38 +292,30 @@ const mockProducts = [  // Men's Clothing (6 products)
       quantity: 56,
       lowStockThreshold: 8,
       trackQuantity: true
-    },
-    features: ["Ribbed Texture", "Turtleneck Design", "Soft Knit Fabric", "Versatile Styling"],
-    tags: ["turtleneck", "black", "sweater", "ribbed", "classic"],
+    },    features: ["Coordinated Set", "Knit Construction", "Winter Ready", "Warmth & Style"],
+    tags: ["sweater", "hat", "set", "coordinated", "winter"],
     status: "active",
     featured: false,
     ratings: {
       average: 4.6,
       count: 145
     }
-  },
-  {
-    name: "High-Waisted Blue Jeans",
-    description: "Vintage-inspired high-waisted jeans in classic blue denim. Features a flattering fit that accentuates the waist and elongates the legs. Perfect for casual and dressed-up looks.",
-    shortDescription: "High-waisted vintage-style blue jeans",
-    price: 84.99,
-    comparePrice: 109.99,
-    category: "Women",
-    subcategory: "Pants",
+  },  {
+    name: "Women's Eyeglasses",
+    description: "Stylish, lightweight frames built for comfort and daily wear. A timeless look to match both casual and formal outfits.",
+    shortDescription: "Stylish lightweight frames for daily wear",
+    price: 120.00,
+    comparePrice: 140.00,    category: "Women",
+    subcategory: "Accessories",
     brand: "VintageDenim",
-    sku: "VD-HWJ-009",
-    images: [
+    sku: "VD-HWJ-009",    images: [
       {
-        url: "/images/womens/StockSnap_ZBTVTYXJPM.jpg",
-        alt: "High-waisted blue jeans",
+        url: "/images/womens/portrait-young-stylish-girl-model-casual-summer-clothes-brown-hat-with-natural-makeup-glasses-isolated.jpg",
+        alt: "Women's eyeglasses",
         isPrimary: true
       }
-    ],
-    sizes: [
-      { size: "26", quantity: 10 },
-      { size: "28", quantity: 16 },
-      { size: "30", quantity: 14 },
-      { size: "32", quantity: 12 }
+    ],sizes: [
+      { size: "One Size", quantity: 52 }
     ],
     colors: [
       { name: "Classic Blue", hex: "#4682B4", quantity: 32 },
@@ -340,38 +325,30 @@ const mockProducts = [  // Men's Clothing (6 products)
       quantity: 52,
       lowStockThreshold: 10,
       trackQuantity: true
-    },
-    features: ["High-Waisted", "Vintage-Inspired", "Flattering Fit", "Classic Denim"],
-    tags: ["jeans", "high-waisted", "vintage", "blue", "denim"],
+    },    features: ["Lightweight Frames", "Daily Comfort", "Timeless Design", "Versatile Style"],
+    tags: ["eyeglasses", "frames", "lightweight", "timeless", "comfort"],
     status: "active",
     featured: true,
     ratings: {
       average: 4.7,
       count: 189
     }
-  },
-  {
-    name: "Beige Tailored Blazer",
-    description: "Sophisticated beige blazer with clean lines and structured silhouette. Perfect for professional settings and business meetings. Features premium fabric and expert tailoring.",
-    shortDescription: "Professional beige tailored blazer",
-    price: 149.99,
-    comparePrice: 199.99,
-    category: "Women",
-    subcategory: "Jackets",
+  },  {
+    name: "Women's Wide-Brim Sunhat",
+    description: "A breathable, structured sunhat with a wide brim for full sun coverage. A fashionable way to stay cool and shaded.",
+    shortDescription: "Breathable wide-brim sunhat for sun protection",
+    price: 52.00,
+    comparePrice: 72.00,    category: "Women",
+    subcategory: "Accessories",
     brand: "ProfessionalStyle",
-    sku: "PS-BTB-010",
-    images: [
+    sku: "PS-BTB-010",    images: [
       {
-        url: "/images/womens/calm-serious-woman-light-brown-stylish-cashmere-suit-cap-looks-into-camera-brunette-longhaired-girl-eyeglasses-poses-isolated-beige-background.jpg",
-        alt: "Beige tailored blazer",
+        url: "/images/womens/StockSnap_JA2NGUEHYA.jpg",
+        alt: "Women's wide-brim sunhat",
         isPrimary: true
       }
-    ],
-    sizes: [
-      { size: "XS", quantity: 6 },
-      { size: "S", quantity: 12 },
-      { size: "M", quantity: 14 },
-      { size: "L", quantity: 8 }
+    ],sizes: [
+      { size: "One Size", quantity: 40 }
     ],
     colors: [
       { name: "Beige", hex: "#F5F5DC", quantity: 25 },
@@ -381,38 +358,30 @@ const mockProducts = [  // Men's Clothing (6 products)
       quantity: 40,
       lowStockThreshold: 6,
       trackQuantity: true
-    },
-    features: ["Structured Silhouette", "Clean Lines", "Premium Fabric", "Professional Cut"],
-    tags: ["blazer", "beige", "professional", "tailored", "business"],
+    },    features: ["Wide Brim", "Sun Protection", "Breathable Material", "Structured Design"],
+    tags: ["sunhat", "wide-brim", "sun protection", "breathable", "fashionable"],
     status: "active",
     featured: true,
     ratings: {
       average: 4.8,
       count: 98
     }
-  },
-  {
-    name: "Blue Knit Sweater",
-    description: "Cozy blue knit sweater with relaxed fit and soft texture. Perfect for casual days and layering. Features comfortable fabric that's both warm and breathable.",
-    shortDescription: "Cozy blue knit sweater",
-    price: 59.99,
-    comparePrice: 79.99,
-    category: "Women",
-    subcategory: "Shirts",
+  },  {
+    name: "Women's Fashion Hat",
+    description: "This structured fashion hat adds a bold finish to any outfit. Made with durable material and a timeless silhouette.",
+    shortDescription: "Structured fashion hat with timeless silhouette",
+    price: 65.00,
+    comparePrice: 85.00,    category: "Women",
+    subcategory: "Accessories",
     brand: "CozyKnits",
-    sku: "CK-BKS-011",
-    images: [
+    sku: "CK-BKS-011",    images: [
       {
-        url: "/images/womens/glamour-stylish-beautiful-young-woman-model-with-red-lips-blue-sweater-hipster-cloth-beanie.jpg",
-        alt: "Blue knit sweater",
+        url: "/images/womens/StockSnap_ODNPHGUMP7.jpg",
+        alt: "Women's fashion hat",
         isPrimary: true
       }
-    ],
-    sizes: [
-      { size: "XS", quantity: 8 },
-      { size: "S", quantity: 14 },
-      { size: "M", quantity: 16 },
-      { size: "L", quantity: 12 }
+    ],sizes: [
+      { size: "One Size", quantity: 50 }
     ],
     colors: [
       { name: "Sky Blue", hex: "#87CEEB", quantity: 30 },
@@ -422,30 +391,26 @@ const mockProducts = [  // Men's Clothing (6 products)
       quantity: 50,
       lowStockThreshold: 8,
       trackQuantity: true
-    },
-    features: ["Soft Knit Texture", "Relaxed Fit", "Comfortable Fabric", "Versatile Styling"],
-    tags: ["sweater", "blue", "knit", "cozy", "casual"],
+    },    features: ["Structured Design", "Durable Material", "Timeless Silhouette", "Bold Finishing"],
+    tags: ["fashion hat", "structured", "bold", "timeless", "durable"],
     status: "active",
     featured: false,
     ratings: {
       average: 4.5,
       count: 134
     }
-  },
-  {
-    name: "Casual Summer Outfit Set",
-    description: "Complete casual summer outfit featuring comfortable top and coordinating accessories. Perfect for weekend outings, festivals, and relaxed social gatherings.",
-    shortDescription: "Complete casual summer outfit",
-    price: 94.99,
-    comparePrice: 124.99,
-    category: "Women",
-    subcategory: "Sets",
+  },  {
+    name: "Women's Jean Shorts",
+    description: "Classic-cut denim shorts with just the right amount of stretch for all-day comfort and effortless casual style.",
+    shortDescription: "Classic-cut denim shorts with stretch",
+    price: 58.00,
+    comparePrice: 78.00,    category: "Women",
+    subcategory: "Pants",
     brand: "SummerStyle",
-    sku: "SS-CSO-012",
-    images: [
+    sku: "SS-CSO-012",    images: [
       {
-        url: "/images/womens/portrait-young-stylish-girl-model-casual-summer-clothes-brown-hat-with-natural-makeup-glasses-isolated.jpg",
-        alt: "Casual summer outfit with hat",
+        url: "/images/womens/StockSnap_ZBTVTYXJPM.jpg",
+        alt: "Women's jean shorts",
         isPrimary: true
       }
     ],
@@ -463,9 +428,8 @@ const mockProducts = [  // Men's Clothing (6 products)
       quantity: 45,
       lowStockThreshold: 8,
       trackQuantity: true
-    },
-    features: ["Complete Outfit", "Summer Weight", "Coordinated Pieces", "Comfortable Fit"],
-    tags: ["outfit set", "summer", "casual", "coordinated", "festival"],
+    },    features: ["Classic Cut", "Stretch Fabric", "All-Day Comfort", "Casual Style"],
+    tags: ["jean shorts", "denim", "classic", "stretch", "casual"],
     status: "active",
     featured: true,
     ratings: {
