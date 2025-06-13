@@ -28,18 +28,16 @@ const productSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Product category is required'],
     enum: ['Men', 'Women']
-  },
-  subcategory: {
+  },  subcategory: {
     type: String,
     required: [true, 'Product subcategory is required'],
-    enum: ['Shirts', 'Pants', 'Dresses', 'Jackets', 'Shoes', 'Accessories'],
+    enum: ['Shirts', 'Pants', 'Dresses', 'Jackets', 'Shoes', 'Accessories', 'Sets'],
     trim: true
   },
-  sizes: [{
-    size: {
+  sizes: [{    size: {
       type: String,
       required: true,
-      enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', '28', '30', '32', '34', '36', '38', '40', '42', '6', '7', '8', '9', '10', '11', '12']
+      enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', '26', '28', '30', '32', '34', '36', '38', '40', '42', '6', '7', '8', '9', '10', '11', '12', 'One Size']
     },
     quantity: {
       type: Number,

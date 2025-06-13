@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
-    <meta name="description" content="EliteStore - Premium products for discerning customers. Quality, style, and innovation in every purchase.">
+    <meta name="description" content="Unhemmed - Premium products for discerning customers. Quality, style, and innovation in every purchase.">
     
     <!-- Preconnect to external domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -81,7 +81,7 @@
                         <svg class="w-8 h-8 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                         </svg>
-                        <span class="font-display">EliteStore</span>
+                        <span class="font-display">Unhemmed</span>
                     </a>
                 </div>                <!-- Desktop Navigation -->
                 <div class="hidden md:flex items-center space-x-8">
@@ -249,7 +249,7 @@
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">                <div class="text-white">
                     <h1 class="text-4xl lg:text-6xl font-bold font-display mb-6 leading-tight">
-                        Welcome to <span class="text-yellow-300">EliteStore</span>
+                        Welcome to <span class="text-yellow-300">Unhemmed</span>
                     </h1>
                     <p class="text-xl lg:text-2xl mb-8 text-gray-100 leading-relaxed">
                         Discover premium clothing for men and women. Quality fashion that elevates your style and confidence.
@@ -276,7 +276,7 @@
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
-                <h2 class="text-3xl lg:text-4xl font-bold font-display text-gray-900 mb-4">Why Choose EliteStore?</h2>
+                <h2 class="text-3xl lg:text-4xl font-bold font-display text-gray-900 mb-4">Why Choose Unhemmed?</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">We're committed to providing you with the best shopping experience through our premium services.</p>
             </div>
             
@@ -372,14 +372,21 @@
                 <h2 class="text-3xl lg:text-4xl font-bold font-display text-gray-900 mb-4">Featured Products</h2>
                 <p class="text-xl text-gray-600">Discover our hand-picked selection of premium products</p>
             </div>
-            
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">                <% products.forEach(product => { %>
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                <% products.forEach(product => { %>
                 <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group transform hover:-translate-y-2">
-                    <div class="aspect-square overflow-hidden">
-                        <img src="<%= product.primaryImage ? product.primaryImage.url : (product.images && product.images[0] ? product.images[0].url : (product.image || '/images/placeholder.jpg')) %>" alt="<%= product.primaryImage ? product.primaryImage.alt : (product.name || 'Product image') %>" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-                    </div>
+                    <a href="/product/<%= product._id || product.id %>" class="block">
+                        <div class="aspect-square overflow-hidden">
+                            <img src="<%= product.primaryImage ? product.primaryImage.url : (product.images && product.images[0] ? product.images[0].url : (product.image || '/images/placeholder.svg')) %>" 
+                                 alt="<%= product.primaryImage ? product.primaryImage.alt : (product.name || 'Product image') %>" 
+                                 class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                                 onerror="this.src='/images/placeholder.svg'">
+                        </div>
+                    </a>
                     <div class="p-6">
-                        <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2"><%= product.name %></h3>
+                        <a href="/product/<%= product._id || product.id %>">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 hover:text-primary-600 transition-colors"><%= product.name %></h3>
+                        </a>
                         <p class="text-gray-600 text-sm mb-4 line-clamp-3"><%= product.shortDescription || product.description %></p>
                         <div class="flex items-center justify-between">
                             <div class="flex items-center space-x-2">
@@ -388,17 +395,23 @@
                                 <span class="text-lg text-gray-500 line-through">$<%= product.comparePrice %></span>
                                 <% } %>
                             </div>
-                            <button class="inline-flex items-center justify-center px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors transform hover:scale-105 shadow-lg" onclick="addToCart('<%= product._id || product.id %>', '<%= product.name.replace(/'/g, "\\'") %>', <%= product.price %>, '<%= (product.images && product.images[0] && product.images[0].url) || product.image || "/images/placeholder.jpg" %>')">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                                Add to Cart
-                            </button>>>
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                </svg>
-                                Add to Cart
-                            </button>
+                            <div class="flex space-x-2">
+                                <a href="/product/<%= product._id || product.id %>" 
+                                   class="inline-flex items-center justify-center px-3 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-gray-200 transition-colors">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                    View
+                                </a>
+                                <button class="inline-flex items-center justify-center px-3 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors transform hover:scale-105 shadow-lg" 
+                                        onclick="addToCart('<%= product._id || product.id %>', '<%= product.name.replace(/'/g, "\\'") %>', <%= product.price %>, '<%= (product.images && product.images[0] && product.images[0].url) || product.image || "/images/placeholder.svg" %>')">
+                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                    Add
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -443,7 +456,7 @@
                         <svg class="w-8 h-8 text-primary-500" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"></path>
                         </svg>
-                        <span class="text-xl font-bold font-display">EliteStore</span>
+                        <span class="text-xl font-bold font-display">Unhemmed</span>
                     </div>
                     <p class="text-gray-300 mb-6 max-w-md leading-relaxed">Your premium destination for quality products and exceptional service. We curate the finest selection of products to enhance your lifestyle.</p>
                     <div class="flex space-x-4">
@@ -490,7 +503,7 @@
 
             <div class="mt-8 pt-8 border-t border-gray-800">
                 <div class="flex flex-col md:flex-row justify-between items-center">
-                    <p class="text-gray-400 text-sm">&copy; 2025 EliteStore. All rights reserved.</p>
+                    <p class="text-gray-400 text-sm">&copy; 2025 Unhemmed. All rights reserved.</p>
                     <div class="flex space-x-6 mt-4 md:mt-0">
                         <a href="/privacy" class="text-gray-400 hover:text-white text-sm transition-colors">Privacy Policy</a>
                         <a href="/terms" class="text-gray-400 hover:text-white text-sm transition-colors">Terms of Service</a>

@@ -111,15 +111,13 @@ app.get('/', async (req, res) => {
             // Use sample data if database not connected
             featuredProducts = sampleProducts.filter(p => p.featured);
         }
-        
-        res.render('index', { 
-            title: 'EliteStore - Premium Clothing',
+          res.render('index', { 
+            title: 'Unhemmed - Premium Clothing',
             products: featuredProducts
         });
     } catch (error) {
-        console.error('Error fetching products:', error);
-        res.render('index', { 
-            title: 'EliteStore - Premium Clothing',
+        console.error('Error fetching products:', error);        res.render('index', { 
+            title: 'Unhemmed - Premium Clothing',
             products: sampleProducts.filter(p => p.featured)
         });
     }
@@ -130,8 +128,7 @@ app.get('/products', async (req, res) => {
         let products = [];
         const category = req.query.category; // 'Men' or 'Women'
         const searchTerm = req.query.search; // Search query
-        
-        if (isDbConnected) {
+          if (isDbConnected) {
             const filter = { status: 'active' };
             
             // Add category filter
@@ -152,7 +149,7 @@ app.get('/products', async (req, res) => {
             }
             
             products = await Product.find(filter).lean();
-        } else {
+              } else {
             products = sampleProducts;
             
             // Filter by search term if provided
@@ -166,12 +163,12 @@ app.get('/products', async (req, res) => {
             }
         }
         
-        let title = 'Our Clothing Collection - EliteStore';
+        let title = 'Our Clothing Collection - Unhemmed';
         if (category) {
-            title = `${category === 'Men' ? "Men's" : "Women's"} Clothing - EliteStore`;
+            title = `${category === 'Men' ? "Men's" : "Women's"} Clothing - Unhemmed`;
         }
         if (searchTerm) {
-            title = `Search Results for "${searchTerm}" - EliteStore`;
+            title = `Search Results for "${searchTerm}" - Unhemmed`;
         }
         
         res.render('products', { 
@@ -183,7 +180,7 @@ app.get('/products', async (req, res) => {
     } catch (error) {
         console.error('Error fetching products:', error);
         res.render('products', { 
-            title: 'Our Products - EliteStore',
+            title: 'Our Products - Unhemmed',
             products: sampleProducts,
             currentCategory: 'All',
             searchTerm: ''
@@ -205,14 +202,14 @@ app.get('/men', async (req, res) => {
         }
         
         res.render('products', { 
-            title: "Men's Clothing - EliteStore",
+            title: "Men's Clothing - Unhemmed",
             products: products,
             currentCategory: 'Men'
         });
     } catch (error) {
         console.error('Error fetching men\'s products:', error);
         res.render('products', { 
-            title: "Men's Clothing - EliteStore",
+            title: "Men's Clothing - Unhemmed",
             products: sampleProducts,
             currentCategory: 'Men'
         });
@@ -233,14 +230,14 @@ app.get('/women', async (req, res) => {
         }
         
         res.render('products', { 
-            title: "Women's Clothing - EliteStore",
+            title: "Women's Clothing - Unhemmed",
             products: products,
             currentCategory: 'Women'
         });
     } catch (error) {
         console.error('Error fetching women\'s products:', error);
         res.render('products', { 
-            title: "Women's Clothing - EliteStore",
+            title: "Women's Clothing - Unhemmed",
             products: sampleProducts,
             currentCategory: 'Women'
         });
@@ -261,7 +258,7 @@ app.get('/product/:id', async (req, res) => {
         }
         
         res.render('product-detail', { 
-            title: `${product.name} - EliteStore`,
+            title: `${product.name} - Unhemmed`,
             product 
         });
     } catch (error) {
@@ -271,32 +268,32 @@ app.get('/product/:id', async (req, res) => {
 });
 
 app.get('/about', (req, res) => {
-    res.render('about', { title: 'About Us - EliteStore' });
+    res.render('about', { title: 'About Us - Unhemmed' });
 });
 
 app.get('/contact', (req, res) => {
-    res.render('contact', { title: 'Contact Us - EliteStore' });
+    res.render('contact', { title: 'Contact Us - Unhemmed' });
 });
 
 app.get('/cart', (req, res) => {
-    res.render('cart', { title: 'Shopping Cart - EliteStore' });
+    res.render('cart', { title: 'Shopping Cart - Unhemmed' });
 });
 
 // Authentication routes
 app.get('/login', (req, res) => {
-    res.render('login', { title: 'Sign In - EliteStore' });
+    res.render('login', { title: 'Sign In - Unhemmed' });
 });
 
 app.get('/register', (req, res) => {
-    res.render('register', { title: 'Create Account - EliteStore' });
+    res.render('register', { title: 'Create Account - Unhemmed' });
 });
 
 app.get('/forgot-password', (req, res) => {
-    res.render('forgot-password', { title: 'Forgot Password - EliteStore' });
+    res.render('forgot-password', { title: 'Forgot Password - Unhemmed' });
 });
 
 app.get('/reset-password', (req, res) => {
-    res.render('reset-password', { title: 'Reset Password - EliteStore' });
+    res.render('reset-password', { title: 'Reset Password - Unhemmed' });
 });
 
 app.get('/verify-email', async (req, res) => {
@@ -304,7 +301,7 @@ app.get('/verify-email', async (req, res) => {
     
     if (!token) {
         return res.render('auth-message', { 
-            title: 'Email Verification - EliteStore',
+            title: 'Email Verification - Unhemmed',
             type: 'error',
             message: 'Invalid verification link',
             redirectUrl: '/login'
@@ -321,14 +318,14 @@ app.get('/verify-email', async (req, res) => {
             
             if (result.success) {
                 return res.render('auth-message', {
-                    title: 'Email Verified - EliteStore',
+                    title: 'Email Verified - Unhemmed',
                     type: 'success',
                     message: 'Your email has been verified successfully! You can now sign in.',
                     redirectUrl: '/login'
                 });
             } else {
                 return res.render('auth-message', {
-                    title: 'Verification Failed - EliteStore',
+                    title: 'Verification Failed - Unhemmed',
                     type: 'error',
                     message: result.message || 'Email verification failed',
                     redirectUrl: '/login'
@@ -336,7 +333,7 @@ app.get('/verify-email', async (req, res) => {
             }
         } else {
             return res.render('auth-message', {
-                title: 'Service Unavailable - EliteStore',
+                title: 'Service Unavailable - Unhemmed',
                 type: 'warning',
                 message: 'Email verification service is currently unavailable',
                 redirectUrl: '/login'
@@ -345,7 +342,7 @@ app.get('/verify-email', async (req, res) => {
     } catch (error) {
         console.error('Email verification error:', error);
         return res.render('auth-message', {
-            title: 'Verification Error - EliteStore',
+            title: 'Verification Error - Unhemmed',
             type: 'error',
             message: 'An error occurred during email verification',
             redirectUrl: '/login'
@@ -355,7 +352,7 @@ app.get('/verify-email', async (req, res) => {
 
 app.get('/setup', (req, res) => {
     res.render('setup', { 
-        title: 'Database Setup - EliteStore',
+        title: 'Database Setup - Unhemmed',
         isDbConnected: isDbConnected 
     });
 });
@@ -375,7 +372,7 @@ app.get('/MONGODB_SETUP.md', (req, res) => {
 });
 
 app.get('/checkout', (req, res) => {
-    res.render('checkout', { title: 'Checkout - EliteStore' });
+    res.render('checkout', { title: 'Checkout - Unhemmed' });
 });
 
 // Health check endpoint
@@ -408,7 +405,7 @@ app.use((req, res) => {
             <!DOCTYPE html>
             <html>
             <head>
-                <title>Page Not Found - EliteStore</title>
+                <title>Page Not Found - Unhemmed</title>
                 <style>
                     body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
                     h1 { color: #333; }

@@ -106,23 +106,9 @@
     .category-card::before {
         content: '';
         @apply absolute inset-0 bg-black bg-opacity-30 transition-all duration-300;
-    }
-    
+    }    
     .category-card:hover::before {
         @apply bg-opacity-40;
-    }
-    
-    /* Product Cards */
-    .product-card {
-        @apply bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group transform hover:-translate-y-2;
-    }
-    
-    .product-card img {
-        @apply w-full h-full object-cover group-hover:scale-110 transition-transform duration-300;
-    }
-    
-    .product-card img[src*="placeholder"], .product-card img[src=""] {
-        @apply bg-gradient-to-br from-gray-200 to-gray-300;
     }
 
     /* Form Components */
