@@ -1,6 +1,73 @@
 // Cart functionality
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
 
+// Authentication integration
+class AuthIntegratedCart {
+    constructor() {
+        this.syncWithAuth();
+    }
+
+    async syncWithAuth() {
+        if (window.authManager && window.authManager.isAuthenticated()) {
+            try {
+                // Sync local cart with server when user is authenticated
+                const response = await window.authManager.makeRequest('/api/auth/profile');
+                if (response.success && response.data.cart) {
+                    // Merge local cart with server cart
+                    this.mergeLocalWithServerCart(response.data.cart);
+                }
+            } catch (error) {
+                console.error('Cart sync error:', error);
+            }
+        }
+    }
+
+    mergeLocalWithServerCart(serverCart) {
+        // Logic to merge local storage cart with server cart
+        const mergedCart = [...serverCart];
+        
+        cart.forEach(localItem => {
+            const existingItem = mergedCart.find(serverItem => 
+                serverItem.product._id === localItem.id || 
+                serverItem.product.id === localItem.id
+            );
+            
+            if (!existingItem) {
+                // Add local item to server (this would need API call)
+                this.addToServerCart(localItem);
+            }
+        });
+        
+        // Update local cart with merged data
+        this.updateLocalCartFromServer(mergedCart);
+    }
+
+    async addToServerCart(item) {
+        if (window.authManager && window.authManager.isAuthenticated()) {
+            try {
+                await window.authManager.makeRequest('/api/auth/cart', 'POST', {
+                    productId: item.id,
+                    quantity: item.quantity
+                });
+            } catch (error) {
+                console.error('Add to server cart error:', error);
+            }
+        }
+    }
+
+    updateLocalCartFromServer(serverCart) {
+        cart = serverCart.map(item => ({
+            id: item.product._id || item.product.id,
+            name: item.product.name,
+            price: item.product.price,
+            image: item.product.images?.[0] || item.product.image,
+            quantity: item.quantity
+        }));
+        saveCart();
+        updateCartCount();
+    }
+}
+
 // Add to cart function
 function addToCart(productId, productName, price, image) {
     const existingItem = cart.find(item => item.id === productId);
@@ -98,8 +165,16 @@ function subscribeNewsletter(email) {
 
 // Initialize page
 document.addEventListener('DOMContentLoaded', function() {
+    // Initialize authentication integrated cart
+    const authCart = new AuthIntegratedCart();
+    
     // Update cart count on page load
     updateCartCount();
+    
+    // Update authentication UI
+    if (window.authManager) {
+        window.authManager.updateAuthUI();
+    }
     
     // Add event listeners to "Add to Cart" buttons
     document.querySelectorAll('.btn:contains("Add to Cart")').forEach(button => {

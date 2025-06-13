@@ -24,16 +24,46 @@ const productSchema = new mongoose.Schema({
   comparePrice: {
     type: Number,
     min: [0, 'Compare price cannot be negative']
-  },
-  category: {
+  },  category: {
     type: String,
     required: [true, 'Product category is required'],
-    enum: ['Electronics', 'Accessories', 'Fashion', 'Home', 'Sports', 'Beauty', 'Books', 'Other']
+    enum: ['Men', 'Women']
   },
   subcategory: {
     type: String,
+    required: [true, 'Product subcategory is required'],
+    enum: ['Shirts', 'Pants', 'Dresses', 'Jackets', 'Shoes', 'Accessories'],
     trim: true
   },
+  sizes: [{
+    size: {
+      type: String,
+      required: true,
+      enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', '28', '30', '32', '34', '36', '38', '40', '42', '6', '7', '8', '9', '10', '11', '12']
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 0,
+      default: 0
+    }
+  }],
+  colors: [{
+    name: {
+      type: String,
+      required: true
+    },
+    hex: {
+      type: String,
+      required: true
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: 0,
+      default: 0
+    }
+  }],
   brand: {
     type: String,
     trim: true

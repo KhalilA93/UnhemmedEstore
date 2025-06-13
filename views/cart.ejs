@@ -87,24 +87,30 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m.9 4L7 13m0 0l-2.5 5M7 13h10m0 0l2.5 5M9 19a2 2 0 11-4 0 2 2 0 014 0zM20 19a2 2 0 11-4 0 2 2 0 014 0z"></path>
                         </svg>
                         <span class="absolute -top-1 -right-1 bg-primary-600 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center" id="cart-count">3</span>
-                    </a>
-
-                    <!-- Mobile menu button -->
-                    <button type="button" class="md:hidden p-2 text-gray-400 hover:text-gray-500 transition-colors" onclick="toggleMobileMenu()">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    </a>                    <!-- Mobile menu button -->
+                    <button type="button" 
+                            class="md:hidden p-2 text-gray-400 hover:text-gray-500 transition-colors" 
+                            onclick="toggleMobileMenu()"
+                            aria-label="Toggle mobile menu"
+                            aria-expanded="false"
+                            id="mobile-menu-button">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="menu-icon">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                        </svg>
+                        <svg class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" id="close-icon">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
                     </button>
                 </div>
-            </div>
-
-            <!-- Mobile Navigation -->
-            <div id="mobile-menu" class="hidden md:hidden pb-4">
-                <div class="flex flex-col space-y-2">
-                    <a href="/" class="text-gray-600 hover:text-primary-600 font-medium py-2 transition-colors">Home</a>
-                    <a href="/products" class="text-gray-600 hover:text-primary-600 font-medium py-2 transition-colors">Products</a>
-                    <a href="/about" class="text-gray-600 hover:text-primary-600 font-medium py-2 transition-colors">About</a>
-                    <a href="/contact" class="text-gray-600 hover:text-primary-600 font-medium py-2 transition-colors">Contact</a>
+            </div>            <!-- Mobile Navigation -->
+            <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200 bg-white">
+                <div class="px-4 py-3 space-y-3">
+                    <a href="/" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Home</a>
+                    <a href="/men" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Men's</a>
+                    <a href="/women" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Women's</a>
+                    <a href="/products" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">All Products</a>
+                    <a href="/about" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">About</a>
+                    <a href="/contact" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-primary-600 hover:bg-gray-50 rounded-md transition-colors">Contact</a>
                 </div>
             </div>
         </div>
@@ -118,88 +124,23 @@
             <p class="text-gray-600 mt-2">Review your items and proceed to checkout</p>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <!-- Cart Items -->
-            <div class="lg:col-span-2 space-y-6">
-                <!-- Cart Item 1 -->
-                <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden">
-                            <img src="/images/headphones.jpg" alt="Premium Wireless Headphones" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-gray-900">Premium Wireless Headphones</h3>
-                            <p class="text-gray-600 text-sm">High-quality wireless headphones with noise cancellation</p>
-                            <div class="flex items-center space-x-4 mt-3">
-                                <div class="flex items-center border border-gray-300 rounded-lg">
-                                    <button class="px-3 py-1 text-gray-600 hover:text-gray-900" onclick="updateQuantity(1, -1)">-</button>
-                                    <span class="px-3 py-1 border-x border-gray-300" id="qty-1">1</span>
-                                    <button class="px-3 py-1 text-gray-600 hover:text-gray-900" onclick="updateQuantity(1, 1)">+</button>
-                                </div>
-                                <span class="text-lg font-bold text-primary-600">$299.99</span>
-                                <button class="text-red-600 hover:text-red-700 ml-auto" onclick="removeItem(1)">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">            <!-- Cart Items -->
+            <div class="lg:col-span-2 space-y-6" id="cart-items-container">
+                <!-- Cart items will be loaded dynamically -->
+                <div id="empty-cart" class="hidden text-center py-12">
+                    <svg class="w-16 h-16 mx-auto text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4m.9 4L7 13m0 0l-2.5 5M7 13h10m0 0l2.5 5M9 19a2 2 0 11-4 0 2 2 0 014 0zM20 19a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                    <h3 class="text-xl font-semibold text-gray-700 mb-2">Your cart is empty</h3>
+                    <p class="text-gray-500 mb-6">Add some items from our collection to get started!</p>
+                    <a href="/products" class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                        </svg>
+                        Continue Shopping
+                    </a>
                 </div>
-
-                <!-- Cart Item 2 -->
-                <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden">
-                            <img src="/images/smartwatch.jpg" alt="Smart Watch Pro" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-gray-900">Smart Watch Pro</h3>
-                            <p class="text-gray-600 text-sm">Advanced fitness tracking and smart notifications</p>
-                            <div class="flex items-center space-x-4 mt-3">
-                                <div class="flex items-center border border-gray-300 rounded-lg">
-                                    <button class="px-3 py-1 text-gray-600 hover:text-gray-900" onclick="updateQuantity(2, -1)">-</button>
-                                    <span class="px-3 py-1 border-x border-gray-300" id="qty-2">1</span>
-                                    <button class="px-3 py-1 text-gray-600 hover:text-gray-900" onclick="updateQuantity(2, 1)">+</button>
-                                </div>
-                                <span class="text-lg font-bold text-primary-600">$399.99</span>
-                                <button class="text-red-600 hover:text-red-700 ml-auto" onclick="removeItem(2)">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Cart Item 3 -->
-                <div class="bg-white rounded-2xl shadow-sm p-6 border border-gray-100">
-                    <div class="flex items-center space-x-4">
-                        <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden">
-                            <img src="/images/backpack.jpg" alt="Premium Laptop Backpack" class="w-full h-full object-cover">
-                        </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-gray-900">Premium Laptop Backpack</h3>
-                            <p class="text-gray-600 text-sm">Durable laptop backpack with USB charging port</p>
-                            <div class="flex items-center space-x-4 mt-3">
-                                <div class="flex items-center border border-gray-300 rounded-lg">
-                                    <button class="px-3 py-1 text-gray-600 hover:text-gray-900" onclick="updateQuantity(3, -1)">-</button>
-                                    <span class="px-3 py-1 border-x border-gray-300" id="qty-3">1</span>
-                                    <button class="px-3 py-1 text-gray-600 hover:text-gray-900" onclick="updateQuantity(3, 1)">+</button>
-                                </div>
-                                <span class="text-lg font-bold text-primary-600">$89.99</span>
-                                <button class="text-red-600 hover:text-red-700 ml-auto" onclick="removeItem(3)">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Continue Shopping -->
+            </div>                <!-- Continue Shopping -->
                 <div class="pt-4">
                     <a href="/products" class="inline-flex items-center space-x-2 text-primary-600 hover:text-primary-700 font-medium">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -324,71 +265,375 @@
                 <p class="text-gray-400">&copy; 2025 EliteStore. All rights reserved.</p>
             </div>
         </div>
-    </footer>
-
-    <!-- JavaScript -->
-    <script>
-        function toggleMobileMenu() {
+    </footer>    <!-- JavaScript -->
+    <script>        function toggleMobileMenu() {
             const menu = document.getElementById('mobile-menu');
+            const menuButton = document.getElementById('mobile-menu-button');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+            
             menu.classList.toggle('hidden');
+            
+            // Update ARIA attributes
+            const isOpen = !menu.classList.contains('hidden');
+            menuButton.setAttribute('aria-expanded', isOpen);
+            
+            // Toggle icons
+            if (isOpen) {
+                menuIcon.classList.add('hidden');
+                closeIcon.classList.remove('hidden');
+            } else {
+                menuIcon.classList.remove('hidden');
+                closeIcon.classList.add('hidden');
+            }
         }
 
-        // Cart functionality
-        const cartItems = {
-            1: { name: "Premium Wireless Headphones", price: 299.99, quantity: 1 },
-            2: { name: "Smart Watch Pro", price: 399.99, quantity: 1 },
-            3: { name: "Premium Laptop Backpack", price: 89.99, quantity: 1 }
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const menu = document.getElementById('mobile-menu');
+            const menuButton = event.target.closest('#mobile-menu-button');
+            const menuContent = event.target.closest('#mobile-menu');
+            
+            if (!menuButton && !menuContent && !menu.classList.contains('hidden')) {
+                closeMobileMenu();
+            }
+        });
+
+        // Close mobile menu when clicking on links
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', function() {
+                closeMobileMenu();
+            });
+        });
+
+        // Close mobile menu with ESC key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                const menu = document.getElementById('mobile-menu');
+                if (!menu.classList.contains('hidden')) {
+                    closeMobileMenu();
+                }
+            }
+        });
+
+        // Helper function to close mobile menu
+        function closeMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            const menuButton = document.getElementById('mobile-menu-button');
+            const menuIcon = document.getElementById('menu-icon');
+            const closeIcon = document.getElementById('close-icon');
+            
+            menu.classList.add('hidden');
+            menuButton.setAttribute('aria-expanded', 'false');
+            menuIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        }
+
+        // Cart Management System
+        class CartManager {
+            constructor() {
+                this.cart = this.loadCart();
+                this.init();
+            }
+
+            init() {
+                this.renderCart();
+                this.updateCartCount();
+                this.updateCartTotals();
+            }            loadCart() {
+                const cartData = localStorage.getItem('cart');
+                if (!cartData) return {};
+                
+                try {
+                    const parsed = JSON.parse(cartData);
+                    
+                    // Handle old array format - convert to new object format
+                    if (Array.isArray(parsed)) {
+                        console.log('Converting old cart format to new format');
+                        const newCart = {};
+                        parsed.forEach((item, index) => {
+                            const key = `${item.id || index}-default-default`;
+                            newCart[key] = {
+                                id: item.id || `item-${index}`,
+                                name: item.name,
+                                price: parseFloat(item.price),
+                                quantity: item.quantity || 1,
+                                images: item.image ? [item.image] : ['/images/placeholder.svg'],
+                                description: item.description || '',
+                                selectedSize: null,
+                                selectedColor: null,
+                                cartKey: key
+                            };
+                        });
+                        
+                        // Save converted cart
+                        localStorage.setItem('cart', JSON.stringify(newCart));
+                        return newCart;
+                    }
+                    
+                    // New object format
+                    return parsed;
+                } catch (e) {
+                    console.error('Error loading cart:', e);
+                    return {};
+                }
+            }
+
+            saveCart() {
+                localStorage.setItem('cart', JSON.stringify(this.cart));
+            }
+
+            addToCart(product, quantity = 1, selectedSize = null, selectedColor = null) {
+                const key = `${product.id}-${selectedSize || 'default'}-${selectedColor || 'default'}`;
+                
+                if (this.cart[key]) {
+                    this.cart[key].quantity += quantity;
+                } else {
+                    this.cart[key] = {
+                        ...product,
+                        quantity: quantity,
+                        selectedSize: selectedSize,
+                        selectedColor: selectedColor,
+                        cartKey: key
+                    };
+                }
+                
+                this.saveCart();
+                this.renderCart();
+                this.updateCartCount();
+                this.updateCartTotals();
+            }
+
+            updateQuantity(cartKey, change) {
+                if (this.cart[cartKey]) {
+                    this.cart[cartKey].quantity += change;
+                    
+                    if (this.cart[cartKey].quantity <= 0) {
+                        this.removeItem(cartKey);
+                        return;
+                    }
+                    
+                    this.saveCart();
+                    this.renderCart();
+                    this.updateCartCount();
+                    this.updateCartTotals();
+                }
+            }
+
+            removeItem(cartKey) {
+                if (this.cart[cartKey]) {
+                    delete this.cart[cartKey];
+                    this.saveCart();
+                    this.renderCart();
+                    this.updateCartCount();
+                    this.updateCartTotals();
+                    
+                    // Show toast notification
+                    this.showToast('Item removed from cart', 'info');
+                }
+            }
+
+            clearCart() {
+                this.cart = {};
+                this.saveCart();
+                this.renderCart();
+                this.updateCartCount();
+                this.updateCartTotals();
+            }
+
+            renderCart() {
+                const container = document.getElementById('cart-items-container');
+                const emptyCart = document.getElementById('empty-cart');
+                const cartKeys = Object.keys(this.cart);
+
+                if (cartKeys.length === 0) {
+                    emptyCart.classList.remove('hidden');
+                    // Hide checkout section if cart is empty
+                    const checkoutSection = document.querySelector('.lg\\:col-span-1');
+                    if (checkoutSection) {
+                        checkoutSection.style.display = 'none';
+                    }
+                    return;
+                } else {
+                    emptyCart.classList.add('hidden');
+                    const checkoutSection = document.querySelector('.lg\\:col-span-1');
+                    if (checkoutSection) {
+                        checkoutSection.style.display = 'block';
+                    }
+                }
+
+                // Clear existing items (except empty cart div)
+                const existingItems = container.querySelectorAll('.cart-item');
+                existingItems.forEach(item => item.remove());
+
+                // Render each cart item
+                cartKeys.forEach(cartKey => {
+                    const item = this.cart[cartKey];
+                    const itemElement = this.createCartItemElement(item);
+                    container.insertBefore(itemElement, emptyCart);
+                });
+            }
+
+            createCartItemElement(item) {
+                const div = document.createElement('div');
+                div.className = 'cart-item bg-white rounded-2xl shadow-sm p-6 border border-gray-100';
+                
+                const sizeColorInfo = (item.selectedSize || item.selectedColor) ? 
+                    `<div class="text-xs text-gray-500 mt-1">
+                        ${item.selectedSize ? `Size: ${item.selectedSize}` : ''}
+                        ${item.selectedSize && item.selectedColor ? ' • ' : ''}
+                        ${item.selectedColor ? `Color: ${item.selectedColor}` : ''}
+                    </div>` : '';
+
+                div.innerHTML = `
+                    <div class="flex items-center space-x-4">
+                        <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden">
+                            <img src="${item.images && item.images[0] ? item.images[0] : '/images/placeholder.svg'}" 
+                                 alt="${item.name}" class="w-full h-full object-cover">
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-semibold text-gray-900">${item.name}</h3>
+                            <p class="text-gray-600 text-sm">${item.description || ''}</p>
+                            ${sizeColorInfo}
+                            <div class="flex items-center space-x-4 mt-3">
+                                <div class="flex items-center border border-gray-300 rounded-lg">
+                                    <button class="px-3 py-1 text-gray-600 hover:text-gray-900" 
+                                            onclick="cartManager.updateQuantity('${item.cartKey}', -1)">-</button>
+                                    <span class="px-3 py-1 border-x border-gray-300">${item.quantity}</span>
+                                    <button class="px-3 py-1 text-gray-600 hover:text-gray-900" 
+                                            onclick="cartManager.updateQuantity('${item.cartKey}', 1)">+</button>
+                                </div>
+                                <span class="text-lg font-bold text-primary-600">$${(item.price * item.quantity).toFixed(2)}</span>
+                                <button class="text-red-600 hover:text-red-700 ml-auto" 
+                                        onclick="cartManager.removeItem('${item.cartKey}')">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                return div;
+            }
+
+            updateCartTotals() {
+                let subtotal = 0;
+                Object.values(this.cart).forEach(item => {
+                    subtotal += item.price * item.quantity;
+                });
+                
+                const tax = subtotal * 0.08; // 8% tax
+                const total = subtotal + tax;
+                
+                const subtotalElement = document.getElementById('subtotal');
+                const taxElement = document.getElementById('tax');
+                const totalElement = document.getElementById('total');
+                
+                if (subtotalElement) subtotalElement.textContent = `$${subtotal.toFixed(2)}`;
+                if (taxElement) taxElement.textContent = `$${tax.toFixed(2)}`;
+                if (totalElement) totalElement.textContent = `$${total.toFixed(2)}`;
+            }            updateCartCount() {
+                const count = Object.values(this.cart).reduce((sum, item) => sum + item.quantity, 0);
+                const cartCountElement = document.getElementById('cart-count');
+                if (cartCountElement) {
+                    cartCountElement.textContent = count;
+                }
+                
+                // Dispatch event for other pages to listen
+                window.dispatchEvent(new CustomEvent('cartUpdated', { 
+                    detail: { count, cart: this.cart }
+                }));
+            }getTotalItems() {
+                return Object.values(this.cart).reduce((sum, item) => sum + item.quantity, 0);
+            }
+
+            getSubtotal() {
+                return Object.values(this.cart).reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            }
+
+            showToast(message, type = 'info') {
+                // Simple toast notification
+                const toast = document.createElement('div');
+                toast.className = `fixed top-4 right-4 z-50 px-4 py-2 rounded-lg text-white ${
+                    type === 'success' ? 'bg-green-500' : 
+                    type === 'error' ? 'bg-red-500' : 
+                    type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500'
+                }`;
+                toast.textContent = message;
+                
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.remove();
+                }, 3000);
+            }
+        }
+
+        // Initialize cart manager
+        const cartManager = new CartManager();
+
+        // Expose globally for other scripts
+        window.cartManager = cartManager;
+
+        // Demo function to add items to cart for testing
+        function addDemoItems() {
+            const demoItems = [
+                {
+                    id: 'demo-shirt',
+                    name: 'Classic Cotton T-Shirt',
+                    price: 29.99,
+                    description: 'Comfortable cotton t-shirt',
+                    images: ['/images/placeholder.svg']
+                },
+                {
+                    id: 'demo-jeans',
+                    name: 'Denim Jeans',
+                    price: 79.99,
+                    description: 'Premium denim jeans',
+                    images: ['/images/placeholder.svg']
+                }
+            ];
+            
+            demoItems.forEach(item => {
+                cartManager.addToCart(item, 1);
+            });
+            
+            console.log('Demo items added to cart!');
+        }
+
+        // Expose demo function for testing
+        window.addDemoItems = addDemoItems;
+
+        // Debug functions for testing
+        window.clearCartStorage = function() {
+            localStorage.removeItem('cart');
+            location.reload();
         };
+        
+        window.debugCart = function() {
+            console.log('Cart localStorage:', localStorage.getItem('cart'));
+            console.log('Parsed cart:', cartManager.cart);
+            console.log('Cart count:', cartManager.getTotalItems ? cartManager.getTotalItems() : Object.values(cartManager.cart).reduce((sum, item) => sum + item.quantity, 0));
+        };
+        
+        console.log('🛒 Cart System Ready!');
+        console.log('Try: addDemoItems() to add demo items to cart');
 
-        function updateQuantity(itemId, change) {
-            const qtyElement = document.getElementById(`qty-${itemId}`);
-            let currentQty = parseInt(qtyElement.textContent);
-            let newQty = currentQty + change;
-            
-            if (newQty < 1) {
-                newQty = 1;
+        // Listen for cart updates from other pages
+        window.addEventListener('cartUpdated', function(event) {
+            cartManager.cart = event.detail.cart || cartManager.loadCart();
+            cartManager.updateCartCount();
+        });
+        
+        // Listen for storage changes (for cross-tab updates)
+        window.addEventListener('storage', function(event) {
+            if (event.key === 'cart') {
+                cartManager.cart = cartManager.loadCart();
+                cartManager.updateCartCount();
             }
-            
-            qtyElement.textContent = newQty;
-            cartItems[itemId].quantity = newQty;
-            updateCartTotals();
-        }
-
-        function removeItem(itemId) {
-            const itemElement = document.querySelector(`#qty-${itemId}`).closest('.bg-white');
-            itemElement.style.opacity = '0.5';
-            itemElement.style.transform = 'translateX(-100%)';
-            
-            setTimeout(() => {
-                itemElement.remove();
-                delete cartItems[itemId];
-                updateCartTotals();
-                updateCartCount();
-            }, 300);
-        }
-
-        function updateCartTotals() {
-            let subtotal = 0;
-            for (const item of Object.values(cartItems)) {
-                subtotal += item.price * item.quantity;
-            }
-            
-            const tax = subtotal * 0.08; // 8% tax
-            const total = subtotal + tax;
-            
-            document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('tax').textContent = `$${tax.toFixed(2)}`;
-            document.getElementById('total').textContent = `$${total.toFixed(2)}`;
-        }
-
-        function updateCartCount() {
-            const count = Object.values(cartItems).reduce((sum, item) => sum + item.quantity, 0);
-            document.getElementById('cart-count').textContent = count;
-        }
-
-        // Initialize cart
-        updateCartTotals();
-        updateCartCount();
+        });
     </script>
 </body>
 </html>

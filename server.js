@@ -6,9 +6,12 @@ require('dotenv').config();
 // Import database connection
 const connectDB = require('./config/database');
 
-// Import routes - temporarily disabled
+// Import routes
 // const productRoutes = require('./routes/productRoutes');
-// const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('./routes/authRoutes');
+
+// Import models
+const Product = require('./models/Product');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,21 +43,22 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// API Routes - temporarily disabled due to MongoDB not running
+// API Routes
 // Middleware to check database status for API routes
-// app.use('/api/*', (req, res, next) => {
-//   if (!isDbConnected) {
-//     return res.status(503).json({
-//       success: false,
-//       message: 'Database not available. Server running in demo mode.',
-//       demo: true
-//     });
-//   }
-//   next();
-// });
+app.use('/api/*', (req, res, next) => {
+  if (!isDbConnected) {
+    return res.status(503).json({
+      success: false,
+      message: 'Database not available. Server running in demo mode.',
+      demo: true
+    });
+  }
+  next();
+});
 
+// API Routes - testing auth routes first
 // app.use('/api/products', productRoutes);
-// app.use('/api/auth', authRoutes);
+app.use('/api/auth', authRoutes);
 
 // Sample data for demo (will be replaced by database queries)
 const sampleProducts = [
@@ -94,29 +98,176 @@ const sampleProducts = [
 ];
 
 // Frontend Routes
-app.get('/', (req, res) => {
-    res.render('index', { 
-        title: 'EliteStore - Premium Products',
-        products: sampleProducts.filter(p => p.featured)
-    });
+app.get('/', async (req, res) => {
+    try {
+        let featuredProducts = [];
+        if (isDbConnected) {
+            // Get featured products from database
+            featuredProducts = await Product.find({ 
+                status: 'active', 
+                featured: true 
+            }).limit(6).lean();
+        } else {
+            // Use sample data if database not connected
+            featuredProducts = sampleProducts.filter(p => p.featured);
+        }
+        
+        res.render('index', { 
+            title: 'EliteStore - Premium Clothing',
+            products: featuredProducts
+        });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.render('index', { 
+            title: 'EliteStore - Premium Clothing',
+            products: sampleProducts.filter(p => p.featured)
+        });
+    }
 });
 
-app.get('/products', (req, res) => {
-    res.render('products', { 
-        title: 'Our Products - EliteStore',
-        products: sampleProducts
-    });
+app.get('/products', async (req, res) => {
+    try {
+        let products = [];
+        const category = req.query.category; // 'Men' or 'Women'
+        const searchTerm = req.query.search; // Search query
+        
+        if (isDbConnected) {
+            const filter = { status: 'active' };
+            
+            // Add category filter
+            if (category && ['Men', 'Women'].includes(category)) {
+                filter.category = category;
+            }
+            
+            // Add search filter
+            if (searchTerm) {
+                filter.$or = [
+                    { name: new RegExp(searchTerm, 'i') },
+                    { description: new RegExp(searchTerm, 'i') },
+                    { shortDescription: new RegExp(searchTerm, 'i') },
+                    { subcategory: new RegExp(searchTerm, 'i') },
+                    { brand: new RegExp(searchTerm, 'i') },
+                    { tags: new RegExp(searchTerm, 'i') }
+                ];
+            }
+            
+            products = await Product.find(filter).lean();
+        } else {
+            products = sampleProducts;
+            
+            // Filter by search term if provided
+            if (searchTerm) {
+                const search = searchTerm.toLowerCase();
+                products = products.filter(product => 
+                    product.name.toLowerCase().includes(search) ||
+                    product.description.toLowerCase().includes(search) ||
+                    (product.category && product.category.toLowerCase().includes(search))
+                );
+            }
+        }
+        
+        let title = 'Our Clothing Collection - EliteStore';
+        if (category) {
+            title = `${category === 'Men' ? "Men's" : "Women's"} Clothing - EliteStore`;
+        }
+        if (searchTerm) {
+            title = `Search Results for "${searchTerm}" - EliteStore`;
+        }
+        
+        res.render('products', { 
+            title: title,
+            products: products,
+            currentCategory: category || 'All',
+            searchTerm: searchTerm || ''
+        });
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        res.render('products', { 
+            title: 'Our Products - EliteStore',
+            products: sampleProducts,
+            currentCategory: 'All',
+            searchTerm: ''
+        });
+    }
 });
 
-app.get('/product/:id', (req, res) => {
-    const product = sampleProducts.find(p => p.id === parseInt(req.params.id));
-    if (!product) {
+// Men's clothing route
+app.get('/men', async (req, res) => {
+    try {
+        let products = [];
+        if (isDbConnected) {
+            products = await Product.find({ 
+                status: 'active', 
+                category: 'Men' 
+            }).lean();
+        } else {
+            products = sampleProducts;
+        }
+        
+        res.render('products', { 
+            title: "Men's Clothing - EliteStore",
+            products: products,
+            currentCategory: 'Men'
+        });
+    } catch (error) {
+        console.error('Error fetching men\'s products:', error);
+        res.render('products', { 
+            title: "Men's Clothing - EliteStore",
+            products: sampleProducts,
+            currentCategory: 'Men'
+        });
+    }
+});
+
+// Women's clothing route
+app.get('/women', async (req, res) => {
+    try {
+        let products = [];
+        if (isDbConnected) {
+            products = await Product.find({ 
+                status: 'active', 
+                category: 'Women' 
+            }).lean();
+        } else {
+            products = sampleProducts;
+        }
+        
+        res.render('products', { 
+            title: "Women's Clothing - EliteStore",
+            products: products,
+            currentCategory: 'Women'
+        });
+    } catch (error) {
+        console.error('Error fetching women\'s products:', error);
+        res.render('products', { 
+            title: "Women's Clothing - EliteStore",
+            products: sampleProducts,
+            currentCategory: 'Women'
+        });
+    }
+});
+
+app.get('/product/:id', async (req, res) => {
+    try {
+        let product = null;
+        if (isDbConnected) {
+            product = await Product.findById(req.params.id).lean();
+        } else {
+            product = sampleProducts.find(p => p.id === parseInt(req.params.id));
+        }
+        
+        if (!product) {
+            return res.status(404).render('404', { title: 'Product Not Found' });
+        }
+        
+        res.render('product-detail', { 
+            title: `${product.name} - EliteStore`,
+            product 
+        });
+    } catch (error) {
+        console.error('Error fetching product:', error);
         return res.status(404).render('404', { title: 'Product Not Found' });
     }
-    res.render('product-detail', { 
-        title: `${product.name} - EliteStore`,
-        product 
-    });
 });
 
 app.get('/about', (req, res) => {
@@ -129,6 +280,77 @@ app.get('/contact', (req, res) => {
 
 app.get('/cart', (req, res) => {
     res.render('cart', { title: 'Shopping Cart - EliteStore' });
+});
+
+// Authentication routes
+app.get('/login', (req, res) => {
+    res.render('login', { title: 'Sign In - EliteStore' });
+});
+
+app.get('/register', (req, res) => {
+    res.render('register', { title: 'Create Account - EliteStore' });
+});
+
+app.get('/forgot-password', (req, res) => {
+    res.render('forgot-password', { title: 'Forgot Password - EliteStore' });
+});
+
+app.get('/reset-password', (req, res) => {
+    res.render('reset-password', { title: 'Reset Password - EliteStore' });
+});
+
+app.get('/verify-email', async (req, res) => {
+    const { token } = req.query;
+    
+    if (!token) {
+        return res.render('auth-message', { 
+            title: 'Email Verification - EliteStore',
+            type: 'error',
+            message: 'Invalid verification link',
+            redirectUrl: '/login'
+        });
+    }
+    
+    try {
+        // If database is connected, verify the token
+        if (isDbConnected) {
+            const response = await fetch(`${req.protocol}://${req.get('host')}/api/auth/verify-email/${token}`, {
+                method: 'GET'
+            });
+            const result = await response.json();
+            
+            if (result.success) {
+                return res.render('auth-message', {
+                    title: 'Email Verified - EliteStore',
+                    type: 'success',
+                    message: 'Your email has been verified successfully! You can now sign in.',
+                    redirectUrl: '/login'
+                });
+            } else {
+                return res.render('auth-message', {
+                    title: 'Verification Failed - EliteStore',
+                    type: 'error',
+                    message: result.message || 'Email verification failed',
+                    redirectUrl: '/login'
+                });
+            }
+        } else {
+            return res.render('auth-message', {
+                title: 'Service Unavailable - EliteStore',
+                type: 'warning',
+                message: 'Email verification service is currently unavailable',
+                redirectUrl: '/login'
+            });
+        }
+    } catch (error) {
+        console.error('Email verification error:', error);
+        return res.render('auth-message', {
+            title: 'Verification Error - EliteStore',
+            type: 'error',
+            message: 'An error occurred during email verification',
+            redirectUrl: '/login'
+        });
+    }
 });
 
 app.get('/setup', (req, res) => {
