@@ -1583,8 +1583,16 @@ h1, h2, h3, h4, h5, h6 {
   height: 100%;
 }
 
+.h-auto {
+  height: auto;
+}
+
 .max-h-64 {
   max-height: 16rem;
+}
+
+.max-h-96 {
+  max-height: 24rem;
 }
 
 .min-h-screen {
@@ -2193,6 +2201,11 @@ h1, h2, h3, h4, h5, h6 {
 .bg-clip-text {
   -webkit-background-clip: text;
           background-clip: text;
+}
+
+.object-contain {
+  -o-object-fit: contain;
+     object-fit: contain;
 }
 
 .object-cover {
@@ -3171,6 +3184,10 @@ h1, h2, h3, h4, h5, h6 {
 
   .lg\:h-\[500px\] {
     height: 500px;
+  }
+
+  .lg\:max-h-\[500px\] {
+    max-height: 500px;
   }
 
   .lg\:grid-cols-2 {
