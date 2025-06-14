@@ -2715,6 +2715,10 @@ h1, h2, h3, h4, h5, h6 {
   transition-duration: 300ms;
 }
 
+.ease-out {
+  transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+
 /* Text utilities */
 
 .line-clamp-2 {

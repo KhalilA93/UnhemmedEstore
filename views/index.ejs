@@ -44,6 +44,143 @@
     
     <!-- Custom Styles -->
     <style>
+        /* Smooth animations and transitions */
+        * {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Fade in animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+        
+        .fade-in-delay-1 {
+            animation-delay: 0.2s;
+        }
+        
+        .fade-in-delay-2 {
+            animation-delay: 0.4s;
+        }
+        
+        .fade-in-delay-3 {
+            animation-delay: 0.6s;
+        }
+        
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Slide in from left */
+        .slide-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        
+        @keyframes slideInLeft {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Slide in from right */
+        .slide-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        
+        @keyframes slideInRight {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        /* Scale in animation */
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            animation: scaleIn 0.6s ease-out forwards;
+        }
+        
+        @keyframes scaleIn {
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        /* Hover animations */
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Mobile-friendly button animations */
+        .btn-animate {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-animate::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-animate:hover::before {
+            left: 100%;
+        }
+        
+        /* Intersection Observer animations */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        
+        .animate-on-scroll.in-view {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .fade-in, .slide-in-left, .slide-in-right, .scale-in {
+                animation-duration: 0.6s;
+            }
+            
+            .hover-lift:hover {
+                transform: translateY(-2px);
+            }
+        }
+        
+        /* Prefers reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+        
         .hero-gradient {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
@@ -246,24 +383,24 @@
     <!-- Hero Section -->
     <section class="relative overflow-hidden bg-white">
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 lg:py-32">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">                <div class="text-gray-900">
-                    <h1 class="text-4xl lg:text-6xl font-bold font-display mb-6 leading-tight">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">                <div class="text-gray-900 slide-in-left">
+                    <h1 class="text-4xl lg:text-6xl font-bold font-display mb-6 leading-tight fade-in">
                         Welcome to <span class="text-primary-600">Unhemmed</span>
                     </h1>
-                    <p class="text-xl lg:text-2xl mb-8 text-gray-700 leading-relaxed">
+                    <p class="text-xl lg:text-2xl mb-8 text-gray-700 leading-relaxed fade-in fade-in-delay-1">
                         Discover premium clothing for men and women. Quality fashion that elevates your style and confidence.
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4">
-                        <a href="/men" class="inline-flex items-center justify-center px-8 py-4 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors transform hover:scale-105 shadow-lg">
+                    <div class="flex flex-col sm:flex-row gap-4 fade-in fade-in-delay-2">
+                        <a href="/men" class="inline-flex items-center justify-center px-8 py-4 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors transform hover:scale-105 shadow-lg btn-animate">
                             Shop Men's
                         </a>
-                        <a href="/women" class="inline-flex items-center justify-center px-8 py-4 border-2 border-primary-600 text-primary-600 font-semibold rounded-lg hover:bg-primary-600 hover:text-white transition-colors">
+                        <a href="/women" class="inline-flex items-center justify-center px-8 py-4 border-2 border-primary-600 text-primary-600 font-semibold rounded-lg hover:bg-primary-600 hover:text-white transition-colors btn-animate">
                             Shop Women's
                         </a>
                     </div>
                 </div>
-                <div class="relative">
-                    <div class="w-full bg-white bg-opacity-10 rounded-2xl backdrop-blur-sm p-4">
+                <div class="relative slide-in-right">
+                    <div class="w-full bg-white bg-opacity-10 rounded-2xl backdrop-blur-sm p-4 hover-lift">
                         <img src="/images/hero/hero-banner.jpg" alt="Unhemmed Fashion" class="w-full h-auto object-contain rounded-lg shadow-2xl">
                     </div>
                 </div>
@@ -274,13 +411,13 @@
     <!-- Features Section -->
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 animate-on-scroll">
                 <h2 class="text-3xl lg:text-4xl font-bold font-display text-gray-900 mb-4">Why Choose Unhemmed?</h2>
                 <p class="text-xl text-gray-600 max-w-3xl mx-auto">We're committed to providing you with the best shopping experience through our premium services.</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div class="text-center group">
+                <div class="text-center group animate-on-scroll hover-lift">
                     <div class="inline-flex items-center justify-center w-16 h-16 bg-primary-100 text-primary-600 rounded-full mb-6 group-hover:bg-primary-600 group-hover:text-white transition-colors">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
@@ -290,7 +427,7 @@
                     <p class="text-gray-600">Free shipping on orders over $100. Fast and reliable delivery worldwide with tracking included.</p>
                 </div>
                 
-                <div class="text-center group">
+                <div class="text-center group animate-on-scroll hover-lift" style="animation-delay: 0.2s;">
                     <div class="inline-flex items-center justify-center w-16 h-16 bg-primary-100 text-primary-600 rounded-full mb-6 group-hover:bg-primary-600 group-hover:text-white transition-colors">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
@@ -300,14 +437,14 @@
                     <p class="text-gray-600">Your payment information is protected with bank-level security and encryption technology.</p>
                 </div>
                 
-                <div class="text-center group">
+                <div class="text-center group animate-on-scroll hover-lift" style="animation-delay: 0.4s;">
                     <div class="inline-flex items-center justify-center w-16 h-16 bg-primary-100 text-primary-600 rounded-full mb-6 group-hover:bg-primary-600 group-hover:text-white transition-colors">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192L5.636 18.364M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
                     </div>
                     <h3 class="text-xl font-semibold text-gray-900 mb-4">24/7 Support</h3>
-                    <p class="text-gray-600">Our customer service team is available around the clock to help you with any questions.</p>
+                    <p class="text-gray-600">Our customer service team is available around the clock to help you with any questions.</p>  
                 </div>
             </div>
         </div>    </section>
@@ -316,12 +453,12 @@
     <section class="py-20 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                <div class="order-2 lg:order-1">
-                    <div class="relative">
+                <div class="order-2 lg:order-1 animate-on-scroll">
+                    <div class="relative hover-lift">
                         <img src="/images/homepage/about-section.jpg" alt="Unhemmed Style" class="w-full h-auto max-h-96 lg:max-h-[500px] object-contain rounded-2xl shadow-2xl">
                     </div>
                 </div>
-                <div class="order-1 lg:order-2">
+                <div class="order-1 lg:order-2 animate-on-scroll">
                     <h2 class="text-4xl lg:text-5xl font-bold font-display text-gray-900 mb-6">
                         Style That Speaks <span class="text-primary-600">Volumes</span>
                     </h2>
@@ -329,15 +466,15 @@
                         At Unhemmed, we believe fashion is more than just clothing—it's a form of self-expression. Our carefully curated collection features premium pieces that blend timeless elegance with contemporary trends.
                     </p>
                     <div class="space-y-4 mb-8">
-                        <div class="flex items-center">
+                        <div class="flex items-center animate-on-scroll" style="animation-delay: 0.2s;">
                             <div class="w-2 h-2 bg-primary-600 rounded-full mr-4"></div>
                             <span class="text-gray-700">Handpicked quality materials</span>
                         </div>
-                        <div class="flex items-center">
+                        <div class="flex items-center animate-on-scroll" style="animation-delay: 0.4s;">
                             <div class="w-2 h-2 bg-primary-600 rounded-full mr-4"></div>
                             <span class="text-gray-700">Sustainable fashion practices</span>
                         </div>
-                        <div class="flex items-center">
+                        <div class="flex items-center animate-on-scroll" style="animation-delay: 0.6s;">
                             <div class="w-2 h-2 bg-primary-600 rounded-full mr-4"></div>
                             <span class="text-gray-700">Designs that transcend seasons</span>
                         </div>
@@ -356,23 +493,23 @@
     <!-- Clothing Categories Section -->
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 animate-on-scroll">
                 <h2 class="text-3xl lg:text-4xl font-bold font-display text-gray-900 mb-4">Shop by Category</h2>
                 <p class="text-xl text-gray-600">Discover premium clothing for every style and occasion</p>
             </div>
             
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <!-- Men's Category -->
-                <div class="relative group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-
+                <div class="relative group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll hover-lift">
                     <div class="aspect-[4/3] bg-gradient-to-br from-blue-600 to-blue-800">
                         <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-40 transition-all duration-300"></div>
                         <div class="absolute inset-0 flex flex-col justify-center items-center text-white p-8">
-                            <svg class="w-16 h-16 mb-4 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-16 h-16 mb-4 text-white opacity-80 scale-in" style="animation-delay: 0.2s;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                             <h3 class="text-3xl font-bold font-display mb-4">Men's Clothing</h3>
                             <p class="text-lg text-center mb-6">Discover premium shirts, pants, jackets, and accessories for the modern man</p>
-                            <a href="/men" class="inline-flex items-center px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors transform hover:scale-105">
+                            <a href="/men" class="inline-flex items-center px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors transform hover:scale-105 btn-animate">
                                 Shop Men's
                                 <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
@@ -383,11 +520,11 @@
                 </div>
 
                 <!-- Women's Category -->
-                <div class="relative group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2">
+                <div class="relative group overflow-hidden rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 animate-on-scroll hover-lift" style="animation-delay: 0.2s;">
                     <div class="aspect-[4/3] bg-gradient-to-br from-pink-500 to-purple-600">
                         <div class="absolute inset-0 bg-black bg-opacity-30 group-hover:bg-opacity-40 transition-all duration-300"></div>
                         <div class="absolute inset-0 flex flex-col justify-center items-center text-white p-8">
-                            <svg class="w-16 h-16 mb-4 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-16 h-16 mb-4 text-white opacity-80 scale-in" style="animation-delay: 0.4s;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                             <h3 class="text-3xl font-bold font-display mb-4">Women's Clothing</h3>
@@ -408,13 +545,13 @@
     <!-- Featured Products Section -->
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16">
+            <div class="text-center mb-16 animate-on-scroll">
                 <h2 class="text-3xl lg:text-4xl font-bold font-display text-gray-900 mb-4">Featured Products</h2>
                 <p class="text-xl text-gray-600">Discover our hand-picked selection of premium products</p>
             </div>
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-                <% products.forEach(product => { %>
-                <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group transform hover:-translate-y-2">
+                <% products.forEach((product, index) => { %>
+                <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group transform hover:-translate-y-2 animate-on-scroll hover-lift" style="animation-delay: <%= index * 0.1 %>s;">
                     <a href="/product/<%= product._id || product.id %>" class="block">
                         <div class="aspect-square overflow-hidden">
                             <img src="<%= product.primaryImage ? product.primaryImage.url : (product.images && product.images[0] ? product.images[0].url : (product.image || '/images/placeholder.svg')) %>" 
@@ -479,7 +616,7 @@
         
         <!-- Content -->
         <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="max-w-3xl mx-auto text-center">
+            <div class="max-w-3xl mx-auto text-center animate-on-scroll">
                 <h2 class="text-4xl lg:text-5xl font-bold font-display text-gray-900 mb-6">
                     Join the <span class="text-primary-600">Unhemmed</span> Community
                 </h2>
@@ -487,15 +624,15 @@
                     Be the first to discover our latest collections, exclusive offers, and style inspiration. Join thousands of fashion enthusiasts who trust Unhemmed for their wardrobe essentials.
                 </p>
                 
-                <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto mb-8" onsubmit="subscribeNewsletter(event)">
+                <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto mb-8 animate-on-scroll" style="animation-delay: 0.2s;" onsubmit="subscribeNewsletter(event)">
                     <input type="email" required placeholder="Enter your email address" 
                            class="flex-1 px-6 py-4 text-gray-900 bg-white border border-gray-300 rounded-lg focus:ring-4 focus:ring-primary-300 focus:outline-none transition-all placeholder-gray-500">
-                    <button type="submit" class="px-8 py-4 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700 transition-colors transform hover:scale-105 shadow-lg">
+                    <button type="submit" class="px-8 py-4 bg-primary-600 text-white font-bold rounded-lg hover:bg-primary-700 transition-colors transform hover:scale-105 shadow-lg btn-animate">
                         Subscribe
                     </button>
                 </form>
                 
-                <div class="flex justify-center items-center gap-6 text-gray-600">
+                <div class="flex justify-center items-center gap-6 text-gray-600 animate-on-scroll" style="animation-delay: 0.4s;">
                     <div class="flex items-center">
                         <svg class="w-5 h-5 mr-2 text-primary-600" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
@@ -945,6 +1082,55 @@
                 cartManager.cart = cartManager.loadCart();
                 cartManager.updateCartCount();
             }
+        });
+        
+        // Intersection Observer for scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    // Optional: unobserve after animation to improve performance
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        
+        // Observe all elements with animate-on-scroll class
+        document.querySelectorAll('.animate-on-scroll').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Touch-friendly interactions for mobile
+        if ('ontouchstart' in window) {
+            // Add touch feedback for interactive elements
+            document.querySelectorAll('.btn-animate, .hover-lift').forEach(element => {
+                element.addEventListener('touchstart', function() {
+                    this.style.transform = 'scale(0.98)';
+                });
+                
+                element.addEventListener('touchend', function() {
+                    this.style.transform = '';
+                });
+            });
+        }
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
         });
     </script>
 </body>
