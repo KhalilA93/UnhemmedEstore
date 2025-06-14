@@ -6,7 +6,7 @@ const nodemailer = require('nodemailer');
 // Email transporter setup
 const createTransporter = () => {
   // For development, create a test account if no email is configured
-  if (!process.env.EMAIL_USER || process.env.EMAIL_USER === 'your-email@gmail.com') {
+  if (!process.env.EMAIL_USER || process.env.EMAIL_USER === 'khalilatkins420@gmail.com') {
     console.log('⚠️  Email not configured. Email features will be simulated.');
     return null;
   }
@@ -383,9 +383,8 @@ const forgotPassword = async (req, res) => {
     `;
 
     try {
-      const transporter = createTransporter();
-      await transporter.sendMail({
-        from: process.env.EMAIL_FROM || 'noreply@elitestore.com',
+      const transporter = createTransporter();      await transporter.sendMail({
+        from: process.env.EMAIL_FROM || 'khalilatkins420@gmail.com',
         to: user.email,
         subject: 'Password Reset Request',
         html: message
@@ -481,15 +480,14 @@ const sendEmailVerification = async (req, res) => {
 
     const message = `
       <h1>Email Verification</h1>
-      <p>Thank you for registering with EliteStore! Please click the link below to verify your email address:</p>
+      <p>Thank you for registering with Unhemmed! Please click the link below to verify your email address:</p>
       <a href="${verifyUrl}" style="display: inline-block; padding: 12px 24px; background-color: #16a34a; color: white; text-decoration: none; border-radius: 6px;">Verify Email</a>
       <p>If you did not create an account, please ignore this email.</p>
     `;
 
     try {
-      const transporter = createTransporter();
-      await transporter.sendMail({
-        from: process.env.EMAIL_FROM || 'noreply@elitestore.com',
+      const transporter = createTransporter();      await transporter.sendMail({
+        from: process.env.EMAIL_FROM || 'khalilatkins420@gmail.com',
         to: user.email,
         subject: 'Verify Your Email Address',
         html: message

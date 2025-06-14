@@ -154,9 +154,9 @@ Create a `.env` file with the following variables:
 MONGODB_URI=mongodb://localhost:27017/elitestore
 JWT_SECRET=your_super_secure_jwt_secret_key_here
 EMAIL_SERVICE=gmail
-EMAIL_USER=your_email@gmail.com
+EMAIL_USER=khalilatkins420@gmail.com
 EMAIL_PASS=your_app_password
-EMAIL_FROM=noreply@elitestore.com
+EMAIL_FROM=khalilatkins420@gmail.com
 ```
 
 ### 2. Database Setup

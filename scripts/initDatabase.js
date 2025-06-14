@@ -55,7 +55,7 @@ const initializeDatabase = async () => {
       const adminUser = new User({
         firstName: 'Admin',
         lastName: 'User',
-        email: 'admin@elitestore.com',
+        email: 'admin@unhemmed.com',
         password: 'Admin123!',
         role: 'admin',
         emailVerified: true

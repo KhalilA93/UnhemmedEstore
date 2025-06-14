@@ -198,7 +198,7 @@ JWT_EXPIRE=30d
 
 # Email Configuration (for newsletter)
 EMAIL_SERVICE=gmail
-EMAIL_USER=your-email@gmail.com
+EMAIL_USER=khalilatkins420@gmail.com
 EMAIL_PASS=your-app-password
 ```
 
@@ -365,7 +365,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - **Documentation**: Check this README and inline code comments
 - **Issues**: Report bugs via GitHub Issues
 - **Discussions**: Join our community discussions
-- **Email**: Contact support@elitestore.com
+- **Email**: Contact khalilatkins420@gmail.com
 
 ---
 
