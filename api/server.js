@@ -4,17 +4,15 @@ const path = require('path');
 require('dotenv').config();
 
 // Import database connection
-const connectDB = require('./config/database');
+const connectDB = require('../config/database');
 
 // Import routes
-// const productRoutes = require('./routes/productRoutes');
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require('../routes/authRoutes');
 
 // Import models
-const Product = require('./models/Product');
+const Product = require('../models/Product');
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
 // Global variable to track database connection status
 let isDbConnected = false;
@@ -32,16 +30,16 @@ initializeDatabase();
 
 // Middleware
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:3000',
+  origin: process.env.CLIENT_URL || '*',
   credentials: true
 }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Set view engine
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 
 // API Routes
 // Middleware to check database status for API routes
@@ -422,6 +420,5 @@ app.use((req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+// For Vercel serverless deployment
+module.exports = app;
