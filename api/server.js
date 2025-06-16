@@ -36,15 +36,6 @@ app.use(cors({
   credentials: true
 }));
 
-// Add compression middleware for better performance
-app.use((req, res, next) => {
-  // Basic compression headers
-  if (req.headers['accept-encoding'] && req.headers['accept-encoding'].includes('gzip')) {
-    res.set('Content-Encoding', 'gzip');
-  }
-  next();
-});
-
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
@@ -136,8 +127,7 @@ app.get('/', async (req, res) => {
         
         // Set cache headers for browser caching
         res.set({
-            'Cache-Control': 'public, max-age=300', // 5 minutes
-            'ETag': `"${Date.now()}"` 
+            'Cache-Control': 'public, max-age=300' // 5 minutes
         });
         
         res.render('index', { 
@@ -219,8 +209,7 @@ app.get('/products', async (req, res) => {
         // Set cache headers
         const cacheTime = searchTerm ? 60 : 300; // Less cache for search results
         res.set({
-            'Cache-Control': `public, max-age=${cacheTime}`,
-            'ETag': `"${category || 'all'}-${searchTerm || 'none'}-${Date.now()}"`
+            'Cache-Control': `public, max-age=${cacheTime}`
         });
         
         res.render('products', { 
@@ -264,8 +253,7 @@ app.get('/men', async (req, res) => {
         
         // Set cache headers
         res.set({
-            'Cache-Control': 'public, max-age=300',
-            'ETag': '"men-products"'
+            'Cache-Control': 'public, max-age=300'
         });
         
         res.render('products', { 
@@ -301,8 +289,7 @@ app.get('/women', async (req, res) => {
         
         // Set cache headers
         res.set({
-            'Cache-Control': 'public, max-age=300',
-            'ETag': '"women-products"'
+            'Cache-Control': 'public, max-age=300'
         });
         
         res.render('products', { 
@@ -340,8 +327,7 @@ app.get('/product/:id', async (req, res) => {
         
         // Set cache headers for product pages
         res.set({
-            'Cache-Control': 'public, max-age=600', // 10 minutes for product details
-            'ETag': `"product-${productId}-${Date.now()}"`
+            'Cache-Control': 'public, max-age=600' // 10 minutes for product details
         });
         
         res.render('product-detail', { 
