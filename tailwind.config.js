@@ -64,12 +64,11 @@ module.exports = {
         bounceSubtle: {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-5px)' },
-        },
-      },
+        },      },
     },
   },
   plugins: [
-    require('@tailwindcss/forms'),
-    require('@tailwindcss/typography'),
+    // Removed @tailwindcss/forms and @tailwindcss/typography to fix missing module error
+    // These can be added back if needed by installing: npm install @tailwindcss/forms @tailwindcss/typography
   ],
 }
