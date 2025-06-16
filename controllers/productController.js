@@ -1,11 +1,84 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
+const { mockProducts } = require('../data/mockProducts');
+
+// Check if database is connected (this will be passed from the route)
+const isDatabaseConnected = () => {
+  // This function can be overridden by middleware
+  return global.isDbConnected !== false;
+};
 
 // @desc    Get all products with filtering, sorting, and pagination
 // @route   GET /api/products
 // @access  Public
 const getProducts = async (req, res) => {
   try {
+    // Check if database is connected
+    if (!isDatabaseConnected()) {
+      // Return mock products with client-side filtering
+      let filteredProducts = [...mockProducts];
+      
+      // Apply filters
+      if (req.query.category) {
+        filteredProducts = filteredProducts.filter(p => 
+          p.category.toLowerCase() === req.query.category.toLowerCase()
+        );
+      }
+      
+      if (req.query.search) {
+        const searchTerm = req.query.search.toLowerCase();
+        filteredProducts = filteredProducts.filter(p => 
+          p.name.toLowerCase().includes(searchTerm) ||
+          p.description.toLowerCase().includes(searchTerm) ||
+          p.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+        );
+      }
+      
+      if (req.query.featured === 'true') {
+        filteredProducts = filteredProducts.filter(p => p.featured);
+      }
+      
+      // Apply sorting
+      switch (req.query.sort) {
+        case 'price_asc':
+          filteredProducts.sort((a, b) => a.price - b.price);
+          break;
+        case 'price_desc':
+          filteredProducts.sort((a, b) => b.price - a.price);
+          break;
+        case 'name_asc':
+          filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
+          break;
+        case 'name_desc':
+          filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
+          break;
+        case 'rating':
+          filteredProducts.sort((a, b) => (b.ratings?.average || 0) - (a.ratings?.average || 0));
+          break;
+        default:
+          filteredProducts.sort((a, b) => (b.featured ? 1 : 0) - (a.featured ? 1 : 0));
+      }
+      
+      // Apply pagination
+      const page = parseInt(req.query.page) || 1;
+      const limit = parseInt(req.query.limit) || 12;
+      const skip = (page - 1) * limit;
+      const paginatedProducts = filteredProducts.slice(skip, skip + limit);
+      
+      return res.json({
+        success: true,
+        data: {
+          products: paginatedProducts,
+          pagination: {
+            page,
+            limit,
+            total: filteredProducts.length,
+            pages: Math.ceil(filteredProducts.length / limit)
+          }
+        },
+        message: 'Products retrieved (demo mode)'
+      });
+    }
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
     const skip = (page - 1) * limit;
@@ -101,6 +174,25 @@ const getProducts = async (req, res) => {
 // @access  Public
 const getProduct = async (req, res) => {
   try {
+    // Check if database is connected
+    if (!isDatabaseConnected()) {
+      const productId = parseInt(req.params.id);
+      const product = mockProducts.find(p => p.id === productId || p.id === req.params.id);
+      
+      if (!product) {
+        return res.status(404).json({
+          success: false,
+          message: 'Product not found'
+        });
+      }
+      
+      return res.json({
+        success: true,
+        data: product,
+        message: 'Product retrieved (demo mode)'
+      });
+    }
+    
     const product = await Product.findOne({ 
       _id: req.params.id, 
       status: 'active' 

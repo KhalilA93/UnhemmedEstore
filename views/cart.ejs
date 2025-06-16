@@ -184,10 +184,8 @@
                             <input type="text" id="promoCode" placeholder="Enter code" class="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                             <button class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors">Apply</button>
                         </div>
-                    </div>
-
-                    <!-- Checkout Button -->
-                    <button class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center space-x-2">
+                    </div>                    <!-- Checkout Button -->
+                    <button id="checkoutBtn" onclick="proceedToCheckout()" class="w-full bg-primary-600 hover:bg-primary-700 text-white py-3 px-6 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center space-x-2">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                         </svg>
@@ -617,9 +615,88 @@
             console.log('Parsed cart:', cartManager.cart);
             console.log('Cart count:', cartManager.getTotalItems ? cartManager.getTotalItems() : Object.values(cartManager.cart).reduce((sum, item) => sum + item.quantity, 0));
         };
-        
-        console.log('🛒 Cart System Ready!');
+          console.log('🛒 Cart System Ready!');
         console.log('Try: addDemoItems() to add demo items to cart');
+
+        // Checkout functionality
+        async function proceedToCheckout() {
+            const cartItems = cartManager.loadCart();
+            
+            if (!cartItems || Object.keys(cartItems).length === 0) {
+                alert('Your cart is empty. Add some items before checkout.');
+                return;
+            }
+            
+            // Check if user is authenticated
+            if (!window.authManager || !window.authManager.isAuthenticated()) {
+                if (confirm('You need to sign in to checkout. Would you like to sign in now?')) {
+                    window.location.href = '/login?redirect=' + encodeURIComponent(window.location.pathname);
+                }
+                return;
+            }
+            
+            // Calculate totals
+            const items = Object.values(cartItems);
+            const itemsPrice = items.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            const taxPrice = itemsPrice * 0.1; // 10% tax
+            const shippingPrice = itemsPrice > 100 ? 0 : 10; // Free shipping over $100
+            const totalPrice = itemsPrice + taxPrice + shippingPrice;
+            
+            // Prepare order data
+            const orderData = {
+                orderItems: items.map(item => ({
+                    product: item.id,
+                    qty: item.quantity
+                })),
+                shippingAddress: {
+                    address: '123 Demo Street',
+                    city: 'Demo City',
+                    postalCode: '12345',
+                    country: 'Demo Country'
+                },
+                paymentMethod: 'Demo Payment',
+                itemsPrice: parseFloat(itemsPrice.toFixed(2)),
+                taxPrice: parseFloat(taxPrice.toFixed(2)),
+                shippingPrice: parseFloat(shippingPrice.toFixed(2)),
+                totalPrice: parseFloat(totalPrice.toFixed(2))
+            };
+            
+            try {
+                // Disable checkout button
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                const originalText = checkoutBtn.innerHTML;
+                checkoutBtn.disabled = true;
+                checkoutBtn.innerHTML = `
+                    <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+                    <span>Processing...</span>
+                `;
+                
+                // Create order
+                const response = await window.authManager.makeRequest('/api/orders', 'POST', orderData);
+                
+                if (response.success) {
+                    // Clear cart
+                    localStorage.removeItem('cart');
+                    
+                    // Show success message
+                    alert(`Order placed successfully! Order ID: ${response.data._id}\n\nTotal: $${totalPrice.toFixed(2)}\n\nYou will receive a confirmation email shortly.`);
+                    
+                    // Redirect to orders page
+                    window.location.href = '/orders';
+                } else {
+                    throw new Error(response.message || 'Failed to create order');
+                }
+                
+            } catch (error) {
+                console.error('Checkout error:', error);
+                alert('Checkout failed: ' + error.message + '\n\nPlease try again or contact support.');
+                
+                // Re-enable checkout button
+                const checkoutBtn = document.getElementById('checkoutBtn');
+                checkoutBtn.disabled = false;
+                checkoutBtn.innerHTML = originalText;
+            }
+        }
 
         // Listen for cart updates from other pages
         window.addEventListener('cartUpdated', function(event) {
@@ -633,7 +710,10 @@
                 cartManager.cart = cartManager.loadCart();
                 cartManager.updateCartCount();
             }
-        });
-    </script>
+        });    </script>
+    
+    <!-- Include authentication functionality -->
+    <script src="/js/auth.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>

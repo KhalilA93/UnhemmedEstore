@@ -69,7 +69,7 @@ class AuthIntegratedCart {
 }
 
 // Add to cart function
-function addToCart(productId, productName, price, image) {
+async function addToCart(productId, productName, price, image) {
     const existingItem = cart.find(item => item.id === productId);
     
     if (existingItem) {
@@ -86,6 +86,19 @@ function addToCart(productId, productName, price, image) {
     
     updateCartCount();
     saveCart();
+    
+    // Sync with server if user is authenticated
+    if (window.authManager && window.authManager.isAuthenticated()) {
+        try {
+            await window.authManager.makeRequest('/api/auth/cart', 'POST', {
+                productId: productId,
+                quantity: 1
+            });
+        } catch (error) {
+            console.error('Failed to sync cart with server:', error);
+        }
+    }
+    
     showAddToCartNotification(productName);
 }
 

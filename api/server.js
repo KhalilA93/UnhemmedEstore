@@ -8,6 +8,8 @@ const connectDB = require('../config/database');
 
 // Import routes
 const authRoutes = require('../routes/authRoutes');
+const productRoutes = require('../routes/productRoutes');
+const orderRoutes = require('../routes/orderRoutes');
 
 // Import models
 const Product = require('../models/Product');
@@ -55,8 +57,15 @@ app.use('/api/*', (req, res, next) => {
 });
 
 // API Routes - testing auth routes first
-// app.use('/api/products', productRoutes);
+// Middleware to pass database status to controllers
+app.use('/api/products', (req, res, next) => {
+  global.isDbConnected = isDbConnected;
+  next();
+});
+
+app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/orders', orderRoutes);
 
 // Import the updated products data
 const { mockProducts } = require('../data/mockProducts');
@@ -246,6 +255,15 @@ app.get('/contact', (req, res) => {
 
 app.get('/cart', (req, res) => {
     res.render('cart', { title: 'Shopping Cart - Unhemmed' });
+});
+
+// Profile and Orders pages (require authentication)
+app.get('/profile', (req, res) => {
+    res.render('profile', { title: 'My Profile - Unhemmed' });
+});
+
+app.get('/orders', (req, res) => {
+    res.render('orders', { title: 'My Orders - Unhemmed' });
 });
 
 // Authentication routes
