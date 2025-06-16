@@ -35,9 +35,25 @@ app.use(cors({
   origin: process.env.CLIENT_URL || '*',
   credentials: true
 }));
+
+// Add compression middleware for better performance
+app.use((req, res, next) => {
+  // Basic compression headers
+  if (req.headers['accept-encoding'] && req.headers['accept-encoding'].includes('gzip')) {
+    res.set('Content-Encoding', 'gzip');
+  }
+  next();
+});
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
-app.use(express.static(path.join(__dirname, '../public')));
+
+// Static files with caching
+app.use(express.static(path.join(__dirname, '../public'), {
+  maxAge: '1d', // Cache static files for 1 day
+  etag: true,
+  lastModified: true
+}));
 
 // Set view engine
 app.set('view engine', 'ejs');
@@ -73,28 +89,72 @@ const { mockProducts } = require('../data/mockProducts');
 // Use updated products as sample data for demo (will be replaced by database queries)
 const sampleProducts = mockProducts;
 
+// Cache for frequently accessed data
+const productCache = {
+  featured: null,
+  all: null,
+  lastUpdated: null,
+  TTL: 5 * 60 * 1000 // 5 minutes cache
+};
+
+// Helper function to get cached or fresh data
+function getCachedProducts(type = 'all') {
+  const now = Date.now();
+  
+  // Check if cache is still valid
+  if (productCache.lastUpdated && (now - productCache.lastUpdated) < productCache.TTL) {
+    if (type === 'featured' && productCache.featured) {
+      return productCache.featured;
+    }
+    if (type === 'all' && productCache.all) {
+      return productCache.all;
+    }
+  }
+  
+  // Refresh cache
+  productCache.all = sampleProducts;
+  productCache.featured = sampleProducts.filter(p => p.featured);
+  productCache.lastUpdated = now;
+  
+  return type === 'featured' ? productCache.featured : productCache.all;
+}
+
 // Frontend Routes
 app.get('/', async (req, res) => {
     try {
         let featuredProducts = [];
         if (isDbConnected) {
-            // Get featured products from database
+            // Get featured products from database with caching
             featuredProducts = await Product.find({ 
                 status: 'active', 
                 featured: true 
-            }).limit(6).lean();
+            }).limit(6).lean().cache(300); // 5 minute cache if supported
         } else {
-            // Use sample data if database not connected
-            featuredProducts = sampleProducts.filter(p => p.featured);
+            // Use cached sample data
+            featuredProducts = getCachedProducts('featured').slice(0, 6);
         }
-          res.render('index', { 
+        
+        // Set cache headers for browser caching
+        res.set({
+            'Cache-Control': 'public, max-age=300', // 5 minutes
+            'ETag': `"${Date.now()}"` 
+        });
+        
+        res.render('index', { 
             title: 'Unhemmed - Premium Clothing',
             products: featuredProducts
         });
     } catch (error) {
-        console.error('Error fetching products:', error);        res.render('index', { 
+        console.error('Error fetching products:', error);
+        
+        // Fallback with cache headers
+        res.set({
+            'Cache-Control': 'public, max-age=60' // 1 minute for errors
+        });
+        
+        res.render('index', { 
             title: 'Unhemmed - Premium Clothing',
-            products: sampleProducts.filter(p => p.featured)
+            products: getCachedProducts('featured').slice(0, 6)
         });
     }
 });
@@ -125,16 +185,25 @@ app.get('/products', async (req, res) => {
             }
             
             products = await Product.find(filter).lean();
-              } else {
-            products = sampleProducts;
+        } else {
+            // Use cached products for better performance
+            products = getCachedProducts('all');
             
-            // Filter by search term if provided
+            // Apply category filter first (most selective)
+            if (category && ['Men', 'Women'].includes(category)) {
+                products = products.filter(product => product.category === category);
+            }
+            
+            // Apply search filter
             if (searchTerm) {
                 const search = searchTerm.toLowerCase();
                 products = products.filter(product => 
                     product.name.toLowerCase().includes(search) ||
                     product.description.toLowerCase().includes(search) ||
-                    (product.category && product.category.toLowerCase().includes(search))
+                    product.shortDescription?.toLowerCase().includes(search) ||
+                    product.subcategory?.toLowerCase().includes(search) ||
+                    product.brand?.toLowerCase().includes(search) ||
+                    product.tags?.some(tag => tag.toLowerCase().includes(search))
                 );
             }
         }
@@ -147,6 +216,13 @@ app.get('/products', async (req, res) => {
             title = `Search Results for "${searchTerm}" - Unhemmed`;
         }
         
+        // Set cache headers
+        const cacheTime = searchTerm ? 60 : 300; // Less cache for search results
+        res.set({
+            'Cache-Control': `public, max-age=${cacheTime}`,
+            'ETag': `"${category || 'all'}-${searchTerm || 'none'}-${Date.now()}"`
+        });
+        
         res.render('products', { 
             title: title,
             products: products,
@@ -155,9 +231,17 @@ app.get('/products', async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching products:', error);
+        
+        // Fallback to cached products
+        let fallbackProducts = getCachedProducts('all');
+        
+        if (req.query.category) {
+            fallbackProducts = fallbackProducts.filter(p => p.category === req.query.category);
+        }
+        
         res.render('products', { 
             title: 'Our Products - Unhemmed',
-            products: sampleProducts,
+            products: fallbackProducts,
             currentCategory: 'All',
             searchTerm: ''
         });
@@ -174,8 +258,15 @@ app.get('/men', async (req, res) => {
                 category: 'Men' 
             }).lean();
         } else {
-            products = sampleProducts;
+            // Use cached category data
+            products = getCachedProducts('all').filter(p => p.category === 'Men');
         }
+        
+        // Set cache headers
+        res.set({
+            'Cache-Control': 'public, max-age=300',
+            'ETag': '"men-products"'
+        });
         
         res.render('products', { 
             title: "Men's Clothing - Unhemmed",
@@ -184,9 +275,11 @@ app.get('/men', async (req, res) => {
         });
     } catch (error) {
         console.error('Error fetching men\'s products:', error);
+        
+        const fallbackProducts = getCachedProducts('all').filter(p => p.category === 'Men');
         res.render('products', { 
             title: "Men's Clothing - Unhemmed",
-            products: sampleProducts,
+            products: fallbackProducts,
             currentCategory: 'Men'
         });
     }
@@ -202,8 +295,15 @@ app.get('/women', async (req, res) => {
                 category: 'Women' 
             }).lean();
         } else {
-            products = sampleProducts;
+            // Use cached category data
+            products = getCachedProducts('all').filter(p => p.category === 'Women');
         }
+        
+        // Set cache headers
+        res.set({
+            'Cache-Control': 'public, max-age=300',
+            'ETag': '"women-products"'
+        });
         
         res.render('products', { 
             title: "Women's Clothing - Unhemmed",
@@ -223,17 +323,26 @@ app.get('/women', async (req, res) => {
 app.get('/product/:id', async (req, res) => {
     try {
         let product = null;
+        const productId = req.params.id;
+        
         if (isDbConnected) {
-            product = await Product.findById(req.params.id).lean();
+            product = await Product.findById(productId).lean();
         } else {
-            // Handle both string and numeric IDs for demo mode
-            const productId = parseInt(req.params.id);
-            product = sampleProducts.find(p => p.id === productId || p.id === req.params.id);
+            // Use cached products for faster lookup
+            const cachedProducts = getCachedProducts('all');
+            const numericId = parseInt(productId);
+            product = cachedProducts.find(p => p.id === numericId || p.id === productId);
         }
         
         if (!product) {
             return res.status(404).render('404', { title: 'Product Not Found' });
         }
+        
+        // Set cache headers for product pages
+        res.set({
+            'Cache-Control': 'public, max-age=600', // 10 minutes for product details
+            'ETag': `"product-${productId}-${Date.now()}"`
+        });
         
         res.render('product-detail', { 
             title: `${product.name} - Unhemmed`,

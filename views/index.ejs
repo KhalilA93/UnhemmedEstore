@@ -513,7 +513,8 @@
                 <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group transform hover:-translate-y-2 animate-on-scroll hover-lift" style="animation-delay: <%= index * 0.1 %>s;">
                     <a href="/product/<%= product._id || product.id %>" class="block">
                         <div class="aspect-square overflow-hidden">
-                            <img src="<%= product.primaryImage ? product.primaryImage.url : (product.images && product.images[0] ? product.images[0].url : (product.image || '/images/placeholder.svg')) %>" 
+                            <img loading="lazy" 
+                                 src="<%= product.primaryImage ? product.primaryImage.url : (product.images && product.images[0] ? product.images[0].url : (product.image || '/images/placeholder.svg')) %>" 
                                  alt="<%= product.primaryImage ? product.primaryImage.alt : (product.name || 'Product image') %>" 
                                  class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                                  onerror="this.src='/images/placeholder.svg'">
