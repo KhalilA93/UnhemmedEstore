@@ -5,6 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "build": "npm run css:build",
+    "vercel-build": "npm run css:build",
     "dev": "concurrently -n \"CSS,SERVER\" -c \"cyan,green\" \"npm run css:watch\" \"npm run server:dev\"",
     "dev:simple": "concurrently \"npm run css:build-once\" \"npm run server:start\"",
     "server:dev": "nodemon server.js",
@@ -12,7 +14,6 @@
     "css:watch": "tailwindcss -i ./public/css/style.css -o ./public/css/output.css --watch",
     "css:build": "tailwindcss -i ./public/css/style.css -o ./public/css/output.css --minify",
     "css:build-once": "tailwindcss -i ./public/css/style.css -o ./public/css/output.css",
-    "build": "npm run css:build",
     "init:db": "node scripts/initDatabase.js",
     "seed": "node scripts/seedData.js",
     "test:auth": "echo \"Testing authentication endpoints...\" && curl -s http://localhost:3002/api/health || echo \"Server not running\"",
