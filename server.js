@@ -60,8 +60,11 @@ app.use('/api/*', (req, res, next) => {
 // app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 
-// Sample data for demo (will be replaced by database queries)
-const sampleProducts = [
+// Import the updated products data
+const { mockProducts } = require('./data/mockProducts');
+
+// Use updated products as sample data for demo (will be replaced by database queries)
+const sampleProducts = mockProducts;
     {
         id: 1,
         name: 'Premium Wireless Headphones',

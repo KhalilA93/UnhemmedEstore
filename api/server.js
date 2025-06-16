@@ -58,42 +58,11 @@ app.use('/api/*', (req, res, next) => {
 // app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 
-// Sample data for demo (will be replaced by database queries)
-const sampleProducts = [
-    {
-        id: 1,
-        name: 'Premium Wireless Headphones',
-        price: 299.99,
-        comparePrice: 399.99,
-        image: '/images/headphones.jpg',
-        description: 'High-quality wireless headphones with noise cancellation and superior sound quality.',
-        category: 'Electronics',
-        featured: true,
-        inStock: true
-    },
-    {
-        id: 2,
-        name: 'Smart Watch Pro',
-        price: 399.99,
-        comparePrice: 499.99,
-        image: '/images/smartwatch.jpg',
-        description: 'Advanced fitness tracking, heart rate monitoring, and smart notifications.',
-        category: 'Electronics',
-        featured: true,
-        inStock: true
-    },
-    {
-        id: 3,
-        name: 'Premium Laptop Backpack',
-        price: 89.99,
-        comparePrice: 120.00,
-        image: '/images/backpack.jpg',
-        description: 'Durable and stylish laptop backpack with multiple compartments and USB charging port.',
-        category: 'Accessories',
-        featured: true,
-        inStock: true
-    }
-];
+// Import the updated products data
+const { mockProducts } = require('../data/mockProducts');
+
+// Use updated products as sample data for demo (will be replaced by database queries)
+const sampleProducts = mockProducts;
 
 // Frontend Routes
 app.get('/', async (req, res) => {

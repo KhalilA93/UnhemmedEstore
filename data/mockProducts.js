@@ -439,4 +439,4 @@ const mockProducts = [  // Men's Clothing (6 products)
   }
 ];
 
-module.exports = mockProducts;
+module.exports = { mockProducts };
