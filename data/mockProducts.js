@@ -1,5 +1,6 @@
 const mockProducts = [  // Men's Clothing (6 products)
   {
+    id: 1,
     name: "Men's Button-Up Shirt",
     description: "A versatile long-sleeve shirt made with premium fabric and tailored for a sharp, structured fit. Perfect for workdays or weekend plans.",
     shortDescription: "Versatile long-sleeve shirt with structured fit",
@@ -37,8 +38,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.7,
       count: 156
-    }
-  },  {
+    }  },  {
+    id: 2,
     name: "Men's Casual Pants",
     description: "Designed with comfort and style in mind, these casual pants feature a relaxed fit with modern detailing. Ideal for everyday wear.",
     shortDescription: "Comfortable casual pants with relaxed fit",
@@ -75,8 +76,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.4,
       count: 89
-    }
-  },  {
+    }  },  {
+    id: 3,
     name: "Men's Activewear Set",
     description: "This breathable and flexible activewear set supports movement without sacrificing comfort—great for workouts or lounging.",
     shortDescription: "Breathable activewear set for workouts",
@@ -113,8 +114,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.6,
       count: 134
-    }
-  },  {
+    }  },  {
+    id: 4,
     name: "Men's Polo Shirt",
     description: "A classic short-sleeve polo shirt with a clean design, soft material, and a tailored silhouette. Easy to dress up or down.",
     shortDescription: "Classic polo shirt with tailored silhouette",
@@ -150,8 +151,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.8,
       count: 67
-    }
-  },  {
+    }  },  {
+    id: 5,
     name: "Men's Active Top",
     description: "Lightweight and moisture-wicking, this active top keeps you cool and comfortable during any activity.",
     shortDescription: "Lightweight moisture-wicking active top",
@@ -188,8 +189,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.5,
       count: 123
-    }
-  },  {
+    }  },  {
+    id: 6,
     name: "Men's Sunglasses",
     description: "Modern and durable sunglasses with full UV protection and a sleek design that complements any face shape.",
     shortDescription: "Modern sunglasses with UV protection",
@@ -222,10 +223,10 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.7,
       count: 89
-    }
-  },
+    }  },
   // Women's Clothing (6 products)
   {
+    id: 7,
     name: "Women's Casual Sweater",
     description: "A soft-knit sweater with a relaxed fit and modern cut. Perfect for layering in cooler weather or wearing solo on breezy days.",
     shortDescription: "Soft-knit sweater with relaxed fit",
@@ -261,8 +262,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.8,
       count: 167
-    }
-  },  {
+    }  },  {
+    id: 8,
     name: "Women's Sweater & Hat Set",
     description: "Cozy meets chic in this cold-weather duo, featuring a coordinated knit sweater and winter hat made for both warmth and style.",
     shortDescription: "Coordinated knit sweater and winter hat set",
@@ -299,8 +300,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.6,
       count: 145
-    }
-  },  {
+    }  },  {
+    id: 9,
     name: "Women's Eyeglasses",
     description: "Stylish, lightweight frames built for comfort and daily wear. A timeless look to match both casual and formal outfits.",
     shortDescription: "Stylish lightweight frames for daily wear",
@@ -332,8 +333,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.7,
       count: 189
-    }
-  },  {
+    }  },  {
+    id: 10,
     name: "Women's Wide-Brim Sunhat",
     description: "A breathable, structured sunhat with a wide brim for full sun coverage. A fashionable way to stay cool and shaded.",
     shortDescription: "Breathable wide-brim sunhat for sun protection",
@@ -365,8 +366,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.8,
       count: 98
-    }
-  },  {
+    }  },  {
+    id: 11,
     name: "Women's Fashion Hat",
     description: "This structured fashion hat adds a bold finish to any outfit. Made with durable material and a timeless silhouette.",
     shortDescription: "Structured fashion hat with timeless silhouette",
@@ -398,8 +399,8 @@ const mockProducts = [  // Men's Clothing (6 products)
     ratings: {
       average: 4.5,
       count: 134
-    }
-  },  {
+    }  },  {
+    id: 12,
     name: "Women's Jean Shorts",
     description: "Classic-cut denim shorts with just the right amount of stretch for all-day comfort and effortless casual style.",
     shortDescription: "Classic-cut denim shorts with stretch",

@@ -217,7 +217,9 @@ app.get('/product/:id', async (req, res) => {
         if (isDbConnected) {
             product = await Product.findById(req.params.id).lean();
         } else {
-            product = sampleProducts.find(p => p.id === parseInt(req.params.id));
+            // Handle both string and numeric IDs for demo mode
+            const productId = parseInt(req.params.id);
+            product = sampleProducts.find(p => p.id === productId || p.id === req.params.id);
         }
         
         if (!product) {
