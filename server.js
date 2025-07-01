@@ -3,28 +3,28 @@ const cors = require('cors');
 const path = require('path');
 require('dotenv').config();
 
-// Import database connection
-const connectDB = require('./config/database');
+// PERFORMANCE TEST: Database imports commented out for static testing
+// const connectDB = require('./config/database');
 
 // Import routes
-// const productRoutes = require('./routes/productRoutes');
+const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
 
-// Import models
-const Product = require('./models/Product');
+// PERFORMANCE TEST: Model imports commented out for static testing
+// const Product = require('./models/Product');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Global variable to track database connection status
+// PERFORMANCE TEST: Force static mode to isolate database performance issues
 let isDbConnected = false;
 
-// Connect to database
+// Connect to database - DISABLED FOR PERFORMANCE TESTING
 const initializeDatabase = async () => {
-  isDbConnected = await connectDB();
-  if (!isDbConnected) {
-    console.log('🚀 Server running in DEMO MODE with sample data');
-  }
+  // isDbConnected = await connectDB(); // Commented out for performance testing
+  isDbConnected = false; // Force static mode
+  console.log('🧪 PERFORMANCE TEST MODE: Database disabled, using static data only');
 };
 
 // Initialize database connection
@@ -43,21 +43,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// API Routes
-// Middleware to check database status for API routes
-app.use('/api/*', (req, res, next) => {
-  if (!isDbConnected) {
-    return res.status(503).json({
-      success: false,
-      message: 'Database not available. Server running in demo mode.',
-      demo: true
-    });
-  }
-  next();
-});
-
-// API Routes - testing auth routes first
-// app.use('/api/products', productRoutes);
+// API Routes - PERFORMANCE TEST: Remove database check middleware
+app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 
 // Import the updated products data
@@ -65,61 +52,20 @@ const { mockProducts } = require('./data/mockProducts');
 
 // Use updated products as sample data for demo (will be replaced by database queries)
 const sampleProducts = mockProducts;
-    {
-        id: 1,
-        name: 'Premium Wireless Headphones',
-        price: 299.99,
-        comparePrice: 399.99,
-        image: '/images/headphones.jpg',
-        description: 'High-quality wireless headphones with noise cancellation and superior sound quality.',
-        category: 'Electronics',
-        featured: true,
-        inStock: true
-    },
-    {
-        id: 2,
-        name: 'Smart Watch Pro',
-        price: 399.99,
-        comparePrice: 499.99,
-        image: '/images/smartwatch.jpg',
-        description: 'Advanced fitness tracking, heart rate monitoring, and smart notifications.',
-        category: 'Electronics',
-        featured: true,
-        inStock: true
-    },
-    {
-        id: 3,
-        name: 'Premium Laptop Backpack',
-        price: 89.99,
-        comparePrice: 120.00,
-        image: '/images/backpack.jpg',
-        description: 'Durable and stylish laptop backpack with multiple compartments and USB charging port.',
-        category: 'Accessories',
-        featured: true,
-        inStock: true
-    }
-];
 
 // Frontend Routes
 app.get('/', async (req, res) => {
     try {
-        let featuredProducts = [];
-        if (isDbConnected) {
-            // Get featured products from database
-            featuredProducts = await Product.find({ 
-                status: 'active', 
-                featured: true 
-            }).limit(6).lean();
-        } else {
-            // Use sample data if database not connected
-            featuredProducts = sampleProducts.filter(p => p.featured);
-        }
-          res.render('index', { 
+        // PERFORMANCE TEST: Always use static data
+        const featuredProducts = sampleProducts.filter(p => p.featured);
+        
+        res.render('index', { 
             title: 'Unhemmed - Premium Clothing',
             products: featuredProducts
         });
     } catch (error) {
-        console.error('Error fetching products:', error);        res.render('index', { 
+        console.error('Error fetching products:', error);
+        res.render('index', { 
             title: 'Unhemmed - Premium Clothing',
             products: sampleProducts.filter(p => p.featured)
         });
@@ -128,42 +74,24 @@ app.get('/', async (req, res) => {
 
 app.get('/products', async (req, res) => {
     try {
-        let products = [];
+        // PERFORMANCE TEST: Always use static data
+        let products = sampleProducts;
         const category = req.query.category; // 'Men' or 'Women'
         const searchTerm = req.query.search; // Search query
-          if (isDbConnected) {
-            const filter = { status: 'active' };
-            
-            // Add category filter
-            if (category && ['Men', 'Women'].includes(category)) {
-                filter.category = category;
-            }
-            
-            // Add search filter
-            if (searchTerm) {
-                filter.$or = [
-                    { name: new RegExp(searchTerm, 'i') },
-                    { description: new RegExp(searchTerm, 'i') },
-                    { shortDescription: new RegExp(searchTerm, 'i') },
-                    { subcategory: new RegExp(searchTerm, 'i') },
-                    { brand: new RegExp(searchTerm, 'i') },
-                    { tags: new RegExp(searchTerm, 'i') }
-                ];
-            }
-            
-            products = await Product.find(filter).lean();
-              } else {
-            products = sampleProducts;
-            
-            // Filter by search term if provided
-            if (searchTerm) {
-                const search = searchTerm.toLowerCase();
-                products = products.filter(product => 
-                    product.name.toLowerCase().includes(search) ||
-                    product.description.toLowerCase().includes(search) ||
-                    (product.category && product.category.toLowerCase().includes(search))
-                );
-            }
+        
+        // Filter by category if provided
+        if (category && ['Men', 'Women'].includes(category)) {
+            products = products.filter(p => p.category === category);
+        }
+        
+        // Filter by search term if provided
+        if (searchTerm) {
+            const search = searchTerm.toLowerCase();
+            products = products.filter(product => 
+                product.name.toLowerCase().includes(search) ||
+                product.description.toLowerCase().includes(search) ||
+                (product.category && product.category.toLowerCase().includes(search))
+            );
         }
         
         let title = 'Our Clothing Collection - Unhemmed';
@@ -194,27 +122,22 @@ app.get('/products', async (req, res) => {
 // Men's clothing route
 app.get('/men', async (req, res) => {
     try {
-        let products = [];
-        if (isDbConnected) {
-            products = await Product.find({ 
-                status: 'active', 
-                category: 'Men' 
-            }).lean();
-        } else {
-            products = sampleProducts;
-        }
+        // PERFORMANCE TEST: Always use static data
+        const products = sampleProducts.filter(p => p.category === 'Men');
         
         res.render('products', { 
             title: "Men's Clothing - Unhemmed",
             products: products,
-            currentCategory: 'Men'
+            currentCategory: 'Men',
+            searchTerm: ''
         });
     } catch (error) {
         console.error('Error fetching men\'s products:', error);
         res.render('products', { 
             title: "Men's Clothing - Unhemmed",
-            products: sampleProducts,
-            currentCategory: 'Men'
+            products: sampleProducts.filter(p => p.category === 'Men'),
+            currentCategory: 'Men',
+            searchTerm: ''
         });
     }
 });
@@ -222,39 +145,30 @@ app.get('/men', async (req, res) => {
 // Women's clothing route
 app.get('/women', async (req, res) => {
     try {
-        let products = [];
-        if (isDbConnected) {
-            products = await Product.find({ 
-                status: 'active', 
-                category: 'Women' 
-            }).lean();
-        } else {
-            products = sampleProducts;
-        }
+        // PERFORMANCE TEST: Always use static data
+        const products = sampleProducts.filter(p => p.category === 'Women');
         
         res.render('products', { 
             title: "Women's Clothing - Unhemmed",
             products: products,
-            currentCategory: 'Women'
+            currentCategory: 'Women',
+            searchTerm: ''
         });
     } catch (error) {
         console.error('Error fetching women\'s products:', error);
         res.render('products', { 
             title: "Women's Clothing - Unhemmed",
-            products: sampleProducts,
-            currentCategory: 'Women'
+            products: sampleProducts.filter(p => p.category === 'Women'),
+            currentCategory: 'Women',
+            searchTerm: ''
         });
     }
 });
 
 app.get('/product/:id', async (req, res) => {
     try {
-        let product = null;
-        if (isDbConnected) {
-            product = await Product.findById(req.params.id).lean();
-        } else {
-            product = sampleProducts.find(p => p.id === parseInt(req.params.id));
-        }
+        // PERFORMANCE TEST: Always use static data
+        const product = sampleProducts.find(p => p.id === parseInt(req.params.id));
         
         if (!product) {
             return res.status(404).render('404', { title: 'Product Not Found' });

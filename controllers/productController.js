@@ -1,5 +1,6 @@
-const Product = require('../models/Product');
-const Category = require('../models/Category');
+// PERFORMANCE TEST: Database imports commented out for static testing
+// const Product = require('../models/Product');
+// const Category = require('../models/Category');
 const { mockProducts } = require('../data/mockProducts');
 
 // Optimized product cache
@@ -11,9 +12,9 @@ const productCache = {
   TTL: 5 * 60 * 1000 // 5 minutes
 };
 
-// Check if database is connected (this will be passed from the route)
+// For performance testing: Force static mode to isolate database performance issues
 const isDatabaseConnected = () => {
-  return global.isDbConnected !== false;
+  return false; // Always return false to use static data
 };
 
 // Optimized cache getter
@@ -275,17 +276,13 @@ const getFeaturedProducts = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
     
-    const products = await Product.find({ 
-      status: 'active', 
-      featured: true 
-    })
-      .sort({ 'ratings.average': -1, createdAt: -1 })
-      .limit(limit)
-      .lean();
+    // PERFORMANCE TEST: Use static data only
+    const featuredProducts = getCachedProducts('featured').slice(0, limit);
 
     res.json({
       success: true,
-      data: products
+      data: featuredProducts,
+      message: 'Featured products retrieved (static mode)'
     });
   } catch (error) {
     console.error('Get featured products error:', error);
@@ -301,13 +298,20 @@ const getFeaturedProducts = async (req, res) => {
 // @access  Public
 const getCategories = async (req, res) => {
   try {
-    const categories = await Category.find({ status: 'active' })
-      .sort({ sortOrder: 1, name: 1 })
-      .lean();
+    // PERFORMANCE TEST: Use static categories from products
+    const cachedProducts = getCachedProducts('all');
+    const categories = [...new Set(cachedProducts.map(p => p.category))]
+      .map(category => ({
+        name: category,
+        slug: category.toLowerCase(),
+        status: 'active'
+      }))
+      .sort((a, b) => a.name.localeCompare(b.name));
 
     res.json({
       success: true,
-      data: categories
+      data: categories,
+      message: 'Categories retrieved (static mode)'
     });
   } catch (error) {
     console.error('Get categories error:', error);
@@ -332,24 +336,31 @@ const searchProducts = async (req, res) => {
       });
     }
 
-    const searchRegex = new RegExp(q.trim(), 'i');
+    // PERFORMANCE TEST: Use static data search
+    const searchTerm = q.trim().toLowerCase();
+    const cachedProducts = getCachedProducts('all');
     
-    const products = await Product.find({
-      status: 'active',
-      $or: [
-        { name: searchRegex },
-        { description: searchRegex },
-        { tags: searchRegex },
-        { brand: searchRegex }
-      ]
-    })
-      .select('name price images category brand')
-      .limit(parseInt(limit))
-      .lean();
+    const results = cachedProducts
+      .filter(product => 
+        product.name.toLowerCase().includes(searchTerm) ||
+        product.description.toLowerCase().includes(searchTerm) ||
+        product.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
+        product.brand.toLowerCase().includes(searchTerm)
+      )
+      .slice(0, parseInt(limit))
+      .map(product => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        images: product.images,
+        category: product.category,
+        brand: product.brand
+      }));
 
     res.json({
       success: true,
-      data: products
+      data: results,
+      message: 'Search completed (static mode)'
     });
   } catch (error) {
     console.error('Search products error:', error);
