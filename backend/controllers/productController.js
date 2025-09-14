@@ -1,6 +1,5 @@
-// PERFORMANCE TEST: Database imports commented out for static testing
-// const Product = require('../models/Product');
-// const Category = require('../models/Category');
+const Product = require('../models/Product');
+const Category = require('../models/Category');
 const { mockProducts } = require('../data/mockProducts');
 
 // Optimized product cache
@@ -12,9 +11,9 @@ const productCache = {
   TTL: 5 * 60 * 1000 // 5 minutes
 };
 
-// For performance testing: Force static mode to isolate database performance issues
+// Check if database is connected (this will be passed from the route)
 const isDatabaseConnected = () => {
-  return false; // Always return false to use static data
+  return global.isDbConnected !== false;
 };
 
 // Optimized cache getter
