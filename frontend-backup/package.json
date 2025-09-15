@@ -1,0 +1,39 @@
+{
+  "name": "unhemmed-frontend",
+  "version": "1.0.0",
+  "description": "Frontend for Unhemmed E-commerce Store",
+  "main": "index.html",
+  "type": "module",
+  "scripts": {
+    "build": "tailwindcss -i ./public/css/style.css -o ./public/css/output.css --watch",
+    "build:prod": "tailwindcss -i ./public/css/style.css -o ./public/css/output.css --minify",
+    "dev": "npm run build",
+    "serve": "npx http-server public -p 3001",
+    "lint": "eslint public/js/",
+    "format": "prettier --write public/js/"
+  },
+  "keywords": [
+    "ecommerce",
+    "frontend",
+    "tailwindcss",
+    "javascript"
+  ],
+  "author": "KhalilA93",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.3.5",
+    "postcss": "^8.4.31",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.52.0",
+    "prettier": "^3.0.3",
+    "http-server": "^14.1.1"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}
