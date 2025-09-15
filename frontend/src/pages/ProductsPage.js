@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { productAPI } from '../services/api';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
+// Updated to 3x3 grid layout
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
   const [products, setProducts] = useState([]);
@@ -14,6 +15,7 @@ const ProductsPage = () => {
 
   useEffect(() => {
     loadProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [category, search]);
 
   const loadProducts = async () => {
@@ -96,7 +98,13 @@ const ProductsPage = () => {
 
         {/* Products Grid */}
         {products.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div 
+            style={{ 
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '1.5rem'
+            }}
+          >
             {products.map((product) => (
               <div key={product.id || product._id} className="card">
                 <div style={{ aspectRatio: '1', backgroundColor: '#f3f4f6' }}>
@@ -113,7 +121,7 @@ const ProductsPage = () => {
                     }}
                   />
                 </div>
-                <div style={{ padding: '1rem' }}>
+                <div style={{ padding: '0.75rem' }}>
                   <div style={{ 
                     display: 'flex', 
                     alignItems: 'center', 
@@ -142,7 +150,7 @@ const ProductsPage = () => {
                   </div>
                   
                   <h3 style={{ 
-                    fontSize: '1.125rem', 
+                    fontSize: '1rem', 
                     fontWeight: '600', 
                     marginBottom: '0.5rem',
                     display: '-webkit-box',
@@ -155,7 +163,7 @@ const ProductsPage = () => {
                   
                   {product.brand && (
                     <p style={{ 
-                      fontSize: '0.875rem', 
+                      fontSize: '0.75rem', 
                       color: '#6b7280', 
                       marginBottom: '0.5rem' 
                     }}>
@@ -164,6 +172,7 @@ const ProductsPage = () => {
                   )}
                   
                   <p style={{ 
+                    fontSize: '0.875rem',
                     color: '#4b5563', 
                     marginBottom: '1rem',
                     display: '-webkit-box',
@@ -177,30 +186,35 @@ const ProductsPage = () => {
                   <div style={{ 
                     display: 'flex', 
                     justifyContent: 'space-between', 
-                    alignItems: 'center' 
+                    alignItems: 'center',
+                    flexWrap: 'wrap',
+                    gap: '0.5rem'
                   }}>
                     <div>
                       <span style={{ 
-                        fontSize: '1.25rem', 
+                        fontSize: '1.125rem', 
                         fontWeight: 'bold', 
                         color: '#1f2937' 
                       }}>
                         ${product.price?.toFixed(2)}
                       </span>
                       {product.comparePrice && product.comparePrice > product.price && (
-                        <span style={{ 
-                          fontSize: '0.875rem', 
+                        <div style={{ 
+                          fontSize: '0.75rem', 
                           color: '#6b7280', 
-                          textDecoration: 'line-through',
-                          marginLeft: '0.5rem'
+                          textDecoration: 'line-through'
                         }}>
                           ${product.comparePrice.toFixed(2)}
-                        </span>
+                        </div>
                       )}
                     </div>
                     <button 
                       className="btn-primary"
-                      style={{ fontSize: '0.875rem', padding: '0.5rem 1rem' }}
+                      style={{ 
+                        fontSize: '0.75rem', 
+                        padding: '0.5rem 0.75rem',
+                        minWidth: 'fit-content'
+                      }}
                       onClick={() => {
                         // TODO: Implement add to cart functionality
                         console.log('Add to cart:', product.id || product._id);
