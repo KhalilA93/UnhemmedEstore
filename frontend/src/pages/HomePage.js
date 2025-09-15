@@ -139,7 +139,7 @@ const HomePage = () => {
           }}>
             <div style={{ textAlign: 'center' }}>
               <h1>
-                Welcome to <span style={{ color: '#bae6fd' }}>Unhemmed</span>
+                Welcome to <span style={{ color: '#0284c7' }}>Unhemmed</span>
               </h1>
               <p>
                 Discover the latest fashion trends with our curated collection of premium clothing and accessories.

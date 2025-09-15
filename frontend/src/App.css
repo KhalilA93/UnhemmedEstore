@@ -107,8 +107,8 @@ nav {
 
 /* Hero section */
 .hero {
-  background: linear-gradient(135deg, #0284c7 0%, #075985 100%);
-  color: white;
+  background: white;
+  color: #1f2937;
   padding: 5rem 0;
   text-align: center;
 }
