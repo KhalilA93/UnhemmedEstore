@@ -388,8 +388,8 @@ const HomePage = () => {
           </div>
           
           {featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {featuredProducts.slice(0, 8).map((product) => (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              {featuredProducts.slice(0, 6).map((product) => (
                 <div key={product._id || product.id} className="card" style={{ cursor: 'pointer' }}>
                   <Link to={`/product/${product._id || product.id}`}>
                     <div style={{ overflow: 'hidden' }}>

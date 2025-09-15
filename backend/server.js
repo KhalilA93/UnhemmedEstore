@@ -110,13 +110,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
 
-// Serve static files from frontend
-app.use(express.static(path.join(__dirname, '../frontend/public')));
-
-// API-only backend - no view engine needed since React handles frontend
-// app.set('view engine', 'ejs');
-// app.set('views', path.join(__dirname, '../frontend/views'));
-
 // API Routes
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
@@ -160,7 +153,7 @@ app.use((req, res) => {
             endpoint: req.originalUrl
         });
     } else {
-        // For non-API requests, return JSON instead of trying to render EJS views
+        // API-only backend - return JSON for non-API requests
         res.status(404).json({
             success: false,
             message: 'Page not found - This is an API server',

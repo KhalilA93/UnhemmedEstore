@@ -96,7 +96,7 @@ const ProductsPage = () => {
 
         {/* Products Grid */}
         {products.length > 0 ? (
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {products.map((product) => (
               <div key={product.id || product._id} className="card">
                 <div style={{ aspectRatio: '1', backgroundColor: '#f3f4f6' }}>
