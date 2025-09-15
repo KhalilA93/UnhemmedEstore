@@ -16,10 +16,32 @@ const HomePage = () => {
 
   const loadFeaturedProducts = async () => {
     try {
+      console.log('Loading featured products...');
       const response = await productAPI.getFeatured();
-      setFeaturedProducts(response.data.products || []);
+      console.log('Featured products response:', response);
+      console.log('Response data:', response.data);
+      
+      // Handle different response structures
+      if (response.data && response.data.success) {
+        const products = response.data.data || response.data.products || [];
+        console.log('Extracted products:', products);
+        setFeaturedProducts(products);
+      } else if (Array.isArray(response.data)) {
+        // Direct array response
+        console.log('Direct array response:', response.data);
+        setFeaturedProducts(response.data);
+      } else {
+        console.error('Unexpected response structure:', response.data);
+        throw new Error('API response has unexpected structure');
+      }
     } catch (error) {
       console.error('Failed to load featured products:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        url: error.config?.url
+      });
       // Use mock data for demo
       setFeaturedProducts([
         {
@@ -368,12 +390,12 @@ const HomePage = () => {
           {featuredProducts.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
               {featuredProducts.slice(0, 8).map((product) => (
-                <div key={product._id} className="card" style={{ cursor: 'pointer' }}>
-                  <Link to={`/product/${product._id}`}>
+                <div key={product._id || product.id} className="card" style={{ cursor: 'pointer' }}>
+                  <Link to={`/product/${product._id || product.id}`}>
                     <div style={{ overflow: 'hidden' }}>
                       <img
-                        src={product.image || '/images/placeholder.svg'}
-                        alt={product.name}
+                        src={product.images?.[0]?.url || product.image || '/images/placeholder.svg'}
+                        alt={product.images?.[0]?.alt || product.name}
                         style={{ 
                           width: '100%', 
                           height: '16rem', 
@@ -382,11 +404,14 @@ const HomePage = () => {
                         }}
                         onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
                         onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                        onError={(e) => {
+                          e.target.src = '/images/placeholder.svg';
+                        }}
                       />
                     </div>
                   </Link>
                   <div style={{ padding: '1.5rem' }}>
-                    <Link to={`/product/${product._id}`}>
+                    <Link to={`/product/${product._id || product.id}`}>
                       <h3 style={{ 
                         fontWeight: '600', 
                         fontSize: '1.125rem', 
@@ -406,7 +431,7 @@ const HomePage = () => {
                       WebkitLineClamp: 2,
                       WebkitBoxOrient: 'vertical'
                     }}>
-                      {product.description}
+                      {product.shortDescription || product.description}
                     </p>
                     <div style={{ 
                       display: 'flex', 
@@ -422,7 +447,7 @@ const HomePage = () => {
                       </span>
                       <Button 
                         size="sm" 
-                        onClick={() => handleAddToCart(product._id)}
+                        onClick={() => handleAddToCart(product._id || product.id)}
                         style={{ transition: 'transform 0.2s' }}
                         onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
                         onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
