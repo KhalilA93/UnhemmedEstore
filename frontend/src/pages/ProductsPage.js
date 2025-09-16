@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import { productAPI } from '../services/api';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
@@ -107,20 +107,22 @@ const ProductsPage = () => {
           >
             {products.map((product) => (
               <div key={product.id || product._id} className="card">
-                <div style={{ aspectRatio: '1', backgroundColor: '#f3f4f6' }}>
-                  <img
-                    src={product.images?.[0]?.url || '/images/placeholder.svg'}
-                    alt={product.images?.[0]?.alt || product.name}
-                    style={{ 
-                      width: '100%', 
-                      height: '100%', 
-                      objectFit: 'cover' 
-                    }}
-                    onError={(e) => {
-                      e.target.src = '/images/placeholder.svg';
-                    }}
-                  />
-                </div>
+                <Link to={`/product/${product._id || product.id}`}>
+                  <div style={{ aspectRatio: '1', backgroundColor: '#f3f4f6' }}>
+                    <img
+                      src={product.images?.[0]?.url || '/images/placeholder.svg'}
+                      alt={product.images?.[0]?.alt || product.name}
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover' 
+                      }}
+                      onError={(e) => {
+                        e.target.src = '/images/placeholder.svg';
+                      }}
+                    />
+                  </div>
+                </Link>
                 <div style={{ padding: '0.75rem' }}>
                   <div style={{ 
                     display: 'flex', 
@@ -149,17 +151,21 @@ const ProductsPage = () => {
                     </span>
                   </div>
                   
-                  <h3 style={{ 
-                    fontSize: '1rem', 
-                    fontWeight: '600', 
-                    marginBottom: '0.5rem',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical',
-                    overflow: 'hidden'
-                  }}>
-                    {product.name}
-                  </h3>
+                  <Link to={`/product/${product._id || product.id}`}>
+                    <h3 style={{ 
+                      fontSize: '1rem', 
+                      fontWeight: '600', 
+                      marginBottom: '0.5rem',
+                      display: '-webkit-box',
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      color: '#111827',
+                      textDecoration: 'none'
+                    }}>
+                      {product.name}
+                    </h3>
+                  </Link>
                   
                   {product.brand && (
                     <p style={{ 
