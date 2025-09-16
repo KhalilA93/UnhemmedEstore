@@ -3,7 +3,7 @@ import axios from 'axios';
 // For development, use empty string to leverage the proxy setup
 // For production, use the environment variable
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? process.env.REACT_APP_API_URL || ''
+  ? process.env.REACT_APP_API_URL || 'https://your-backend-app.onrender.com'
   : '';
 
 console.log('API Configuration:', {
