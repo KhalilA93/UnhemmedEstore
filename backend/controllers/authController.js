@@ -146,7 +146,7 @@ const login = async (req, res) => {
     if (!user || !(await user.comparePassword(password))) {
       // If user exists, increment login attempts
       if (user) {
-        await user.incLoginAttempts();
+        await user.handleFailedLogin();
       }
       
       return res.status(401).json({
@@ -172,7 +172,7 @@ const login = async (req, res) => {
     }
 
     // Reset login attempts on successful login and update last login
-    await user.resetLoginAttempts();
+    await user.handleSuccessfulLogin();
 
     // Migrate guest cart if exists (will implement in frontend)
     // For now, just return user data
