@@ -61,12 +61,14 @@ const Header = () => {
             {isAuthenticated ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                 <Link 
-                  to="/profile" 
+                  to="/dashboard" 
                   className="nav-link"
                   style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
                 >
                   <UserIcon style={{ height: '1.5rem', width: '1.5rem' }} />
-                  <span className="hidden md:block">{user?.name}</span>
+                  <span className="hidden md:block">
+                    {user?.firstName ? `${user.firstName}` : user?.name || 'Account'}
+                  </span>
                 </Link>
                 <button
                   onClick={handleLogout}
@@ -138,7 +140,38 @@ const Header = () => {
                   {item.name}
                 </Link>
               ))}
-              {!isAuthenticated && (
+              {isAuthenticated ? (
+                <>
+                  <Link
+                    to="/dashboard"
+                    className="nav-link"
+                    onClick={() => setMobileMenuOpen(false)}
+                    style={{ 
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '0.375rem',
+                      display: 'block'
+                    }}
+                  >
+                    My Account
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="nav-link"
+                    style={{ 
+                      padding: '0.5rem 0.75rem',
+                      borderRadius: '0.375rem',
+                      display: 'block',
+                      background: 'none',
+                      border: 'none',
+                      cursor: 'pointer',
+                      textAlign: 'left',
+                      width: '100%'
+                    }}
+                  >
+                    Logout
+                  </button>
+                </>
+              ) : (
                 <>
                   <Link
                     to="/login"

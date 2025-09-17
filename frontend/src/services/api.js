@@ -3,7 +3,7 @@ import axios from 'axios';
 // For development, use empty string to leverage the proxy setup
 // For production, use the environment variable
 const API_BASE_URL = process.env.NODE_ENV === 'production' 
-  ? process.env.REACT_APP_API_URL || 'https://your-backend-app.onrender.com'
+  ? process.env.REACT_APP_API_URL || 'https://unhemmedestore-backend.onrender.com'
   : '';
 
 console.log('API Configuration:', {
@@ -81,6 +81,27 @@ export const authAPI = {
   logout: () => api.post('/api/auth/logout'),
   getProfile: () => api.get('/api/auth/profile'),
   updateProfile: (userData) => api.put('/api/auth/profile', userData),
+  updatePassword: (passwordData) => api.put('/api/auth/update-password', passwordData),
+  forgotPassword: (email) => api.post('/api/auth/forgot-password', { email }),
+  resetPassword: (token, newPassword) => api.post('/api/auth/reset-password', { token, newPassword }),
+  verifyEmail: (token) => api.post('/api/auth/verify-email', { token }),
+  resendVerification: (email) => api.post('/api/auth/resend-verification', { email }),
+  
+  // Address management
+  getAddresses: () => api.get('/api/auth/addresses'),
+  addAddress: (addressData) => api.post('/api/auth/addresses', addressData),
+  updateAddress: (addressId, addressData) => api.put(`/api/auth/addresses/${addressId}`, addressData),
+  deleteAddress: (addressId) => api.delete(`/api/auth/addresses/${addressId}`),
+  setDefaultAddress: (addressId) => api.put(`/api/auth/addresses/${addressId}/default`),
+  
+  // Wishlist management
+  getWishlist: () => api.get('/api/auth/wishlist'),
+  addToWishlist: (productId) => api.post('/api/auth/wishlist', { productId }),
+  removeFromWishlist: (productId) => api.delete(`/api/auth/wishlist/${productId}`),
+  
+  // Account security
+  getSecuritySettings: () => api.get('/api/auth/security'),
+  updateSecuritySettings: (settings) => api.put('/api/auth/security', settings),
 };
 
 export const cartAPI = {
@@ -89,12 +110,20 @@ export const cartAPI = {
   update: (productId, quantity) => api.put('/api/cart/update', { productId, quantity }),
   remove: (productId) => api.delete(`/api/cart/remove/${productId}`),
   clear: () => api.delete('/api/cart/clear'),
+  moveToWishlist: (productId) => api.post('/api/cart/move-to-wishlist', { productId }),
+  applyCoupon: (couponCode) => api.post('/api/cart/apply-coupon', { couponCode }),
+  removeCoupon: () => api.delete('/api/cart/remove-coupon'),
 };
 
 export const orderAPI = {
   create: (orderData) => api.post('/api/orders', orderData),
   getAll: () => api.get('/api/orders'),
   getById: (id) => api.get(`/api/orders/${id}`),
+  updateStatus: (id, status) => api.put(`/api/orders/${id}/status`, { status }),
+  cancelOrder: (id, reason) => api.put(`/api/orders/${id}/cancel`, { reason }),
+  initiateReturn: (id, items, reason) => api.post(`/api/orders/${id}/return`, { items, reason }),
+  trackOrder: (id) => api.get(`/api/orders/${id}/tracking`),
+  getOrderHistory: (page = 1, limit = 10) => api.get(`/api/orders?page=${page}&limit=${limit}`),
 };
 
 export default api;

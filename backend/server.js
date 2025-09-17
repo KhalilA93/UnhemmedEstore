@@ -16,6 +16,7 @@ const connectDB = require('./config/database');
 const productRoutes = require('./routes/productRoutes');
 const authRoutes = require('./routes/authRoutes');
 const orderRoutes = require('./routes/orderRoutes');
+const cartRoutes = require('./routes/cartRoutes');
 
 // Import models
 const Product = require('./models/Product');
@@ -105,7 +106,8 @@ if (process.env.NODE_ENV === 'development') {
 const allowedOrigins = [
   'http://localhost:3000', // Development
   'https://localhost:3000', // HTTPS Development
-  process.env.CLIENT_URL, // Production frontend URL
+  'https://unhemmedestore-frontend.onrender.com', // Production frontend
+  process.env.CLIENT_URL, // Production frontend URL from env
 ].filter(Boolean); // Remove undefined values
 
 app.use(cors({
@@ -129,6 +131,7 @@ app.use(cors({
 app.use('/api/products', productRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/cart', cartRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {

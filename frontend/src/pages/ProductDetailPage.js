@@ -8,15 +8,19 @@ import Button from '../components/common/Button';
 const ProductDetailPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useApp();
+  const { addToCart, addToWishlist, isAuthenticated, wishlist } = useApp();
   
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedSize, setSelectedSize] = useState('');
+  const [selectedColor, setSelectedColor] = useState('');
   const [quantity, setQuantity] = useState(1);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [addingToCart, setAddingToCart] = useState(false);
+  const [addingToWishlist, setAddingToWishlist] = useState(false);
+
+  const isInWishlist = wishlist && product && wishlist.some(item => item._id === product._id);
 
   useEffect(() => {
     loadProduct();
@@ -44,6 +48,14 @@ const ProductDetailPage = () => {
           console.log('Setting default size:', defaultSize);
           setSelectedSize(defaultSize);
         }
+        
+        // Set default color if available
+        if (productData.colors && productData.colors.length > 0) {
+          const firstColor = productData.colors[0];
+          const defaultColor = typeof firstColor === 'string' ? firstColor : (firstColor.color || firstColor.name || firstColor.value);
+          console.log('Setting default color:', defaultColor);
+          setSelectedColor(defaultColor);
+        }
       } else {
         setError('Product not found');
       }
@@ -62,9 +74,31 @@ const ProductDetailPage = () => {
   const handleAddToCart = async () => {
     if (!product) return;
     
+    // Validate required selections
+    if (product.sizes && product.sizes.length > 0 && !selectedSize) {
+      alert('Please select a size');
+      return;
+    }
+    
+    if (product.colors && product.colors.length > 0 && !selectedColor) {
+      alert('Please select a color');
+      return;
+    }
+    
     setAddingToCart(true);
     try {
-      const result = await addToCart(product._id || product.id, quantity);
+      const cartItem = {
+        productId: product._id || product.id,
+        quantity,
+        selectedSize: selectedSize || undefined,
+        selectedColor: selectedColor || undefined
+      };
+      
+      const result = await addToCart(cartItem.productId, cartItem.quantity, {
+        size: cartItem.selectedSize,
+        color: cartItem.selectedColor
+      });
+      
       if (result.success) {
         alert(`Added ${quantity} ${product.name}(s) to cart!`);
       } else {
@@ -75,6 +109,30 @@ const ProductDetailPage = () => {
       alert('Failed to add to cart. Please try again.');
     } finally {
       setAddingToCart(false);
+    }
+  };
+
+  const handleAddToWishlist = async () => {
+    if (!product) return;
+    
+    if (!isAuthenticated) {
+      alert('Please log in to add items to your wishlist');
+      return;
+    }
+    
+    setAddingToWishlist(true);
+    try {
+      const result = await addToWishlist(product._id || product.id);
+      if (result.success) {
+        alert(`Added ${product.name} to wishlist!`);
+      } else {
+        alert('Failed to add to wishlist. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error adding to wishlist:', error);
+      alert('Failed to add to wishlist. Please try again.');
+    } finally {
+      setAddingToWishlist(false);
     }
   };
 
@@ -382,6 +440,41 @@ const ProductDetailPage = () => {
               </div>
             )}
 
+            {/* Color Selection */}
+            {product.colors && product.colors.length > 0 && (
+              <div style={{ marginBottom: '2rem' }}>
+                <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '0.5rem' }}>
+                  Color
+                </h3>
+                <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                  {product.colors.map((color, index) => {
+                    // Handle both string colors and object colors
+                    const colorValue = typeof color === 'string' ? color : (color.color || color.name || color.value || `Color ${index + 1}`);
+                    const colorKey = typeof color === 'string' ? color : (color._id || color.id || colorValue);
+                    
+                    return (
+                      <button
+                        key={colorKey}
+                        onClick={() => setSelectedColor(colorValue)}
+                        style={{
+                          padding: '0.5rem 1rem',
+                          border: selectedColor === colorValue ? '2px solid #0284c7' : '1px solid #d1d5db',
+                          borderRadius: '0.375rem',
+                          backgroundColor: selectedColor === colorValue ? '#dbeafe' : 'white',
+                          color: selectedColor === colorValue ? '#0284c7' : '#4b5563',
+                          cursor: 'pointer',
+                          fontWeight: selectedColor === colorValue ? '600' : '400',
+                          transition: 'all 0.2s'
+                        }}
+                      >
+                        {colorValue}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+
             {/* Quantity and Add to Cart */}
             <div style={{ marginBottom: '2rem' }}>
               <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1rem' }}>
@@ -423,23 +516,55 @@ const ProductDetailPage = () => {
                 </div>
               </div>
 
-              <Button
-                onClick={handleAddToCart}
-                disabled={addingToCart || (product.sizes?.length > 0 && !selectedSize)}
-                style={{ 
-                  width: '100%', 
-                  fontSize: '1.125rem',
-                  padding: '1rem'
-                }}
-              >
-                {addingToCart ? 'Adding...' : `Add ${quantity} to Cart - $${(product.price * quantity).toFixed(2)}`}
-              </Button>
+              <div style={{ display: 'flex', gap: '1rem' }}>
+                <Button
+                  onClick={handleAddToCart}
+                  disabled={addingToCart || (product.sizes?.length > 0 && !selectedSize) || (product.colors?.length > 0 && !selectedColor)}
+                  style={{ 
+                    flex: 1,
+                    fontSize: '1.125rem',
+                    padding: '1rem'
+                  }}
+                >
+                  {addingToCart ? 'Adding...' : `Add ${quantity} to Cart - $${(product.price * quantity).toFixed(2)}`}
+                </Button>
+                
+                {isAuthenticated && (
+                  <button
+                    onClick={handleAddToWishlist}
+                    disabled={addingToWishlist || isInWishlist}
+                    style={{
+                      padding: '1rem',
+                      backgroundColor: isInWishlist ? '#f3f4f6' : 'white',
+                      border: '2px solid #e5e7eb',
+                      borderRadius: '0.5rem',
+                      cursor: addingToWishlist || isInWishlist ? 'not-allowed' : 'pointer',
+                      color: isInWishlist ? '#6b7280' : '#374151',
+                      transition: 'all 0.2s',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      minWidth: '60px'
+                    }}
+                    title={isInWishlist ? 'Already in wishlist' : 'Add to wishlist'}
+                  >
+                    {addingToWishlist ? '...' : isInWishlist ? '💚' : '♡'}
+                  </button>
+                )}
+              </div>
               
-              {product.sizes?.length > 0 && !selectedSize && (
-                <p style={{ color: '#dc2626', fontSize: '0.875rem', marginTop: '0.5rem' }}>
-                  Please select a size
-                </p>
-              )}
+              <div style={{ marginTop: '0.5rem' }}>
+                {product.sizes?.length > 0 && !selectedSize && (
+                  <p style={{ color: '#dc2626', fontSize: '0.875rem' }}>
+                    Please select a size
+                  </p>
+                )}
+                {product.colors?.length > 0 && !selectedColor && (
+                  <p style={{ color: '#dc2626', fontSize: '0.875rem' }}>
+                    Please select a color
+                  </p>
+                )}
+              </div>
             </div>
 
             {/* Stock Status */}

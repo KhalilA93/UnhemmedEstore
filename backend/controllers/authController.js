@@ -40,7 +40,7 @@ const generateToken = (id) => {
 // @access  Public
 const register = async (req, res) => {
   try {
-    const { firstName, lastName, email, password, phone } = req.body;
+    const { firstName, lastName, email, password, phone, preferences } = req.body;
 
     // Check if user exists
     const userExists = await User.findOne({ email });
@@ -51,24 +51,66 @@ const register = async (req, res) => {
       });
     }
 
+    // Generate email verification token
+    const emailVerificationToken = crypto.randomBytes(32).toString('hex');
+
     // Create user
     const user = await User.create({
       firstName,
       lastName,
       email,
       password,
-      phone
+      phone,
+      preferences: preferences || {},
+      emailVerificationToken
     });
 
     if (user) {
+      // Send welcome/verification email
+      try {
+        const transporter = createTransporter();
+        if (transporter) {
+          const verifyUrl = `${req.protocol}://${req.get('host')}/verify-email?token=${emailVerificationToken}`;
+          
+          const message = `
+            <h1>Welcome to Unhemmed!</h1>
+            <p>Thank you for creating an account with us, ${firstName}!</p>
+            <p>To complete your registration, please verify your email address:</p>
+            <a href="${verifyUrl}" style="display: inline-block; padding: 12px 24px; background-color: #16a34a; color: white; text-decoration: none; border-radius: 6px;">Verify Email</a>
+            <p>Once verified, you'll have access to:</p>
+            <ul>
+              <li>Personalized product recommendations</li>
+              <li>Order tracking and history</li>
+              <li>Saved addresses and payment methods</li>
+              <li>Wishlist and favorites</li>
+            </ul>
+            <p>Welcome to the Unhemmed family!</p>
+          `;
+
+          await transporter.sendMail({
+            from: process.env.EMAIL_FROM || 'noreply@unhemmed.com',
+            to: user.email,
+            subject: 'Welcome to Unhemmed - Verify Your Email',
+            html: message
+          });
+        } else {
+          await simulateEmail(user.email, 'Welcome to Unhemmed', 'Welcome and verification email');
+        }
+      } catch (emailError) {
+        console.error('Welcome email error:', emailError);
+        // Don't fail registration if email fails
+      }
+
       res.status(201).json({
         success: true,
+        message: 'Registration successful! Please check your email to verify your account.',
         data: {
           _id: user._id,
           firstName: user.firstName,
           lastName: user.lastName,
           email: user.email,
           role: user.role,
+          emailVerified: user.emailVerified,
           token: generateToken(user._id)
         }
       });
@@ -94,31 +136,66 @@ const login = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // Check for user email
-    const user = await User.findOne({ email }).select('+password');
+    // Check for user email and include password for comparison
+    const user = await User.findOne({ email })
+      .select('+password')
+      .populate('cart.product', 'name price images sizes colors')
+      .populate('wishlist.product', 'name price images');
 
-    if (user && (await user.comparePassword(password))) {
-      // Update last login
-      user.lastLogin = new Date();
-      await user.save();
-
-      res.json({
-        success: true,
-        data: {
-          _id: user._id,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          email: user.email,
-          role: user.role,
-          token: generateToken(user._id)
-        }
-      });
-    } else {
-      res.status(401).json({
+    // Check if user exists and password is correct
+    if (!user || !(await user.comparePassword(password))) {
+      // If user exists, increment login attempts
+      if (user) {
+        await user.incLoginAttempts();
+      }
+      
+      return res.status(401).json({
         success: false,
         message: 'Invalid email or password'
       });
     }
+
+    // Check if account is locked
+    if (user.isLocked) {
+      return res.status(423).json({
+        success: false,
+        message: 'Account temporarily locked due to multiple failed login attempts. Please try again later.'
+      });
+    }
+
+    // Check if account is active
+    if (user.status !== 'active') {
+      return res.status(403).json({
+        success: false,
+        message: 'Account is inactive. Please contact support.'
+      });
+    }
+
+    // Reset login attempts on successful login and update last login
+    await user.resetLoginAttempts();
+
+    // Migrate guest cart if exists (will implement in frontend)
+    // For now, just return user data
+
+    res.json({
+      success: true,
+      message: 'Login successful',
+      data: {
+        _id: user._id,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        emailVerified: user.emailVerified,
+        phoneVerified: user.phoneVerified,
+        preferences: user.preferences,
+        cart: user.cart,
+        wishlist: user.wishlist,
+        analytics: user.analytics,
+        token: generateToken(user._id)
+      }
+    });
   } catch (error) {
     console.error('Login error:', error);
     res.status(500).json({
@@ -151,7 +228,10 @@ const logout = async (req, res) => {
 // @access  Private
 const getProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user.id).populate('cart.product', 'name price images');
+    const user = await User.findById(req.user.id)
+      .populate('cart.product', 'name price images sizes colors')
+      .populate('wishlist.product', 'name price images')
+      .populate('recentlyViewed.product', 'name price images');
 
     if (!user) {
       return res.status(404).json({
@@ -188,17 +268,19 @@ const updateProfile = async (req, res) => {
     }
 
     // Update fields
-    const { firstName, lastName, phone, preferences } = req.body;
+    const { firstName, lastName, phone, dateOfBirth, preferences } = req.body;
     
     if (firstName) user.firstName = firstName;
     if (lastName) user.lastName = lastName;
     if (phone) user.phone = phone;
+    if (dateOfBirth) user.dateOfBirth = dateOfBirth;
     if (preferences) user.preferences = { ...user.preferences, ...preferences };
 
     const updatedUser = await user.save();
 
     res.json({
       success: true,
+      message: 'Profile updated successfully',
       data: updatedUser
     });
   } catch (error) {
@@ -578,6 +660,211 @@ const changePassword = async (req, res) => {
   }
 };
 
+// @desc    Add address to user profile
+// @route   POST /api/auth/addresses
+// @access  Private
+const addAddress = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const addressData = req.body;
+
+    // If this is the first address or marked as default, make it default
+    if (user.addresses.length === 0 || addressData.isDefault) {
+      user.addresses.forEach(addr => {
+        if (addr.type === addressData.type || addr.type === 'both') {
+          addr.isDefault = false;
+        }
+      });
+      addressData.isDefault = true;
+    }
+
+    user.addresses.push(addressData);
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Address added successfully',
+      data: user.addresses
+    });
+  } catch (error) {
+    console.error('Add address error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while adding address'
+    });
+  }
+};
+
+// @desc    Update address
+// @route   PUT /api/auth/addresses/:addressId
+// @access  Private
+const updateAddress = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const address = user.addresses.id(req.params.addressId);
+
+    if (!address) {
+      return res.status(404).json({
+        success: false,
+        message: 'Address not found'
+      });
+    }
+
+    // Update address fields
+    Object.keys(req.body).forEach(key => {
+      if (req.body[key] !== undefined) {
+        address[key] = req.body[key];
+      }
+    });
+
+    // Handle default address logic
+    if (req.body.isDefault) {
+      user.setDefaultAddress(address._id, address.type);
+    }
+
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Address updated successfully',
+      data: user.addresses
+    });
+  } catch (error) {
+    console.error('Update address error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while updating address'
+    });
+  }
+};
+
+// @desc    Delete address
+// @route   DELETE /api/auth/addresses/:addressId
+// @access  Private
+const deleteAddress = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    const address = user.addresses.id(req.params.addressId);
+
+    if (!address) {
+      return res.status(404).json({
+        success: false,
+        message: 'Address not found'
+      });
+    }
+
+    address.remove();
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Address deleted successfully',
+      data: user.addresses
+    });
+  } catch (error) {
+    console.error('Delete address error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while deleting address'
+    });
+  }
+};
+
+// @desc    Add to wishlist
+// @route   POST /api/auth/wishlist
+// @access  Private
+const addToWishlist = async (req, res) => {
+  try {
+    const { productId, notes } = req.body;
+    const user = await User.findById(req.user.id);
+
+    // Check if product already in wishlist
+    const existingItem = user.wishlist.find(
+      item => item.product.toString() === productId
+    );
+
+    if (existingItem) {
+      return res.status(400).json({
+        success: false,
+        message: 'Product already in wishlist'
+      });
+    }
+
+    user.wishlist.push({
+      product: productId,
+      notes,
+      addedAt: new Date()
+    });
+
+    await user.save();
+    await user.populate('wishlist.product', 'name price images');
+
+    res.json({
+      success: true,
+      message: 'Product added to wishlist',
+      data: user.wishlist
+    });
+  } catch (error) {
+    console.error('Add to wishlist error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while adding to wishlist'
+    });
+  }
+};
+
+// @desc    Remove from wishlist
+// @route   DELETE /api/auth/wishlist/:productId
+// @access  Private
+const removeFromWishlist = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id);
+    
+    user.wishlist = user.wishlist.filter(
+      item => item.product.toString() !== req.params.productId
+    );
+
+    await user.save();
+    await user.populate('wishlist.product', 'name price images');
+
+    res.json({
+      success: true,
+      message: 'Product removed from wishlist',
+      data: user.wishlist
+    });
+  } catch (error) {
+    console.error('Remove from wishlist error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error while removing from wishlist'
+    });
+  }
+};
+
+// @desc    Add product to recently viewed
+// @route   POST /api/auth/recently-viewed
+// @access  Private
+const addToRecentlyViewed = async (req, res) => {
+  try {
+    const { productId } = req.body;
+    const user = await User.findById(req.user.id);
+
+    user.addToRecentlyViewed(productId);
+    await user.save();
+
+    res.json({
+      success: true,
+      message: 'Product added to recently viewed'
+    });
+  } catch (error) {
+    console.error('Add to recently viewed error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+};
+
 module.exports = {
   register,
   login,
@@ -591,5 +878,11 @@ module.exports = {
   resetPassword,
   sendEmailVerification,
   verifyEmail,
-  changePassword
+  changePassword,
+  addAddress,
+  updateAddress,
+  deleteAddress,
+  addToWishlist,
+  removeFromWishlist,
+  addToRecentlyViewed
 };

@@ -16,7 +16,13 @@ const {
   resetPassword,
   sendEmailVerification,
   verifyEmail,
-  changePassword
+  changePassword,
+  addAddress,
+  updateAddress,
+  deleteAddress,
+  addToWishlist,
+  removeFromWishlist,
+  addToRecentlyViewed
 } = require('../controllers/authController');
 const { protect } = require('../middleware/auth');
 
@@ -83,5 +89,26 @@ router.put('/cart/:itemId', protect, updateCartItem);
 
 // @route   DELETE /api/auth/cart/:itemId
 router.delete('/cart/:itemId', protect, removeFromCart);
+
+// Address management routes
+// @route   POST /api/auth/addresses
+router.post('/addresses', protect, addAddress);
+
+// @route   PUT /api/auth/addresses/:addressId
+router.put('/addresses/:addressId', protect, updateAddress);
+
+// @route   DELETE /api/auth/addresses/:addressId
+router.delete('/addresses/:addressId', protect, deleteAddress);
+
+// Wishlist management routes
+// @route   POST /api/auth/wishlist
+router.post('/wishlist', protect, addToWishlist);
+
+// @route   DELETE /api/auth/wishlist/:productId
+router.delete('/wishlist/:productId', protect, removeFromWishlist);
+
+// Recently viewed
+// @route   POST /api/auth/recently-viewed
+router.post('/recently-viewed', protect, addToRecentlyViewed);
 
 module.exports = router;
