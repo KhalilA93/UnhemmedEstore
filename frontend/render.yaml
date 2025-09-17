@@ -1,0 +1,59 @@
+services:
+  - type: web
+    name: unhemmedestore-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build
+    headers:
+      - path: /**
+        headers:
+          - name: X-Frame-Options
+            value: DENY
+          - name: X-Content-Type-Options
+            value: nosniff
+    routes:
+      - type: rewrite
+        source: /**
+        destination: /index.html
+  - type: web
+    name: unhemmedestore-frontend
+    env: static
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./build
+    routes:
+      - type: rewrite
+        source: /
+        destination: /index.html
+      - type: rewrite
+        source: /login
+        destination: /index.html
+      - type: rewrite
+        source: /register
+        destination: /index.html
+      - type: rewrite
+        source: /dashboard
+        destination: /index.html
+      - type: rewrite
+        source: /products
+        destination: /index.html
+      - type: rewrite
+        source: /product/*
+        destination: /index.html
+      - type: rewrite
+        source: /cart
+        destination: /index.html
+      - type: rewrite
+        source: /about
+        destination: /index.html
+      - type: rewrite
+        source: /contact
+        destination: /index.html
+      - type: rewrite
+        source: /reset-password
+        destination: /index.html
+      - type: rewrite
+        source: /verify-email
+        destination: /index.html
+      - type: rewrite
+        source: /*
+        destination: /index.html
