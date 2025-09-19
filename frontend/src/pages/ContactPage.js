@@ -220,14 +220,14 @@ const ContactPage = () => {
                   <span style={{ fontSize: '1.25rem' }}>📧</span>
                   <div>
                     <div style={{ fontWeight: '500' }}>Email</div>
-                    <div style={{ color: '#6b7280' }}>hello@unhemmed.com</div>
+                    <div style={{ color: '#6b7280' }}>khalilatkins420@gmail.com</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                   <span style={{ fontSize: '1.25rem' }}>📱</span>
                   <div>
                     <div style={{ fontWeight: '500' }}>Phone</div>
-                    <div style={{ color: '#6b7280' }}>+1 (555) 123-4567</div>
+                    <div style={{ color: '#6b7280' }}>267-631-1415</div>
                   </div>
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -235,8 +235,7 @@ const ContactPage = () => {
                   <div>
                     <div style={{ fontWeight: '500' }}>Address</div>
                     <div style={{ color: '#6b7280' }}>
-                      123 Fashion Street<br />
-                      New York, NY 10001
+                      Philadelphia, PA
                     </div>
                   </div>
                 </div>
@@ -298,7 +297,9 @@ const ContactPage = () => {
                   📷
                 </a>
                 <a 
-                  href="#" 
+                  href="https://www.linkedin.com/in/khalilatkins" 
+                  target="_blank"
+                  rel="noopener noreferrer"
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -314,7 +315,7 @@ const ContactPage = () => {
                   onMouseOver={(e) => e.target.style.backgroundColor = '#e5e7eb'}
                   onMouseOut={(e) => e.target.style.backgroundColor = '#f3f4f6'}
                 >
-                  🐦
+                  �
                 </a>
               </div>
             </div>

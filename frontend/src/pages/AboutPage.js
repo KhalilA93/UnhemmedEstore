@@ -15,45 +15,76 @@ const AboutPage = () => {
             maxWidth: '48rem', 
             margin: '0 auto' 
           }}>
-            We're passionate about delivering premium fashion that combines style, 
-            comfort, and quality craftsmanship.
+            Unhemmed is a mock e-commerce site crafted from the ground up by me, 
+            Khalil Atkins. This project showcases modern web development practices, featuring a complete 
+            MERN stack implementation and responsive design across all devices.
           </p>
         </div>
 
-        {/* Content Grid */}
-        <div className="grid md:grid-cols-2 gap-8" style={{ marginBottom: '3rem' }}>
-          <div>
-            <img 
-              src="/images/homepage/about-section.jpg" 
-              alt="About Unhemmed" 
-              style={{ 
-                width: '100%', 
-                height: '400px', 
-                objectFit: 'cover', 
-                borderRadius: '0.5rem' 
-              }}
-              onError={(e) => {
-                e.target.src = '/images/placeholder.svg';
-              }}
-            />
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-            <h2 style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '1rem' }}>
+        {/* Content Section */}
+        <div style={{ 
+          maxWidth: '800px',
+          margin: '0 auto',
+          padding: '0 1.5rem',
+          marginBottom: '4rem'
+        }}>
+          {/* Our Story Section */}
+          <div style={{ 
+            backgroundColor: '#ffffff',
+            borderRadius: '12px',
+            padding: '2.5rem',
+            marginBottom: '2rem',
+            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+            border: '1px solid #e5e7eb'
+          }}>
+            <h2 style={{ 
+              fontSize: 'clamp(1.75rem, 4vw, 2.25rem)',
+              fontWeight: '700',
+              marginBottom: '1.5rem',
+              color: '#1f2937',
+              lineHeight: '1.2',
+              textAlign: 'center'
+            }}>
               Our Story
             </h2>
-            <p style={{ color: '#4b5563', marginBottom: '1rem', lineHeight: '1.6' }}>
-              Founded with a vision to make premium fashion accessible, Unhemmed has been 
-              curating exceptional clothing for fashion-forward individuals who value both 
-              style and substance.
+            <div style={{
+              width: '60px',
+              height: '4px',
+              backgroundColor: '#3b82f6',
+              margin: '0 auto 2rem auto',
+              borderRadius: '2px'
+            }}></div>
+            <p style={{ 
+              color: '#374151',
+              marginBottom: '1.5rem',
+              lineHeight: '1.7',
+              fontSize: 'clamp(1rem, 2.5vw, 1.125rem)',
+              textAlign: 'justify'
+            }}>
+              I am a self-taught freelance full-stack software engineer who began coding in 2023, 
+              but my passion for technology goes back to childhood. At 10 years old, I was already 
+              fascinated by how software shapes the world, and that curiosity has fueled my drive 
+              ever since.
             </p>
-            <p style={{ color: '#4b5563', marginBottom: '1rem', lineHeight: '1.6' }}>
-              Every piece in our collection is carefully selected for its quality, design, 
-              and versatility. We believe that great fashion should enhance your confidence 
-              and express your unique personality.
+            <p style={{ 
+              color: '#374151',
+              marginBottom: '1.5rem',
+              lineHeight: '1.7',
+              fontSize: 'clamp(1rem, 2.5vw, 1.125rem)',
+              textAlign: 'justify'
+            }}>
+              Over the past few years, I've built and deployed multiple full-stack applications 
+              from the ground up using the MERN stack, gaining hands-on experience with modern 
+              frameworks, APIs, and responsive design.
             </p>
-            <p style={{ color: '#4b5563', lineHeight: '1.6' }}>
-              From timeless classics to contemporary trends, we're here to help you build 
-              a wardrobe that's uniquely yours.
+            <p style={{ 
+              color: '#374151',
+              lineHeight: '1.7',
+              fontSize: 'clamp(1rem, 2.5vw, 1.125rem)',
+              textAlign: 'justify'
+            }}>
+              My journey reflects persistence, adaptability, and a deep love for solving problems 
+              through code—qualities I bring to every project I take on.
             </p>
           </div>
         </div>
@@ -78,18 +109,18 @@ const AboutPage = () => {
                 fontSize: '3rem', 
                 marginBottom: '1rem' 
               }}>
-                ✨
+                📱
               </div>
               <h3 style={{ 
                 fontSize: '1.25rem', 
                 fontWeight: '600', 
                 marginBottom: '0.5rem' 
               }}>
-                Quality
+                Responsive Design
               </h3>
               <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                We source only the finest materials and work with trusted manufacturers 
-                to ensure every piece meets our high standards.
+                Every interface is crafted to provide seamless experiences across all devices, 
+                from mobile phones to desktop computers, ensuring accessibility for everyone.
               </p>
             </div>
             <div style={{ textAlign: 'center' }}>
@@ -97,18 +128,18 @@ const AboutPage = () => {
                 fontSize: '3rem', 
                 marginBottom: '1rem' 
               }}>
-                🌱
+                ⚡
               </div>
               <h3 style={{ 
                 fontSize: '1.25rem', 
                 fontWeight: '600', 
                 marginBottom: '0.5rem' 
               }}>
-                Sustainability
+                Performance
               </h3>
               <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                We're committed to responsible fashion practices and supporting 
-                brands that prioritize environmental consciousness.
+                Fast loading times and optimized code deliver smooth user interactions, 
+                minimizing wait times and maximizing user engagement.
               </p>
             </div>
             <div style={{ textAlign: 'center' }}>
@@ -116,18 +147,18 @@ const AboutPage = () => {
                 fontSize: '3rem', 
                 marginBottom: '1rem' 
               }}>
-                💝
+                🎨
               </div>
               <h3 style={{ 
                 fontSize: '1.25rem', 
                 fontWeight: '600', 
                 marginBottom: '0.5rem' 
               }}>
-                Customer Care
+                User Experience
               </h3>
               <p style={{ color: '#6b7280', lineHeight: '1.6' }}>
-                Your satisfaction is our priority. We're here to help you find 
-                the perfect pieces for your wardrobe.
+                Intuitive navigation and clean, modern interfaces prioritize usability, 
+                making complex functionality feel simple and natural.
               </p>
             </div>
           </div>
