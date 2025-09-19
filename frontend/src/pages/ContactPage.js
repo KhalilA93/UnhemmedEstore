@@ -1,325 +1,287 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 const ContactPage = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    
-    // Simulate form submission
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setSubmitSuccess(true);
-      setFormData({
-        name: '',
-        email: '',
-        subject: '',
-        message: ''
-      });
-      
-      // Reset success message after 3 seconds
-      setTimeout(() => {
-        setSubmitSuccess(false);
-      }, 3000);
-    }, 1000);
-  };
-
   return (
-    <div style={{ padding: '2rem 0' }}>
-      <div className="container">
-        {/* Header */}
-        <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-          <h1 style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>
-            Contact Us
-          </h1>
-          <p style={{ 
-            fontSize: '1.25rem', 
-            color: '#6b7280', 
-            maxWidth: '32rem', 
-            margin: '0 auto' 
+    <div style={{ 
+      backgroundColor: 'white',
+      minHeight: '100vh',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '2rem'
+    }}>
+      <div style={{
+        maxWidth: '1200px',
+        width: '100%'
+      }}>
+        {/* Header Section */}
+        <div style={{ 
+          textAlign: 'center', 
+          marginBottom: '4rem',
+          color: '#1f2937'
+        }}>
+          <h1 style={{ 
+            fontSize: 'clamp(2.5rem, 6vw, 4rem)',
+            fontWeight: '800',
+            marginBottom: '1rem',
+            letterSpacing: '-0.02em'
           }}>
-            We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            Get In Touch
+          </h1>
+          <div style={{
+            width: '80px',
+            height: '4px',
+            background: 'linear-gradient(90deg, #667eea, #764ba2)',
+            margin: '0 auto 2rem',
+            borderRadius: '2px'
+          }}></div>
+          <p style={{ 
+            fontSize: '1.25rem',
+            lineHeight: '1.7',
+            maxWidth: '600px',
+            margin: '0 auto',
+            color: '#6b7280',
+            fontWeight: '300'
+          }}>
+            Ready to bring your vision to life? I'd love to hear about your project and discuss how we can work together to create something amazing.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {/* Contact Form */}
-          <div>
-            <div className="card" style={{ padding: '2rem' }}>
-              <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1.5rem' }}>
-                Send us a message
-              </h2>
-              
-              {submitSuccess && (
-                <div style={{
-                  backgroundColor: '#d1fae5',
-                  color: '#065f46',
-                  padding: '0.75rem',
-                  borderRadius: '0.5rem',
-                  marginBottom: '1rem',
-                  textAlign: 'center'
-                }}>
-                  ✅ Thank you! Your message has been sent successfully.
-                </div>
-              )}
-
-              <form onSubmit={handleSubmit}>
-                <div style={{ marginBottom: '1rem' }}>
-                  <label 
-                    htmlFor="name" 
-                    style={{ 
-                      display: 'block', 
-                      marginBottom: '0.5rem', 
-                      fontWeight: '500' 
-                    }}
-                  >
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem'
-                    }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label 
-                    htmlFor="email" 
-                    style={{ 
-                      display: 'block', 
-                      marginBottom: '0.5rem', 
-                      fontWeight: '500' 
-                    }}
-                  >
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem'
-                    }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1rem' }}>
-                  <label 
-                    htmlFor="subject" 
-                    style={{ 
-                      display: 'block', 
-                      marginBottom: '0.5rem', 
-                      fontWeight: '500' 
-                    }}
-                  >
-                    Subject *
-                  </label>
-                  <input
-                    type="text"
-                    id="subject"
-                    name="subject"
-                    value={formData.subject}
-                    onChange={handleInputChange}
-                    required
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem'
-                    }}
-                  />
-                </div>
-
-                <div style={{ marginBottom: '1.5rem' }}>
-                  <label 
-                    htmlFor="message" 
-                    style={{ 
-                      display: 'block', 
-                      marginBottom: '0.5rem', 
-                      fontWeight: '500' 
-                    }}
-                  >
-                    Message *
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    required
-                    rows={5}
-                    style={{
-                      width: '100%',
-                      padding: '0.75rem',
-                      border: '1px solid #d1d5db',
-                      borderRadius: '0.5rem',
-                      fontSize: '1rem',
-                      resize: 'vertical'
-                    }}
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="btn-primary"
-                  style={{ 
-                    width: '100%',
-                    opacity: isSubmitting ? 0.6 : 1,
-                    cursor: isSubmitting ? 'not-allowed' : 'pointer'
-                  }}
-                >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </button>
-              </form>
-            </div>
+        {/* Contact Cards Row */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          gap: '2rem',
+          marginBottom: '3rem',
+          flexWrap: 'wrap'
+        }}>
+          {/* Email Card */}
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '1.5rem',
+            padding: '2.5rem 2rem',
+            textAlign: 'center',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #e5e7eb',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer',
+            flex: '1',
+            maxWidth: '280px',
+            minWidth: '250px'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.15)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.1)';
+          }}>
+            <div style={{
+              width: '70px',
+              height: '70px',
+              backgroundColor: '#667eea',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.5rem',
+              fontSize: '2rem'
+            }}>📧</div>
+            <h3 style={{
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              color: '#1f2937',
+              marginBottom: '0.75rem'
+            }}>Email</h3>
+            <a 
+              href="mailto:khalilatkins420@gmail.com"
+              style={{
+                color: '#667eea',
+                textDecoration: 'none',
+                fontSize: '1rem',
+                fontWeight: '500',
+                transition: 'color 0.2s ease'
+              }}
+              onMouseOver={(e) => e.target.style.color = '#5a67d8'}
+              onMouseOut={(e) => e.target.style.color = '#667eea'}
+            >
+              khalilatkins420@gmail.com
+            </a>
           </div>
 
-          {/* Contact Information */}
-          <div>
-            <div className="card" style={{ padding: '2rem', marginBottom: '1.5rem' }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem' }}>
-                Get in touch
-              </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <span style={{ fontSize: '1.25rem' }}>📧</span>
-                  <div>
-                    <div style={{ fontWeight: '500' }}>Email</div>
-                    <div style={{ color: '#6b7280' }}>khalilatkins420@gmail.com</div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <span style={{ fontSize: '1.25rem' }}>📱</span>
-                  <div>
-                    <div style={{ fontWeight: '500' }}>Phone</div>
-                    <div style={{ color: '#6b7280' }}>267-631-1415</div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <span style={{ fontSize: '1.25rem' }}>📍</span>
-                  <div>
-                    <div style={{ fontWeight: '500' }}>Address</div>
-                    <div style={{ color: '#6b7280' }}>
-                      Philadelphia, PA
-                    </div>
-                  </div>
-                </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                  <span style={{ fontSize: '1.25rem' }}>🕒</span>
-                  <div>
-                    <div style={{ fontWeight: '500' }}>Business Hours</div>
-                    <div style={{ color: '#6b7280' }}>
-                      Monday - Friday: 9AM - 6PM<br />
-                      Saturday: 10AM - 4PM<br />
-                      Sunday: Closed
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+          {/* Phone Card */}
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '1.5rem',
+            padding: '2.5rem 2rem',
+            textAlign: 'center',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #e5e7eb',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer',
+            flex: '1',
+            maxWidth: '280px',
+            minWidth: '250px'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.15)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.1)';
+          }}>
+            <div style={{
+              width: '70px',
+              height: '70px',
+              backgroundColor: '#48bb78',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.5rem',
+              fontSize: '2rem'
+            }}>📱</div>
+            <h3 style={{
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              color: '#1f2937',
+              marginBottom: '0.75rem'
+            }}>Phone</h3>
+            <a 
+              href="tel:2676311415"
+              style={{
+                color: '#48bb78',
+                textDecoration: 'none',
+                fontSize: '1rem',
+                fontWeight: '500',
+                transition: 'color 0.2s ease'
+              }}
+              onMouseOver={(e) => e.target.style.color = '#38a169'}
+              onMouseOut={(e) => e.target.style.color = '#48bb78'}
+            >
+              267-631-1415
+            </a>
+          </div>
 
-            <div className="card" style={{ padding: '2rem' }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '600', marginBottom: '1rem' }}>
-                Follow us
-              </h3>
-              <div style={{ display: 'flex', gap: '1rem' }}>
-                <a 
-                  href="#" 
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '2.5rem',
-                    height: '2.5rem',
-                    backgroundColor: '#f3f4f6',
-                    borderRadius: '0.5rem',
-                    textDecoration: 'none',
-                    fontSize: '1.25rem',
-                    transition: 'background-color 0.2s'
-                  }}
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#e5e7eb'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = '#f3f4f6'}
-                >
-                  📘
-                </a>
-                <a 
-                  href="#" 
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '2.5rem',
-                    height: '2.5rem',
-                    backgroundColor: '#f3f4f6',
-                    borderRadius: '0.5rem',
-                    textDecoration: 'none',
-                    fontSize: '1.25rem',
-                    transition: 'background-color 0.2s'
-                  }}
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#e5e7eb'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = '#f3f4f6'}
-                >
-                  📷
-                </a>
-                <a 
-                  href="https://www.linkedin.com/in/khalilatkins" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '2.5rem',
-                    height: '2.5rem',
-                    backgroundColor: '#f3f4f6',
-                    borderRadius: '0.5rem',
-                    textDecoration: 'none',
-                    fontSize: '1.25rem',
-                    transition: 'background-color 0.2s'
-                  }}
-                  onMouseOver={(e) => e.target.style.backgroundColor = '#e5e7eb'}
-                  onMouseOut={(e) => e.target.style.backgroundColor = '#f3f4f6'}
-                >
-                  �
-                </a>
-              </div>
+          {/* Location Card */}
+          <div style={{
+            backgroundColor: 'white',
+            borderRadius: '1.5rem',
+            padding: '2.5rem 2rem',
+            textAlign: 'center',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #e5e7eb',
+            transition: 'all 0.3s ease',
+            cursor: 'pointer',
+            flex: '1',
+            maxWidth: '280px',
+            minWidth: '250px'
+          }}
+          onMouseOver={(e) => {
+            e.currentTarget.style.transform = 'translateY(-5px)';
+            e.currentTarget.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.15)';
+          }}
+          onMouseOut={(e) => {
+            e.currentTarget.style.transform = 'translateY(0)';
+            e.currentTarget.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.1)';
+          }}>
+            <div style={{
+              width: '70px',
+              height: '70px',
+              backgroundColor: '#ed8936',
+              borderRadius: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1.5rem',
+              fontSize: '2rem'
+            }}>📍</div>
+            <h3 style={{
+              fontSize: '1.25rem',
+              fontWeight: '600',
+              color: '#1f2937',
+              marginBottom: '0.75rem'
+            }}>Location</h3>
+            <div style={{
+              color: '#6b7280',
+              fontSize: '1rem',
+              fontWeight: '500'
+            }}>
+              Philadelphia, PA
             </div>
           </div>
+        </div>
+
+        {/* LinkedIn CTA Section */}
+        <div style={{
+          backgroundColor: '#f8fafc',
+          borderRadius: '2rem',
+          padding: '3rem 2rem',
+          textAlign: 'center',
+          border: '1px solid #e5e7eb',
+          boxShadow: '0 10px 30px rgba(0, 0, 0, 0.05)'
+        }}>
+          <div style={{
+            width: '80px',
+            height: '80px',
+            backgroundColor: '#0077b5',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            margin: '0 auto 1.5rem',
+            fontSize: '2.5rem'
+          }}>💼</div>
+          <h3 style={{
+            fontSize: '1.5rem',
+            fontWeight: '600',
+            color: '#1f2937',
+            marginBottom: '1rem'
+          }}>Let's Connect Professionally</h3>
+          <p style={{
+            color: '#6b7280',
+            fontSize: '1.1rem',
+            marginBottom: '2rem',
+            maxWidth: '500px',
+            margin: '0 auto 2rem'
+          }}>
+            Connect with me on LinkedIn to stay updated on my latest projects and professional journey.
+          </p>
+          <a 
+            href="https://www.linkedin.com/in/khalilatkins" 
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              background: 'linear-gradient(135deg, #0077b5, #005582)',
+              color: 'white',
+              padding: '1rem 2rem',
+              borderRadius: '50px',
+              textDecoration: 'none',
+              fontSize: '1.1rem',
+              fontWeight: '600',
+              transition: 'all 0.3s ease',
+              boxShadow: '0 8px 25px rgba(0, 119, 181, 0.3)',
+              border: '2px solid transparent'
+            }}
+            onMouseOver={(e) => {
+              e.target.style.transform = 'translateY(-2px) scale(1.05)';
+              e.target.style.boxShadow = '0 15px 35px rgba(0, 119, 181, 0.4)';
+              e.target.style.borderColor = 'rgba(0, 119, 181, 0.3)';
+            }}
+            onMouseOut={(e) => {
+              e.target.style.transform = 'translateY(0) scale(1)';
+              e.target.style.boxShadow = '0 8px 25px rgba(0, 119, 181, 0.3)';
+              e.target.style.borderColor = 'transparent';
+            }}
+          >
+            <span style={{ fontSize: '1.3rem' }}>💼</span>
+            Connect on LinkedIn
+          </a>
         </div>
       </div>
     </div>
