@@ -16,32 +16,19 @@ const HomePage = () => {
 
   const loadFeaturedProducts = async () => {
     try {
-      console.log('Loading featured products...');
       const response = await productAPI.getFeatured();
-      console.log('Featured products response:', response);
-      console.log('Response data:', response.data);
       
       // Handle different response structures
       if (response.data && response.data.success) {
         const products = response.data.data || response.data.products || [];
-        console.log('Extracted products:', products);
         setFeaturedProducts(products);
       } else if (Array.isArray(response.data)) {
         // Direct array response
-        console.log('Direct array response:', response.data);
         setFeaturedProducts(response.data);
       } else {
-        console.error('Unexpected response structure:', response.data);
         throw new Error('API response has unexpected structure');
       }
     } catch (error) {
-      console.error('Failed to load featured products:', error);
-      console.error('Error details:', {
-        message: error.message,
-        response: error.response?.data,
-        status: error.response?.status,
-        url: error.config?.url
-      });
       // Use mock data for demo
       setFeaturedProducts([
         {
@@ -107,10 +94,7 @@ const HomePage = () => {
   };
 
   const handleAddToCart = async (productId) => {
-    const result = await addToCart(productId, 1);
-    if (result.success) {
-      alert('Product added to cart!');
-    }
+    await addToCart(productId, 1);
   };
 
   if (loading) {

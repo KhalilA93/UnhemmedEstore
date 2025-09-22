@@ -32,20 +32,15 @@ const ProductDetailPage = () => {
       setLoading(true);
       setError(null);
       
-      console.log('Loading product with ID:', id);
       const response = await productAPI.getById(id);
-      console.log('Product response:', response);
       
       if (response.data.success) {
         const productData = response.data.data;
-        console.log('Product data:', productData);
-        console.log('Product sizes:', productData.sizes);
         setProduct(productData);
         // Set default size if available
         if (productData.sizes && productData.sizes.length > 0) {
           const firstSize = productData.sizes[0];
           const defaultSize = typeof firstSize === 'string' ? firstSize : (firstSize.size || firstSize.name || firstSize.value);
-          console.log('Setting default size:', defaultSize);
           setSelectedSize(defaultSize);
         }
         
@@ -53,14 +48,12 @@ const ProductDetailPage = () => {
         if (productData.colors && productData.colors.length > 0) {
           const firstColor = productData.colors[0];
           const defaultColor = typeof firstColor === 'string' ? firstColor : (firstColor.color || firstColor.name || firstColor.value);
-          console.log('Setting default color:', defaultColor);
           setSelectedColor(defaultColor);
         }
       } else {
         setError('Product not found');
       }
     } catch (err) {
-      console.error('Error loading product:', err);
       if (err.response?.status === 404) {
         setError('Product not found');
       } else {
@@ -76,12 +69,10 @@ const ProductDetailPage = () => {
     
     // Validate required selections
     if (product.sizes && product.sizes.length > 0 && !selectedSize) {
-      alert('Please select a size');
       return;
     }
     
     if (product.colors && product.colors.length > 0 && !selectedColor) {
-      alert('Please select a color');
       return;
     }
     
@@ -94,22 +85,15 @@ const ProductDetailPage = () => {
         selectedColor: selectedColor || undefined
       };
       
-      const result = await addToCart(cartItem.productId, cartItem.quantity, {
+      await addToCart(cartItem.productId, cartItem.quantity, {
         price: product.price,
         name: product.name,
         images: product.images,
         selectedSize: cartItem.selectedSize,
         selectedColor: cartItem.selectedColor
       });
-      
-      if (result.success) {
-        alert(`Added ${quantity} ${product.name}(s) to cart!`);
-      } else {
-        alert('Failed to add to cart. Please try again.');
-      }
     } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Failed to add to cart. Please try again.');
+      // Handle error silently
     } finally {
       setAddingToCart(false);
     }
@@ -119,21 +103,14 @@ const ProductDetailPage = () => {
     if (!product) return;
     
     if (!isAuthenticated) {
-      alert('Please log in to add items to your wishlist');
       return;
     }
     
     setAddingToWishlist(true);
     try {
-      const result = await addToWishlist(product._id || product.id);
-      if (result.success) {
-        alert(`Added ${product.name} to wishlist!`);
-      } else {
-        alert('Failed to add to wishlist. Please try again.');
-      }
+      await addToWishlist(product._id || product.id);
     } catch (error) {
-      console.error('Error adding to wishlist:', error);
-      alert('Failed to add to wishlist. Please try again.');
+      // Handle error silently
     } finally {
       setAddingToWishlist(false);
     }

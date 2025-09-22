@@ -25,23 +25,16 @@ const ProductsPage = () => {
       setLoading(true);
       setError(null);
       
-      console.log('Loading products with:', { category, search });
-      
       let response;
       if (search) {
-        console.log('Making search request:', search);
         response = await productAPI.search(search);
       } else if (category) {
-        console.log('Making category request:', category);
         // Capitalize first letter to match backend expectations
         const categoryFormatted = category.charAt(0).toUpperCase() + category.slice(1).toLowerCase();
         response = await productAPI.getByCategory(categoryFormatted);
       } else {
-        console.log('Making getAll request');
         response = await productAPI.getAll();
       }
-      
-      console.log('API Response:', response);
       
       if (response.data.success) {
         setProducts(response.data.data.products || response.data.data);
@@ -49,7 +42,6 @@ const ProductsPage = () => {
         setError('Failed to load products');
       }
     } catch (err) {
-      console.error('Error loading products:', err);
       setError('Failed to load products. Please try again.');
     } finally {
       setLoading(false);
@@ -64,14 +56,11 @@ const ProductsPage = () => {
         images: product.images
       });
       
-      if (result.success) {
-        alert(`Added ${product.name} to cart!`);
-      } else {
-        alert('Failed to add to cart. Please try again.');
+      if (!result.success) {
+        // Handle error silently or show user-friendly message
       }
     } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Failed to add to cart. Please try again.');
+      // Handle error silently or show user-friendly message
     }
   };
 

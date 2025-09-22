@@ -49,7 +49,6 @@ const CartPage = () => {
 
   const handleMoveToWishlist = async (productId) => {
     if (!isAuthenticated) {
-      alert('Please log in to use the wishlist feature');
       return;
     }
     
@@ -340,8 +339,7 @@ const CartPage = () => {
                 className="btn-primary"
                 style={{ width: '100%', marginBottom: '1rem' }}
                 onClick={() => {
-                  // TODO: Implement checkout
-                  alert('Checkout functionality coming soon!');
+                  // TODO: Implement checkout functionality
                 }}
               >
                 Proceed to Checkout

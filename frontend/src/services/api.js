@@ -6,13 +6,6 @@ const API_BASE_URL = process.env.NODE_ENV === 'production'
   ? process.env.REACT_APP_API_URL || 'https://unhemmedestore-backend.onrender.com'
   : '';
 
-console.log('API Configuration:', {
-  NODE_ENV: process.env.NODE_ENV,
-  REACT_APP_API_URL: process.env.REACT_APP_API_URL,
-  API_BASE_URL,
-  isProduction: process.env.NODE_ENV === 'production'
-});
-
 const api = axios.create({
   baseURL: API_BASE_URL,
   headers: {
@@ -22,13 +15,6 @@ const api = axios.create({
 
 // Add auth token to requests
 api.interceptors.request.use((config) => {
-  console.log('🚀 Making API request:', {
-    method: config.method?.toUpperCase(),
-    url: config.url,
-    baseURL: config.baseURL,
-    fullURL: `${config.baseURL || ''}${config.url}`,
-    headers: config.headers
-  });
   const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
@@ -38,26 +24,8 @@ api.interceptors.request.use((config) => {
 
 // Handle responses and errors
 api.interceptors.response.use(
-  (response) => {
-    console.log('✅ API request successful:', {
-      status: response.status,
-      url: response.config.url,
-      data: response.data
-    });
-    return response;
-  },
+  (response) => response,
   (error) => {
-    console.error('❌ API request failed:', {
-      message: error.message,
-      code: error.code,
-      status: error.response?.status,
-      statusText: error.response?.statusText,
-      url: error.config?.url,
-      fullURL: `${error.config?.baseURL || ''}${error.config?.url}`,
-      responseData: error.response?.data,
-      stack: error.stack
-    });
-    
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       window.location.href = '/login';

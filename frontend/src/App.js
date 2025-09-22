@@ -14,7 +14,6 @@ import RegisterPage from './pages/RegisterPage';
 import ResetPasswordPage from './pages/ResetPasswordPage';
 import EmailVerificationPage from './pages/EmailVerificationPage';
 import UserDashboard from './components/user/UserDashboard';
-import TestApiPage from './pages/TestApiPage';
 import './App.css';
 
 function App() {
@@ -38,7 +37,6 @@ function App() {
                 <UserDashboard />
               </ProtectedRoute>
             } />
-            <Route path="/test-api" element={<TestApiPage />} />
             {/* 404 Page */}
             <Route path="*" element={
               <div className="flex items-center justify-center min-h-screen">

@@ -206,7 +206,6 @@ export function AppProvider({ children }) {
         loadRecentOrders()
       ]);
     } catch (error) {
-      console.error('Failed to load user profile:', error);
       localStorage.removeItem('token');
       dispatch({ type: 'SET_ERROR', payload: 'Failed to load user profile' });
       dispatch({ type: 'SET_AUTH_LOADING', payload: false });
@@ -218,7 +217,6 @@ export function AppProvider({ children }) {
       const localCart = JSON.parse(localStorage.getItem('cart') || '[]');
       dispatch({ type: 'SET_CART', payload: localCart });
     } catch (error) {
-      console.error('Failed to load guest cart:', error);
       dispatch({ type: 'SET_CART', payload: [] });
     }
   };
@@ -229,7 +227,6 @@ export function AppProvider({ children }) {
       const response = await cartAPI.get();
       dispatch({ type: 'SET_CART', payload: response.data.cart || [] });
     } catch (error) {
-      console.error('Failed to load cart:', error);
       dispatch({ type: 'SET_CART_LOADING', payload: false });
       // Fallback to local storage cart for guests
       if (!state.isAuthenticated) {
@@ -244,7 +241,6 @@ export function AppProvider({ children }) {
       const response = await authAPI.getWishlist();
       dispatch({ type: 'SET_WISHLIST', payload: response.data.wishlist || [] });
     } catch (error) {
-      console.error('Failed to load wishlist:', error);
       dispatch({ type: 'SET_WISHLIST_LOADING', payload: false });
     }
   };
@@ -254,7 +250,7 @@ export function AppProvider({ children }) {
       const response = await authAPI.getAddresses();
       dispatch({ type: 'SET_ADDRESSES', payload: response.data.addresses || [] });
     } catch (error) {
-      console.error('Failed to load addresses:', error);
+      // Handle error silently
     }
   };
 
@@ -263,7 +259,7 @@ export function AppProvider({ children }) {
       const response = await orderAPI.getOrderHistory(1, 5);
       dispatch({ type: 'SET_ORDERS', payload: response.data.orders || [] });
     } catch (error) {
-      console.error('Failed to load recent orders:', error);
+      // Handle error silently
     }
   };
 
@@ -333,7 +329,7 @@ export function AppProvider({ children }) {
     try {
       await authAPI.logout();
     } catch (error) {
-      console.error('Logout error:', error);
+      // Handle error silently
     } finally {
       localStorage.removeItem('token');
       localStorage.removeItem('cart');
@@ -360,7 +356,7 @@ export function AppProvider({ children }) {
         await cartAPI.add(item.productId, item.quantity);
       }
     } catch (error) {
-      console.error('Failed to merge guest cart:', error);
+      // Handle error silently
     }
   };
 
