@@ -6,7 +6,7 @@ const CartPage = () => {
   const { 
     cart, 
     cartCount, 
-    updateCartQuantity, 
+    updateCartItem, 
     removeFromCart, 
     moveToWishlist,
     isAuthenticated,
@@ -24,7 +24,7 @@ const CartPage = () => {
     
     setProcessingItems(prev => new Set(prev).add(productId));
     try {
-      await updateCartQuantity(productId, newQuantity);
+      await updateCartItem(productId, newQuantity);
     } finally {
       setProcessingItems(prev => {
         const newSet = new Set(prev);

@@ -70,7 +70,15 @@ function appReducer(state, action) {
       if (existingItem) {
         existingItem.quantity += action.payload.quantity;
       } else {
-        updatedCart.push(action.payload);
+        updatedCart.push({
+          productId: action.payload.productId,
+          quantity: action.payload.quantity,
+          price: action.payload.price,
+          name: action.payload.name,
+          image: action.payload.image,
+          selectedSize: action.payload.selectedSize,
+          selectedColor: action.payload.selectedColor
+        });
       }
       const newCartTotal = updatedCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
       return {
@@ -374,11 +382,21 @@ export function AppProvider({ children }) {
             quantity, 
             price: productDetails?.price || 0,
             name: productDetails?.name || '',
-            image: productDetails?.images?.[0] || ''
+            image: productDetails?.images?.[0]?.url || productDetails?.images?.[0] || '',
+            selectedSize: productDetails?.selectedSize,
+            selectedColor: productDetails?.selectedColor
           });
         }
         localStorage.setItem('cart', JSON.stringify(localCart));
-        dispatch({ type: 'ADD_TO_CART', payload: { productId, quantity, price: productDetails?.price || 0 } });
+        dispatch({ type: 'ADD_TO_CART', payload: { 
+          productId, 
+          quantity, 
+          price: productDetails?.price || 0,
+          name: productDetails?.name || '',
+          image: productDetails?.images?.[0]?.url || productDetails?.images?.[0] || '',
+          selectedSize: productDetails?.selectedSize,
+          selectedColor: productDetails?.selectedColor
+        }});
       }
       return { success: true };
     } catch (error) {

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { productAPI } from '../services/api';
+import { useApp } from '../context/AppContext';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 
 // Updated to 3x3 grid layout
 const ProductsPage = () => {
   const [searchParams] = useSearchParams();
+  const { addToCart } = useApp();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -51,6 +53,25 @@ const ProductsPage = () => {
       setError('Failed to load products. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleAddToCart = async (product) => {
+    try {
+      const result = await addToCart(product._id || product.id, 1, {
+        price: product.price,
+        name: product.name,
+        images: product.images
+      });
+      
+      if (result.success) {
+        alert(`Added ${product.name} to cart!`);
+      } else {
+        alert('Failed to add to cart. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      alert('Failed to add to cart. Please try again.');
     }
   };
 
@@ -221,10 +242,7 @@ const ProductsPage = () => {
                         padding: '0.5rem 0.75rem',
                         minWidth: 'fit-content'
                       }}
-                      onClick={() => {
-                        // TODO: Implement add to cart functionality
-                        console.log('Add to cart:', product.id || product._id);
-                      }}
+                      onClick={() => handleAddToCart(product)}
                     >
                       Add to Cart
                     </button>

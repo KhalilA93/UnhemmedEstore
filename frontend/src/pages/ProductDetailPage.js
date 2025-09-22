@@ -95,8 +95,11 @@ const ProductDetailPage = () => {
       };
       
       const result = await addToCart(cartItem.productId, cartItem.quantity, {
-        size: cartItem.selectedSize,
-        color: cartItem.selectedColor
+        price: product.price,
+        name: product.name,
+        images: product.images,
+        selectedSize: cartItem.selectedSize,
+        selectedColor: cartItem.selectedColor
       });
       
       if (result.success) {
