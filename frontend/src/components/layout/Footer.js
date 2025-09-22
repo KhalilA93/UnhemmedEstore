@@ -63,59 +63,6 @@ const Footer = () => {
               </li>
             </ul>
           </div>
-
-          {/* Customer Service */}
-          <div>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem' }}>Customer Service</h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <Link to="/orders" style={{ color: '#9ca3af', textDecoration: 'none' }}>
-                  Track Order
-                </Link>
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <Link to="/returns" style={{ color: '#9ca3af', textDecoration: 'none' }}>
-                  Returns & Exchanges
-                </Link>
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <Link to="/shipping" style={{ color: '#9ca3af', textDecoration: 'none' }}>
-                  Shipping Info
-                </Link>
-              </li>
-              <li style={{ marginBottom: '0.5rem' }}>
-                <Link to="/faq" style={{ color: '#9ca3af', textDecoration: 'none' }}>
-                  FAQ
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </div>
-
-        <div style={{ 
-          marginTop: '2rem', 
-          paddingTop: '2rem', 
-          borderTop: '1px solid #374151',
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          gap: '1rem'
-        }}>
-          <p style={{ color: '#9ca3af', fontSize: '0.875rem' }}>
-            © 2025 Unhemmed. All rights reserved.
-          </p>
-          <div style={{ display: 'flex', gap: '1.5rem' }}>
-            <Link to="/privacy" style={{ color: '#9ca3af', fontSize: '0.875rem', textDecoration: 'none' }}>
-              Privacy Policy
-            </Link>
-            <Link to="/terms" style={{ color: '#9ca3af', fontSize: '0.875rem', textDecoration: 'none' }}>
-              Terms of Service
-            </Link>
-            <Link to="/cookies" style={{ color: '#9ca3af', fontSize: '0.875rem', textDecoration: 'none' }}>
-              Cookie Policy
-            </Link>
-          </div>
         </div>
       </div>
     </footer>
