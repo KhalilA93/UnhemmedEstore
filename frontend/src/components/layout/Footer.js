@@ -5,17 +5,23 @@ const Footer = () => {
   return (
     <footer style={{ backgroundColor: '#111827', color: 'white' }}>
       <div className="container" style={{ padding: '3rem 0' }}>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div style={{ 
+          display: 'flex', 
+          flexDirection: 'column', 
+          alignItems: 'center', 
+          textAlign: 'center', 
+          gap: '3rem' 
+        }}>
           {/* Company Info */}
-          <div style={{ gridColumn: 'span 2' }}>
+          <div>
             <div style={{ marginBottom: '1rem' }}>
               <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#60a5fa' }}>Unhemmed</h3>
-              <p style={{ marginTop: '0.5rem', color: '#9ca3af' }}>
+              <p style={{ marginTop: '0.5rem', color: '#9ca3af', maxWidth: '400px' }}>
                 Your premier destination for high-quality, fashionable clothing. 
                 We believe in style that speaks to your individuality.
               </p>
             </div>
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
               <a href="#" style={{ color: '#9ca3af', textDecoration: 'none' }}>
                 <span style={{ position: 'absolute', left: '-9999px' }}>Facebook</span>
                 <svg style={{ height: '1.5rem', width: '1.5rem' }} fill="currentColor" viewBox="0 0 24 24">
@@ -40,23 +46,23 @@ const Footer = () => {
           {/* Quick Links */}
           <div>
             <h3 style={{ fontSize: '1.125rem', fontWeight: '600', marginBottom: '1rem' }}>Quick Links</h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
-              <li style={{ marginBottom: '0.5rem' }}>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+              <li>
                 <Link to="/" style={{ color: '#9ca3af', textDecoration: 'none' }}>
                   Home
                 </Link>
               </li>
-              <li style={{ marginBottom: '0.5rem' }}>
+              <li>
                 <Link to="/products" style={{ color: '#9ca3af', textDecoration: 'none' }}>
                   Products
                 </Link>
               </li>
-              <li style={{ marginBottom: '0.5rem' }}>
+              <li>
                 <Link to="/about" style={{ color: '#9ca3af', textDecoration: 'none' }}>
                   About Us
                 </Link>
               </li>
-              <li style={{ marginBottom: '0.5rem' }}>
+              <li>
                 <Link to="/contact" style={{ color: '#9ca3af', textDecoration: 'none' }}>
                   Contact
                 </Link>
