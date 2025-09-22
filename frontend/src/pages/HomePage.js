@@ -386,60 +386,109 @@ const HomePage = () => {
               Handpicked items from our latest collection, chosen just for you.
             </p>
           </div>
-          
-          {featuredProducts.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {featuredProducts.slice(0, 6).map((product) => (
-                <div key={product._id || product.id} className="card" style={{ cursor: 'pointer' }}>
-                  <Link to={`/product/${product._id || product.id}`}>
-                    <div style={{ overflow: 'hidden' }}>
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, minmax(260px, 1fr))',
+            gap: '2rem',
+            maxWidth: '900px',
+            margin: '0 auto'
+          }}>
+            {featuredProducts
+              .filter(p => p.category === 'women').slice(0,2)
+              .concat(featuredProducts.filter(p => p.category === 'men').slice(0,2))
+              .map((product) => (
+                <div 
+                  key={product._id || product.id} 
+                  style={{
+                    backgroundColor: 'white',
+                    borderRadius: '1rem',
+                    boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)',
+                    border: '1px solid #e5e7eb',
+                    overflow: 'hidden',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    minHeight: '420px'
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.transform = 'translateY(-5px)';
+                    e.currentTarget.style.boxShadow = '0 20px 40px -10px rgba(0, 0, 0, 0.15)';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 10px 25px -5px rgba(0, 0, 0, 0.1)';
+                  }}
+                >
+                  <Link to={`/product/${product._id || product.id}`} style={{ textDecoration: 'none' }}>
+                    <div style={{ 
+                      position: 'relative',
+                      overflow: 'hidden',
+                      height: '220px',
+                      background: '#f3f4f6'
+                    }}>
                       <img
-                        src={product.images?.[0]?.url || product.image || '/images/placeholder.svg'}
-                        alt={product.images?.[0]?.alt || product.name}
+                        src={product.image || '/images/placeholder.svg'}
+                        alt={product.name}
                         style={{ 
                           width: '100%', 
-                          height: '16rem', 
+                          height: '100%', 
                           objectFit: 'cover',
-                          transition: 'transform 0.3s'
+                          transition: 'transform 0.3s ease'
                         }}
-                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
-                        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
-                        onError={(e) => {
-                          e.target.src = '/images/placeholder.svg';
-                        }}
+                        onMouseEnter={e => e.target.style.transform = 'scale(1.05)'}
+                        onMouseLeave={e => e.target.style.transform = 'scale(1)'
+                        }
+                        onError={e => { e.target.src = '/images/placeholder.svg'; }}
                       />
+                      <div style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        right: '1rem',
+                        backgroundColor: product.category === 'women' ? '#ec4899' : '#3b82f6',
+                        color: 'white',
+                        padding: '0.25rem 0.75rem',
+                        borderRadius: '9999px',
+                        fontSize: '0.75rem',
+                        fontWeight: '600',
+                        textTransform: 'uppercase'
+                      }}>
+                        {product.category === 'women' ? "Women's" : "Men's"}
+                      </div>
                     </div>
                   </Link>
-                  <div style={{ padding: '1.5rem' }}>
-                    <Link to={`/product/${product._id || product.id}`}>
+                  <div style={{ padding: '1.25rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <Link to={`/product/${product._id || product.id}`} style={{ textDecoration: 'none' }}>
                       <h3 style={{ 
                         fontWeight: '600', 
-                        fontSize: '1.125rem', 
+                        fontSize: '1.15rem', 
                         marginBottom: '0.5rem',
                         color: '#111827',
-                        textDecoration: 'none'
+                        lineHeight: '1.4'
                       }}>
                         {product.name}
                       </h3>
                     </Link>
                     <p style={{ 
                       color: '#6b7280', 
-                      fontSize: '0.875rem', 
-                      marginBottom: '1rem',
+                      fontSize: '0.95rem', 
+                      marginBottom: '1.1rem',
+                      lineHeight: '1.5',
                       overflow: 'hidden',
                       display: '-webkit-box',
                       WebkitLineClamp: 2,
                       WebkitBoxOrient: 'vertical'
                     }}>
-                      {product.shortDescription || product.description}
+                      {product.description}
                     </p>
                     <div style={{ 
                       display: 'flex', 
                       alignItems: 'center', 
-                      justifyContent: 'space-between' 
+                      justifyContent: 'space-between',
+                      marginTop: 'auto'
                     }}>
                       <span style={{ 
-                        fontSize: '1.5rem', 
+                        fontSize: '1.25rem', 
                         fontWeight: 'bold', 
                         color: '#0284c7' 
                       }}>
@@ -447,10 +496,24 @@ const HomePage = () => {
                       </span>
                       <Button 
                         size="sm" 
-                        onClick={() => handleAddToCart(product._id || product.id)}
-                        style={{ transition: 'transform 0.2s' }}
-                        onMouseEnter={(e) => e.target.style.transform = 'scale(1.05)'}
-                        onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                        onClick={e => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleAddToCart(product._id || product.id);
+                        }}
+                        style={{ 
+                          transition: 'all 0.2s ease',
+                          backgroundColor: '#0284c7',
+                          border: 'none'
+                        }}
+                        onMouseEnter={e => {
+                          e.target.style.transform = 'scale(1.05)';
+                          e.target.style.backgroundColor = '#0369a1';
+                        }}
+                        onMouseLeave={e => {
+                          e.target.style.transform = 'scale(1)';
+                          e.target.style.backgroundColor = '#0284c7';
+                        }}
                       >
                         Add to Cart
                       </Button>
@@ -458,32 +521,7 @@ const HomePage = () => {
                   </div>
                 </div>
               ))}
-            </div>
-          ) : (
-            <div className="text-center" style={{ padding: '3rem 0' }}>
-              <div style={{ 
-                margin: '0 auto 1rem',
-                height: '6rem',
-                width: '6rem',
-                backgroundColor: '#f3f4f6',
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-              }}>
-                <svg style={{ height: '3rem', width: '3rem', color: '#9ca3af' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                </svg>
-              </div>
-              <p style={{ color: '#6b7280', fontSize: '1.125rem', marginBottom: '1rem' }}>
-                No featured products available at the moment.
-              </p>
-              <Link to="/products">
-                <Button>Browse All Products</Button>
-              </Link>
-            </div>
-          )}
-
+          </div>
           <div className="text-center" style={{ marginTop: '3rem' }}>
             <Link to="/products">
               <Button size="lg" variant="outline">
