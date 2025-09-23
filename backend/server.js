@@ -26,23 +26,17 @@ app.set('trust proxy', 1);
 
 // Application state
 const appState = {
-  isDbConnected: false,
   startTime: new Date().toISOString()
 };
 
 // Database initialization with proper error handling
 const initializeDatabase = async () => {
   try {
-    appState.isDbConnected = await connectDB();
-    
-    if (appState.isDbConnected) {
-      console.log('✅ Database connected successfully');
-    } else {
-      console.log('� Server running in DEMO MODE with sample data');
-    }
+    await connectDB();
+    console.log('✅ Database connected successfully');
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
-    appState.isDbConnected = false;
+    process.exit(1);
   }
 };
 
@@ -167,7 +161,7 @@ const configureHealthCheck = () => {
       message: 'Backend server is running',
       timestamp: new Date().toISOString(),
       environment: process.env.NODE_ENV,
-      database: appState.isDbConnected ? 'connected' : 'disconnected',
+      database: 'connected',
       uptime: process.uptime(),
       startTime: appState.startTime
     });
@@ -233,7 +227,7 @@ const startServer = () => {
   app.listen(PORT, () => {
     console.log(`🚀 Backend server running on http://localhost:${PORT}`);
     console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-    console.log(`🗄️  Database: ${appState.isDbConnected ? 'Connected' : 'Demo Mode'}`);
+    console.log(`🗄️  Database: Connected`);
     console.log(`⏰ Started at: ${appState.startTime}`);
   });
 };

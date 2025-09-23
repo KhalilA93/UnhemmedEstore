@@ -29,8 +29,7 @@ const connectDB = async () => {
 
   } catch (error) {
     console.error('❌ Database connection failed:', error.message);
-    console.log('📝 Running in demo mode with sample data...');
-    return false;
+    throw error;
   }
 };
 

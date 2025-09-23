@@ -382,17 +382,6 @@ const LoginPage = () => {
             </p>
           </div>
         </div>
-
-        {/* Demo Account Info */}
-        <div className="card" style={{ padding: '1rem', marginTop: '1rem', backgroundColor: '#f0f9ff' }}>
-          <p style={{ fontSize: '0.875rem', color: '#0369a1', textAlign: 'center', marginBottom: '0.5rem' }}>
-            <strong>Demo Account:</strong>
-          </p>
-          <p style={{ fontSize: '0.75rem', color: '#075985', textAlign: 'center' }}>
-            Email: demo@unhemmed.com<br />
-            Password: demo123
-          </p>
-        </div>
       </div>
     </div>
   );

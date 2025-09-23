@@ -1,11 +1,6 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
 
-// Check if database is connected
-const isDatabaseConnected = () => {
-  return global.isDbConnected !== false;
-};
-
 // @desc    Create new order
 // @route   POST /api/orders
 // @access  Private
@@ -31,16 +26,7 @@ const createOrder = async (req, res) => {
     // Validate products exist and prices are correct
     let validatedItems = [];
     for (let item of orderItems) {
-      let product;
-      
-      if (isDatabaseConnected()) {
-        product = await Product.findById(item.product);
-      } else {
-        return res.status(503).json({
-          success: false,
-          message: 'Database not available. Please try again later.'
-        });
-      }
+      const product = await Product.findById(item.product);
       
       if (!product) {
         return res.status(404).json({
@@ -58,48 +44,23 @@ const createOrder = async (req, res) => {
       });
     }
 
-    if (isDatabaseConnected()) {
-      const order = new Order({
-        user: req.user._id,
-        orderItems: validatedItems,
-        shippingAddress,
-        paymentMethod,
-        itemsPrice,
-        taxPrice,
-        shippingPrice,
-        totalPrice
-      });
+    const order = new Order({
+      user: req.user._id,
+      orderItems: validatedItems,
+      shippingAddress,
+      paymentMethod,
+      itemsPrice,
+      taxPrice,
+      shippingPrice,
+      totalPrice
+    });
 
-      const createdOrder = await order.save();
-      
-      res.status(201).json({
-        success: true,
-        data: createdOrder
-      });
-    } else {
-      // Demo mode - simulate order creation
-      const simulatedOrder = {
-        _id: Date.now().toString(),
-        user: req.user._id || 'demo-user',
-        orderItems: validatedItems,
-        shippingAddress,
-        paymentMethod,
-        itemsPrice,
-        taxPrice,
-        shippingPrice,
-        totalPrice,
-        isPaid: false,
-        isDelivered: false,
-        createdAt: new Date(),
-        orderStatus: 'processing'
-      };
-      
-      res.status(201).json({
-        success: true,
-        data: simulatedOrder,
-        message: 'Order created (demo mode)'
-      });
-    }
+    const createdOrder = await order.save();
+    
+    res.status(201).json({
+      success: true,
+      data: createdOrder
+    });
   } catch (error) {
     console.error('Create order error:', error);
     res.status(500).json({
@@ -114,39 +75,11 @@ const createOrder = async (req, res) => {
 // @access  Private
 const getOrders = async (req, res) => {
   try {
-    if (isDatabaseConnected()) {
-      const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
-      res.json({
-        success: true,
-        data: orders
-      });
-    } else {
-      // Demo mode - return sample orders
-      const sampleOrders = [
-        {
-          _id: '1',
-          orderItems: [
-            {
-              name: "Men's Button-Up Shirt",
-              qty: 1,
-              price: 85.00,
-              image: '/images/mens/StockSnap_AIOTY3A4AE.jpg'
-            }
-          ],
-          totalPrice: 95.00,
-          isPaid: true,
-          isDelivered: false,
-          createdAt: new Date(Date.now() - 86400000), // 1 day ago
-          orderStatus: 'processing'
-        }
-      ];
-      
-      res.json({
-        success: true,
-        data: sampleOrders,
-        message: 'Orders retrieved (demo mode)'
-      });
-    }
+    const orders = await Order.find({ user: req.user._id }).sort({ createdAt: -1 });
+    res.json({
+      success: true,
+      data: orders
+    });
   } catch (error) {
     console.error('Get orders error:', error);
     res.status(500).json({
@@ -161,48 +94,22 @@ const getOrders = async (req, res) => {
 // @access  Private
 const getOrder = async (req, res) => {
   try {
-    if (isDatabaseConnected()) {
-      const order = await Order.findOne({ 
-        _id: req.params.id, 
-        user: req.user._id 
-      });
+    const order = await Order.findOne({ 
+      _id: req.params.id, 
+      user: req.user._id 
+    });
 
-      if (!order) {
-        return res.status(404).json({
-          success: false,
-          message: 'Order not found'
-        });
-      }
-
-      res.json({
-        success: true,
-        data: order
-      });
-    } else {
-      // Demo mode
-      const sampleOrder = {
-        _id: req.params.id,
-        orderItems: [
-          {
-            name: "Men's Button-Up Shirt",
-            qty: 1,
-            price: 85.00,
-            image: '/images/mens/StockSnap_AIOTY3A4AE.jpg'
-          }
-        ],
-        totalPrice: 95.00,
-        isPaid: true,
-        isDelivered: false,
-        createdAt: new Date(),
-        orderStatus: 'processing'
-      };
-      
-      res.json({
-        success: true,
-        data: sampleOrder,
-        message: 'Order retrieved (demo mode)'
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found'
       });
     }
+
+    res.json({
+      success: true,
+      data: order
+    });
   } catch (error) {
     console.error('Get order error:', error);
     res.status(500).json({
@@ -219,33 +126,25 @@ const updateOrderStatus = async (req, res) => {
   try {
     const { status } = req.body;
     
-    if (isDatabaseConnected()) {
-      const order = await Order.findOne({ 
-        _id: req.params.id, 
-        user: req.user._id 
-      });
+    const order = await Order.findOne({ 
+      _id: req.params.id, 
+      user: req.user._id 
+    });
 
-      if (!order) {
-        return res.status(404).json({
-          success: false,
-          message: 'Order not found'
-        });
-      }
-
-      order.orderStatus = status;
-      await order.save();
-
-      res.json({
-        success: true,
-        data: order
-      });
-    } else {
-      // Demo mode
-      res.json({
-        success: true,
-        message: `Order status updated to ${status} (demo mode)`
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found'
       });
     }
+
+    order.orderStatus = status;
+    await order.save();
+
+    res.json({
+      success: true,
+      data: order
+    });
   } catch (error) {
     console.error('Update order status error:', error);
     res.status(500).json({
@@ -260,40 +159,32 @@ const updateOrderStatus = async (req, res) => {
 // @access  Private
 const cancelOrder = async (req, res) => {
   try {
-    if (isDatabaseConnected()) {
-      const order = await Order.findOne({ 
-        _id: req.params.id, 
-        user: req.user._id 
-      });
+    const order = await Order.findOne({ 
+      _id: req.params.id, 
+      user: req.user._id 
+    });
 
-      if (!order) {
-        return res.status(404).json({
-          success: false,
-          message: 'Order not found'
-        });
-      }
-
-      if (order.orderStatus === 'delivered') {
-        return res.status(400).json({
-          success: false,
-          message: 'Cannot cancel delivered order'
-        });
-      }
-
-      order.orderStatus = 'cancelled';
-      await order.save();
-
-      res.json({
-        success: true,
-        message: 'Order cancelled successfully'
-      });
-    } else {
-      // Demo mode
-      res.json({
-        success: true,
-        message: 'Order cancelled (demo mode)'
+    if (!order) {
+      return res.status(404).json({
+        success: false,
+        message: 'Order not found'
       });
     }
+
+    if (order.orderStatus === 'delivered') {
+      return res.status(400).json({
+        success: false,
+        message: 'Cannot cancel delivered order'
+      });
+    }
+
+    order.orderStatus = 'cancelled';
+    await order.save();
+
+    res.json({
+      success: true,
+      message: 'Order cancelled successfully'
+    });
   } catch (error) {
     console.error('Cancel order error:', error);
     res.status(500).json({

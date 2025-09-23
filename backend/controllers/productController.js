@@ -1,23 +1,11 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
 
-// Check if database is connected (this will be passed from the route)
-const isDatabaseConnected = () => {
-  return global.isDbConnected !== false;
-};
-
 // @desc    Get all products with filtering, sorting, and pagination
 // @route   GET /api/products
 // @access  Public
 const getProducts = async (req, res) => {
   try {
-    // Check if database is connected
-    if (!isDatabaseConnected()) {
-      return res.status(503).json({
-        success: false,
-        message: 'Database not available. Please try again later.'
-      });
-    }
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
     const skip = (page - 1) * limit;
@@ -113,14 +101,6 @@ const getProducts = async (req, res) => {
 // @access  Public
 const getProduct = async (req, res) => {
   try {
-    // Check if database is connected
-    if (!isDatabaseConnected()) {
-      return res.status(503).json({
-        success: false,
-        message: 'Database not available. Please try again later.'
-      });
-    }
-    
     const product = await Product.findOne({ 
       _id: req.params.id, 
       status: 'active' 
@@ -153,14 +133,6 @@ const getFeaturedProducts = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
     
-    // Check if database is connected
-    if (!isDatabaseConnected()) {
-      return res.status(503).json({
-        success: false,
-        message: 'Database not available. Please try again later.'
-      });
-    }
-
     const featuredProducts = await Product.find({ 
       featured: true, 
       status: 'active' 
@@ -186,14 +158,6 @@ const getFeaturedProducts = async (req, res) => {
 // @access  Public
 const getCategories = async (req, res) => {
   try {
-    // Check if database is connected
-    if (!isDatabaseConnected()) {
-      return res.status(503).json({
-        success: false,
-        message: 'Database not available. Please try again later.'
-      });
-    }
-
     const categories = await Category.find({ status: 'active' })
       .sort({ name: 1 })
       .lean();
@@ -222,14 +186,6 @@ const searchProducts = async (req, res) => {
       return res.json({
         success: true,
         data: []
-      });
-    }
-
-    // Check if database is connected
-    if (!isDatabaseConnected()) {
-      return res.status(503).json({
-        success: false,
-        message: 'Database not available. Please try again later.'
       });
     }
 
