@@ -29,65 +29,8 @@ const HomePage = () => {
         throw new Error('API response has unexpected structure');
       }
     } catch (error) {
-      // Use mock data for demo
-      setFeaturedProducts([
-        {
-          _id: '1',
-          name: 'Classic Cotton T-Shirt',
-          price: 29.99,
-          image: '/images/mens/StockSnap_AIOTY3A4AE.jpg',
-          description: 'Comfortable and stylish cotton t-shirt perfect for casual wear'
-        },
-        {
-          _id: '2',
-          name: 'Denim Jacket',
-          price: 89.99,
-          image: '/images/mens/StockSnap_FHQXYGYJJJ.jpg',
-          description: 'Classic denim jacket for any occasion, versatile and durable'
-        },
-        {
-          _id: '3',
-          name: 'Summer Dress',
-          price: 69.99,
-          image: '/images/womens/StockSnap_JA2NGUEHYA.jpg',
-          description: 'Light and breezy summer dress for warm weather days'
-        },
-        {
-          _id: '4',
-          name: 'Casual Sneakers',
-          price: 79.99,
-          image: '/images/womens/glamour-stylish-beautiful-young-woman-model-with-red-lips-blue-sweater-hipster-cloth-beanie.jpg',
-          description: 'Comfortable sneakers for everyday wear and active lifestyle'
-        },
-        {
-          _id: '5',
-          name: 'Stylish Blazer',
-          price: 129.99,
-          image: '/images/mens/StockSnap_GPPKPJ32EE.jpg',
-          description: 'Professional blazer perfect for business and formal occasions'
-        },
-        {
-          _id: '6',
-          name: 'Casual Sweater',
-          price: 59.99,
-          image: '/images/womens/portrait-young-stylish-girl-model-casual-summer-clothes-brown-hat-with-natural-makeup-glasses-isolated.jpg',
-          description: 'Cozy sweater for chilly days, soft and comfortable'
-        },
-        {
-          _id: '7',
-          name: 'Modern Chinos',
-          price: 49.99,
-          image: '/images/mens/StockSnap_PBZVOATJFO.jpg',
-          description: 'Versatile chinos that pair well with any top'
-        },
-        {
-          _id: '8',
-          name: 'Elegant Coat',
-          price: 149.99,
-          image: '/images/womens/calm-serious-woman-light-brown-stylish-cashmere-suit-cap-looks-into-camera-brunette-longhaired-girl-eyeglasses-poses-isolated-beige-background.jpg',
-          description: 'Sophisticated coat for professional and formal settings'
-        }
-      ]);
+      // Fallback to empty array if API fails
+      setFeaturedProducts([]);
     } finally {
       setLoading(false);
     }

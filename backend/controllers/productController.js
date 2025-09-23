@@ -1,132 +1,21 @@
 const Product = require('../models/Product');
 const Category = require('../models/Category');
-const { mockProducts } = require('../data/mockProducts');
-
-// Optimized product cache
-const productCache = {
-  all: null,
-  featured: null,
-  byCategory: {},
-  lastUpdated: null,
-  TTL: 5 * 60 * 1000 // 5 minutes
-};
 
 // Check if database is connected (this will be passed from the route)
 const isDatabaseConnected = () => {
   return global.isDbConnected !== false;
 };
 
-// Optimized cache getter
-function getCachedProducts(type = 'all', category = null) {
-  const now = Date.now();
-  
-  // Check cache validity
-  if (productCache.lastUpdated && (now - productCache.lastUpdated) < productCache.TTL) {
-    if (type === 'featured' && productCache.featured) return productCache.featured;
-    if (type === 'category' && category && productCache.byCategory[category]) {
-      return productCache.byCategory[category];
-    }
-    if (type === 'all' && productCache.all) return productCache.all;
-  }
-  
-  // Refresh cache
-  productCache.all = mockProducts;
-  productCache.featured = mockProducts.filter(p => p.featured);
-  
-  // Cache by category
-  productCache.byCategory = {};
-  const categories = [...new Set(mockProducts.map(p => p.category))];
-  categories.forEach(cat => {
-    productCache.byCategory[cat] = mockProducts.filter(p => p.category === cat);
-  });
-  
-  productCache.lastUpdated = now;
-  
-  // Return requested data
-  if (type === 'featured') return productCache.featured;
-  if (type === 'category' && category) return productCache.byCategory[category] || [];
-  return productCache.all;
-}
-
 // @desc    Get all products with filtering, sorting, and pagination
 // @route   GET /api/products
 // @access  Public
 const getProducts = async (req, res) => {
-  try {    // Check if database is connected
+  try {
+    // Check if database is connected
     if (!isDatabaseConnected()) {
-      // Optimized filtering for demo mode
-      let filteredProducts;
-      
-      // Use category cache if available
-      if (req.query.category) {
-        filteredProducts = getCachedProducts('category', req.query.category);
-      } else {
-        filteredProducts = getCachedProducts('all');
-      }
-      
-      // Apply additional filters
-      if (req.query.search) {
-        const searchTerm = req.query.search.toLowerCase();
-        filteredProducts = filteredProducts.filter(p => 
-          p.name.toLowerCase().includes(searchTerm) ||
-          p.description.toLowerCase().includes(searchTerm) ||
-          p.tags.some(tag => tag.toLowerCase().includes(searchTerm))
-        );
-      }
-      
-      if (req.query.featured === 'true') {
-        if (!req.query.category && !req.query.search) {
-          // Use featured cache if no other filters
-          filteredProducts = getCachedProducts('featured');
-        } else {
-          filteredProducts = filteredProducts.filter(p => p.featured);
-        }
-      }
-      
-      // Apply sorting (optimized)
-      switch (req.query.sort) {
-        case 'price_asc':
-          filteredProducts.sort((a, b) => a.price - b.price);
-          break;
-        case 'price_desc':
-          filteredProducts.sort((a, b) => b.price - a.price);
-          break;
-        case 'name_asc':
-          filteredProducts.sort((a, b) => a.name.localeCompare(b.name));
-          break;
-        case 'name_desc':
-          filteredProducts.sort((a, b) => b.name.localeCompare(a.name));
-          break;
-        case 'rating':
-          filteredProducts.sort((a, b) => (b.ratings?.average || 0) - (a.ratings?.average || 0));
-          break;
-        default:
-          // Default sort: featured first, then by name
-          filteredProducts.sort((a, b) => {
-            if (a.featured && !b.featured) return -1;
-            if (!a.featured && b.featured) return 1;
-            return a.name.localeCompare(b.name);
-          });
-      }
-      
-      // Apply pagination
-      const page = parseInt(req.query.page) || 1;
-      const limit = parseInt(req.query.limit) || 12;
-      const skip = (page - 1) * limit;
-      const paginatedProducts = filteredProducts.slice(skip, skip + limit);
-      
-      return res.json({
-        success: true,
-        data: {
-          products: paginatedProducts,
-          pagination: {
-            page,
-            limit,
-            total: filteredProducts.length,
-            pages: Math.ceil(filteredProducts.length / limit)
-          }
-        },
-        message: 'Products retrieved (demo mode)'
+      return res.status(503).json({
+        success: false,
+        message: 'Database not available. Please try again later.'
       });
     }
     const page = parseInt(req.query.page) || 1;
@@ -223,23 +112,12 @@ const getProducts = async (req, res) => {
 // @route   GET /api/products/:id
 // @access  Public
 const getProduct = async (req, res) => {
-  try {    // Check if database is connected
+  try {
+    // Check if database is connected
     if (!isDatabaseConnected()) {
-      const productId = parseInt(req.params.id);
-      const cachedProducts = getCachedProducts('all');
-      const product = cachedProducts.find(p => p.id === productId || p.id === req.params.id);
-      
-      if (!product) {
-        return res.status(404).json({
-          success: false,
-          message: 'Product not found'
-        });
-      }
-      
-      return res.json({
-        success: true,
-        data: product,
-        message: 'Product retrieved (demo mode)'
+      return res.status(503).json({
+        success: false,
+        message: 'Database not available. Please try again later.'
       });
     }
     
@@ -275,13 +153,24 @@ const getFeaturedProducts = async (req, res) => {
   try {
     const limit = parseInt(req.query.limit) || 6;
     
-    // PERFORMANCE TEST: Use static data only
-    const featuredProducts = getCachedProducts('featured').slice(0, limit);
+    // Check if database is connected
+    if (!isDatabaseConnected()) {
+      return res.status(503).json({
+        success: false,
+        message: 'Database not available. Please try again later.'
+      });
+    }
+
+    const featuredProducts = await Product.find({ 
+      featured: true, 
+      status: 'active' 
+    })
+    .limit(limit)
+    .lean();
 
     res.json({
       success: true,
-      data: featuredProducts,
-      message: 'Featured products retrieved (static mode)'
+      data: featuredProducts
     });
   } catch (error) {
     console.error('Get featured products error:', error);
@@ -297,20 +186,21 @@ const getFeaturedProducts = async (req, res) => {
 // @access  Public
 const getCategories = async (req, res) => {
   try {
-    // PERFORMANCE TEST: Use static categories from products
-    const cachedProducts = getCachedProducts('all');
-    const categories = [...new Set(cachedProducts.map(p => p.category))]
-      .map(category => ({
-        name: category,
-        slug: category.toLowerCase(),
-        status: 'active'
-      }))
-      .sort((a, b) => a.name.localeCompare(b.name));
+    // Check if database is connected
+    if (!isDatabaseConnected()) {
+      return res.status(503).json({
+        success: false,
+        message: 'Database not available. Please try again later.'
+      });
+    }
+
+    const categories = await Category.find({ status: 'active' })
+      .sort({ name: 1 })
+      .lean();
 
     res.json({
       success: true,
-      data: categories,
-      message: 'Categories retrieved (static mode)'
+      data: categories
     });
   } catch (error) {
     console.error('Get categories error:', error);
@@ -335,31 +225,31 @@ const searchProducts = async (req, res) => {
       });
     }
 
-    // PERFORMANCE TEST: Use static data search
-    const searchTerm = q.trim().toLowerCase();
-    const cachedProducts = getCachedProducts('all');
-    
-    const results = cachedProducts
-      .filter(product => 
-        product.name.toLowerCase().includes(searchTerm) ||
-        product.description.toLowerCase().includes(searchTerm) ||
-        product.tags.some(tag => tag.toLowerCase().includes(searchTerm)) ||
-        product.brand.toLowerCase().includes(searchTerm)
-      )
-      .slice(0, parseInt(limit))
-      .map(product => ({
-        id: product.id,
-        name: product.name,
-        price: product.price,
-        images: product.images,
-        category: product.category,
-        brand: product.brand
-      }));
+    // Check if database is connected
+    if (!isDatabaseConnected()) {
+      return res.status(503).json({
+        success: false,
+        message: 'Database not available. Please try again later.'
+      });
+    }
+
+    const searchTerm = q.trim();
+    const results = await Product.find({
+      status: 'active',
+      $or: [
+        { name: new RegExp(searchTerm, 'i') },
+        { description: new RegExp(searchTerm, 'i') },
+        { tags: new RegExp(searchTerm, 'i') },
+        { brand: new RegExp(searchTerm, 'i') }
+      ]
+    })
+    .limit(parseInt(limit))
+    .select('name price images category brand')
+    .lean();
 
     res.json({
       success: true,
-      data: results,
-      message: 'Search completed (static mode)'
+      data: results
     });
   } catch (error) {
     console.error('Search products error:', error);

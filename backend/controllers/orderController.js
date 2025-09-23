@@ -1,6 +1,5 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
-const { mockProducts } = require('../data/mockProducts');
 
 // Check if database is connected
 const isDatabaseConnected = () => {
@@ -37,7 +36,10 @@ const createOrder = async (req, res) => {
       if (isDatabaseConnected()) {
         product = await Product.findById(item.product);
       } else {
-        product = mockProducts.find(p => p.id === item.product || p._id === item.product);
+        return res.status(503).json({
+          success: false,
+          message: 'Database not available. Please try again later.'
+        });
       }
       
       if (!product) {
