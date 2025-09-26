@@ -1,6 +1,6 @@
 # Unhemmed E-Store
 
-A full-stack e-commerce application built with React.js and Node.js, featuring user authentication, product management, shopping cart functionality, and order processing.
+A full-stack e-commerce application built with React.js and Node.js.
 
 ## 🚀 Live Demo
 
